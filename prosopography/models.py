@@ -57,6 +57,11 @@ class Correspondent(models.Model):
     senatorial = SocialField()
     consular = SocialField()
 
+    # years, all optional
+    birth = models.PositiveSmallIntegerField(blank=True, null=True)
+    death = models.PositiveSmallIntegerField(blank=True, null=True)
+    floruit = models.PositiveSmallIntegerField(blank=True, null=True)
+
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
     centainty_of_id = models.PositiveSmallIntegerField(
         validators=[valid_range]
