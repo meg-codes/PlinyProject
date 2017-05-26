@@ -60,6 +60,7 @@ class Correspondent(models.Model):
     # years, all optional
     birth = models.PositiveSmallIntegerField(blank=True, null=True)
     death = models.PositiveSmallIntegerField(blank=True, null=True)
+    cos = models.PositiveSmallIntegerField(blank=True, null=True)
     floruit = models.PositiveSmallIntegerField(blank=True, null=True)
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
@@ -80,6 +81,18 @@ class Correspondent(models.Model):
         symmetrical=False,
         through='Relationship',
     )
+
+    def __str__(self):
+        if self.birth or self.death:
+            return (
+                '%s (%s - %s)' %
+                (self.birth, self.death)
+            ).replace('null', '').replace('None', '')
+        if self.cos:
+            return '%s (cos. %s)' % (self.nomina, self.cos)
+        if self.floruit:
+            return '%s (fl. %s)' % (self.nomina, self.floruit)
+        return self.nomina
 
 
 class Relationship(models.Model):
