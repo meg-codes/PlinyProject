@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from letters.models import Letter
 
 def valid_range(value):
     if 0 < value < 6:
@@ -58,6 +59,10 @@ class Correspondent(models.Model):
     centainty_of_id = models.PositiveSmallIntegerField(
         validators=[valid_range]
     )
+
+    # Letter Foreign Keys
+    letters_to = models.ManyToManyField(Letter, related_name='letters_to')
+    mentioned_in = models.ManyToManyField(Letter, related_name='mentioned_in')
 
     # Person notes
     notes = models.TextField()
