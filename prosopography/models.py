@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 
 from letters.models import Letter
 
+
 def valid_range(value):
     if 0 < value < 6:
         pass
@@ -45,8 +46,9 @@ class Correspondent(models.Model):
         ('M', 'Male'),
         ('F', 'Female')
     )
-    # default says more about Pliny's correspondents than any overarching gender
-    # statement
+
+    # default says more about Pliny's correspondents than any overarching
+    # statement about gender.
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
 
     # Citizenship ambiguity
