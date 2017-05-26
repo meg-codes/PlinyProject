@@ -64,7 +64,7 @@ class Correspondent(models.Model):
     floruit = models.PositiveSmallIntegerField(blank=True, null=True)
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
-    centainty_of_id = models.PositiveSmallIntegerField(
+    certainty_of_id = models.PositiveSmallIntegerField(
         validators=[valid_range]
     )
 
@@ -82,16 +82,31 @@ class Correspondent(models.Model):
         through='Relationship',
     )
 
+    def str_dates(self):
+        '''Produce BC/AD strings of any integer dates'''
+        date_fields = ['birth', 'death', 'cos', 'floruit']
+        dates = {}
+        for field in date_fields:
+            value = getattr(self, field)
+            if value and value < 0:
+                value = ('%s BC' % value).replace('-', '')
+            elif value and value > 0:
+                value = 'AD %s' % value
+            dates[field] = str(value)
+
+        return dates
+
     def __str__(self):
+        dates = self.str_dates()
+        if self.cos:
+            return '%s (cos. %s)' % (self.nomina, dates['cos'])
         if self.birth or self.death:
             return (
                 '%s (%s - %s)' %
-                (self.birth, self.death)
+                (self.nomina, dates['birth'], dates['death'])
             ).replace('null', '').replace('None', '')
-        if self.cos:
-            return '%s (cos. %s)' % (self.nomina, self.cos)
         if self.floruit:
-            return '%s (fl. %s)' % (self.nomina, self.floruit)
+            return '%s (fl. %s)' % (self.nomina, dates['floruit'])
         return self.nomina
 
 
