@@ -65,7 +65,8 @@ class Correspondent(models.Model):
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
     certainty_of_id = models.PositiveSmallIntegerField(
-        validators=[valid_range]
+        validators=[valid_range],
+        default=5,
     )
 
     # Letter Foreign Keys
@@ -131,7 +132,7 @@ class Relationship(models.Model):
         (SIBLING, 'sibling'),
         (PARENT, 'parent'),
         (CHILD, 'child'),
-        (FAMILIA, 'family group'),
+        (FAMILIA, 'member of same familia'),
         (AMICUS, 'amicus'),
         (OTHER, 'otherwise related'),
     )
@@ -142,3 +143,10 @@ class Relationship(models.Model):
         choices=RELATIONSHIP_TYPES,
         db_index=True
     )
+
+    def __str__(self):
+        return '%s - %s to - %s' % (
+            self.from_person,
+            self.get_relationship_type_display(),
+            self.to_person
+        )

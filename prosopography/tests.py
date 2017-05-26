@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from .models import Correspondent, SocialField
+from .models import Correspondent, Relationship, SocialField
 
 
 class TestSocialField(TestCase):
@@ -74,3 +74,26 @@ class TestCorrespondent(TestCase):
         # full clean, however, should choke
         with self.assertRaises(ValidationError):
             quintus.full_clean()
+
+
+class TestRelationship(TestCase):
+
+    def setUp(self):
+        self.quintus = Correspondent.objects.create(**{
+            'nomina': 'Quintus',
+            'gender': 'M',
+        })
+
+        self.quinta = Correspondent.objects.create(**{
+            'nomina': 'Quinta',
+            'gender': 'F',
+        })
+
+    def test_str(self):
+        relationship = Relationship.objects.create(
+            from_person=self.quintus,
+            to_person=self.quinta,
+            relationship_type='sib'
+        )
+        print(relationship)
+        assert str(relationship) == 'Quintus - sibling to - Quinta'
