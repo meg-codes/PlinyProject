@@ -1,15 +1,26 @@
 from django.db import models
+from prosopography.models import Correspondent
 
 
 class Letter(models.Model):
     """A letter from one of Pliny's books of personal correspondence"""
     book = models.PositiveSmallIntegerField()
     letter = models.PositiveSmallIntegerField()
-    topic = models.ManyToManyField('Topic')
-    date = models.PositiveSmallIntegerField(blank=True, null=True)
+    topics = models.ManyToManyField('Topic', blank=True)
+    date = models.PositiveSmallIntegerField(blank=True)
 
     class Meta:
         unique_together = ('book', 'letter')
+
+    def __str__(self):
+        value = "%s.%s" % (self.book, self.letter)
+        correspondents = Correspondent.objects.filter(letters_to__in=[self])
+        if correspondents.exists():
+            people_string = ''
+            for person in correspondents:
+                people_string += "%s, " % person
+            value += " to %s" % people_string
+        return value.strip(', ')
 
 
 class Topic(models.Model):

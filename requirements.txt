@@ -1,3 +1,4 @@
 Django~=1.11
 nose
 django-nose
+django-grappelli
