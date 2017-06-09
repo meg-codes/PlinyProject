@@ -32,6 +32,13 @@ class SocialField(models.CharField):
         super(SocialField, self).__init__(*args, **kwargs)
 
 
+class AKA(models.Model):
+    """Alternate names for individuals to account for common searches or
+    confusions"""
+    nomina = models.CharField(max_length=255)
+    correspondent = models.ForeignKey('Correspondent')
+
+
 class Correspondent(models.Model):
     """Persons tracked in the database to whom Pliny wrote"""
 
