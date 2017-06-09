@@ -36,6 +36,7 @@ class AKA(models.Model):
     """Alternate names for individuals to account for common searches or
     confusions"""
     nomina = models.CharField(max_length=255)
+    notes = models.TextField(blank=True, default='')
     correspondent = models.ForeignKey('Correspondent')
 
 

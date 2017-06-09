@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Correspondent, Relationship
+from .models import Correspondent, Relationship, AKA
 from letters.models import Letter
+
+
+class AKAInline(admin.TabularInline):
+    model = AKA
+    extra = 1
 
 
 class LettersToInline(admin.TabularInline):
@@ -17,7 +22,7 @@ class MentionedInline(admin.TabularInline):
 
 
 class CorrespondentAdmin(admin.ModelAdmin):
-    inlines = [LettersToInline, MentionedInline]
+    inlines = [LettersToInline, MentionedInline, AKAInline]
     model = Correspondent
     fields = (
         'nomina',
