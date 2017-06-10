@@ -1,14 +1,14 @@
 from django.contrib import admin
-from .models import Letter, Topic, Correspondent
+from .models import Letter, Topic, Person
 
 
-class CorrespondentInline(admin.TabularInline):
-    model = Correspondent.letters_to.through
+class PersonInline(admin.TabularInline):
+    model = Person.letters_to.through
 
 
 class LetterAdmin(admin.ModelAdmin):
     model = Letter
-    inlines = [CorrespondentInline]
+    inlines = [PersonInline]
     fields = ('book', 'letter', 'topics', 'date')
 
 

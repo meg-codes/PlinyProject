@@ -1,6 +1,15 @@
+import os
+import sys
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from .models import Correspondent, Relationship, SocialField
+
+from .models import Person, Relationship, SocialField
+from letters.models import Letter
+from prosopography.management.commands import import_pliny_data
+
+FIXTURES_DIR = os.path.join(settings.BASE_DIR, 'prosopography', 'fixtures')
 
 
 class TestSocialField(TestCase):
@@ -13,10 +22,11 @@ class TestSocialField(TestCase):
         assert field.blank
         assert isinstance(field.choices, tuple)
 
-class TestCorrespondent(TestCase):
+
+class TestPerson(TestCase):
 
     def test_str_dates(self):
-        quintus = Correspondent(**{
+        quintus = Person(**{
             'nomina': 'Quintus',
             'gender': 'M',
             'cos': -25,
@@ -34,7 +44,7 @@ class TestCorrespondent(TestCase):
 
     def test_str(self):
         # just a name
-        quintus = Correspondent(**{
+        quintus = Person(**{
             'nomina': 'Quintus',
             'gender': 'M',
         })
@@ -53,7 +63,7 @@ class TestCorrespondent(TestCase):
         assert str(quintus) == 'Quintus (cos. AD 90)'
 
         # now just a floruit
-        quintus = Correspondent(**{
+        quintus = Person(**{
             'nomina': 'Quintus',
             'gender': 'M',
         })
@@ -61,7 +71,7 @@ class TestCorrespondent(TestCase):
         assert str(quintus) == 'Quintus (fl. AD 80)'
 
     def test_certainty_validator(self):
-        quintus = Correspondent.objects.create(**{
+        quintus = Person.objects.create(**{
             'nomina': 'Quintus',
             'gender': 'M',
             'certainty_of_id': 5
@@ -79,12 +89,12 @@ class TestCorrespondent(TestCase):
 class TestRelationship(TestCase):
 
     def setUp(self):
-        self.quintus = Correspondent.objects.create(**{
+        self.quintus = Person.objects.create(**{
             'nomina': 'Quintus',
             'gender': 'M',
         })
 
-        self.quinta = Correspondent.objects.create(**{
+        self.quinta = Person.objects.create(**{
             'nomina': 'Quinta',
             'gender': 'F',
         })
@@ -97,3 +107,62 @@ class TestRelationship(TestCase):
         )
         print(relationship)
         assert str(relationship) == 'Quintus - sibling to - Quinta'
+
+class TestImport(TestCase):
+
+    def setUp(self):
+        self.letters = os.path.join(FIXTURES_DIR, 'letters.csv')
+        self.people = os.path.join(FIXTURES_DIR, 'people.csv')
+        self.importer = import_pliny_data.Command()
+        self.options = {
+            'letter_csv': [self.letters],
+            'people_csv': [self.people]
+        }
+
+    def test_read_csv(self):
+        command = self.importer
+        options = self.options
+        letter_list, people_list = command.read_CSVs(**options)
+
+        # output should be a list
+        assert isinstance(letter_list, list)
+        assert isinstance(people_list, list)
+        # there should be two from the fixture
+        assert len(letter_list) == 2
+        assert len(people_list) == 2
+
+        # All of the fields should be represented
+        for field in ["AddresseeID", "Book", "Letter"]:
+            assert field in letter_list[0]
+        for field in ["ID", "Name", "Gender", "Rank", "Consular", "Uncertain",
+                      "Alt.Name", "Notes"]:
+            assert field in people_list[0]
+
+    def test_make_letters(self):
+        command = self.importer
+        options = self.options
+        letter_list, people_list = command.read_CSVs(**options)
+
+        command.make_letters(letter_list)
+
+        assert "Created: 2 letters" in sys.stdout.getvalue().strip()
+        letters = Letter.objects.all()
+        assert len(letters) == 2
+        assert Letter.objects.get(book=1, letter=5)
+        assert Letter.objects.get(book=1, letter=6)
+
+    def test_make_people(self):
+        command = self.importer
+        options = self.options
+        letter_list, people_list = command.read_CSVs(**options)
+
+        command.make_letters(letter_list)
+        command.make_people(people_list, letter_list)
+
+        assert "Created: 2 people" in sys.stdout.getvalue().strip()
+        people = Person.objects.all()
+        assert len(people) == 2
+        tacitus = people.filter(nomina__icontains='Tacitus')[0]
+        assert tacitus.nomina == 'Cornelius Tacitus'
+        letters = tacitus.letters_to.all()
+        assert len(letters) == 1

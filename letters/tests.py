@@ -1,18 +1,18 @@
 from django.test import TestCase
 
-from prosopography.models import Correspondent
+from prosopography.models import Person
 from .models import Letter, Topic
 
 
 class TestLetter(TestCase):
 
     def setUp(self):
-        self.quintus = Correspondent.objects.create(**{
+        self.quintus = Person.objects.create(**{
             'nomina': 'Quintus',
             'gender': 'M',
         })
 
-        self.quinta = Correspondent.objects.create(**{
+        self.quinta = Person.objects.create(**{
             'nomina': 'Quinta',
             'gender': 'F',
         })

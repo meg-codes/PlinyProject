@@ -37,11 +37,11 @@ class AKA(models.Model):
     confusions"""
     nomina = models.CharField(max_length=255)
     notes = models.TextField(blank=True, default='')
-    correspondent = models.ForeignKey('Correspondent')
+    correspondent = models.ForeignKey('Person')
 
 
-class Correspondent(models.Model):
-    """Persons tracked in the database to whom Pliny wrote"""
+class Person(models.Model):
+    """Persons tracked in the database to whom Pliny wrote or mentioned in his letters"""
 
     nomina = models.CharField(max_length=255)
     # NOTE: Do I need more than this here for looonnnng nomina or should those
@@ -70,6 +70,7 @@ class Correspondent(models.Model):
     floruit = models.PositiveSmallIntegerField(blank=True, null=True)
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
+    # Low uncertainty expresses overall issues with identification
     certainty_of_id = models.PositiveSmallIntegerField(
         validators=[valid_range],
         default=5,
@@ -93,7 +94,7 @@ class Correspondent(models.Model):
 
     # related people
     related_to = models.ManyToManyField(
-        'Correspondent',
+        'Person',
         symmetrical=False,
         through='Relationship',
     )
@@ -128,8 +129,8 @@ class Correspondent(models.Model):
 
 class Relationship(models.Model):
     """A through model for a relationship between two people"""
-    from_person = models.ForeignKey(Correspondent, related_name='from_person')
-    to_person = models.ForeignKey(Correspondent)
+    from_person = models.ForeignKey(Person, related_name='from_person')
+    to_person = models.ForeignKey(Person)
 
     # List of controlled vocabulary and indexed relationship field
     ANCESTOR = 'anc'

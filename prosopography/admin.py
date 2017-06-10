@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Correspondent, Relationship, AKA
-from letters.models import Letter
+from .models import Person, Relationship, AKA
 
 
 class AKAInline(admin.TabularInline):
@@ -9,21 +8,21 @@ class AKAInline(admin.TabularInline):
 
 
 class LettersToInline(admin.TabularInline):
-    model = Correspondent.letters_to.through
+    model = Person.letters_to.through
     verbose_name_plural = "Letters of Pliny to this Person"
     show_change_link = True
     extra = 1
 
 
 class MentionedInline(admin.TabularInline):
-    model = Correspondent.letters_to.through
+    model = Person.letters_to.through
     verbose_name_plural = "Letters in which Pliny mentions this person"
     extra = 1
 
 
 class CorrespondentAdmin(admin.ModelAdmin):
     inlines = [LettersToInline, MentionedInline, AKAInline]
-    model = Correspondent
+    model = Person
     fields = (
         'nomina',
         'gender',
@@ -35,5 +34,5 @@ class CorrespondentAdmin(admin.ModelAdmin):
     exclude = ['letters_to', 'mentioned_in']
 
 
-admin.site.register(Correspondent, CorrespondentAdmin)
+admin.site.register(Person, CorrespondentAdmin)
 admin.site.register(Relationship)

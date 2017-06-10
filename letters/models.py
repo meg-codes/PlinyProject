@@ -1,5 +1,5 @@
 from django.db import models
-from prosopography.models import Correspondent
+from prosopography.models import Person
 
 
 class Letter(models.Model):
@@ -15,10 +15,10 @@ class Letter(models.Model):
 
     def __str__(self):
         value = "%s.%s" % (self.book, self.letter)
-        correspondents = Correspondent.objects.filter(letters_to__in=[self])
-        if correspondents.exists():
+        people = Person.objects.filter(letters_to__in=[self])
+        if people.exists():
             people_string = ''
-            for person in correspondents:
+            for person in people:
                 people_string += "%s, " % person
             value += " to %s" % people_string
         return value.strip(', ')
