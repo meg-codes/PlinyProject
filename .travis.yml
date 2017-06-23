@@ -7,7 +7,7 @@ install:
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
   - pip install codecov
-  - cat ci/databaseoverride.py >> plinyproj/settings.py
+  - cat ci/database_override.py >> plinyproj/settings.py
 
 script:
   - pytest --cov --cov-config .coveragerc
@@ -16,4 +16,4 @@ sevices:
   - mysql
 
 aftersuccess:
-  - codecov      
+  - codecov
