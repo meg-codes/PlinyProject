@@ -1,6 +1,5 @@
 import os
-import sys
-
+import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -138,6 +137,7 @@ class TestImport(TestCase):
                       "Alt.Name", "Notes"]:
             assert field in people_list[0]
 
+    @pytest.mark.usefixtures("pass_capsys")
     def test_make_letters(self):
         command = self.importer
         options = self.options
@@ -145,12 +145,15 @@ class TestImport(TestCase):
 
         command.make_letters(letter_list)
 
-        assert "Created: 2 letters" in sys.stdout.getvalue().strip()
+        stdout, stderr = self.capsys.readouterr()
+
+        assert "Created: 2 letters" in stdout
         letters = Letter.objects.all()
         assert len(letters) == 2
         assert Letter.objects.get(book=1, letter=5)
         assert Letter.objects.get(book=1, letter=6)
 
+    @pytest.mark.usefixtures("pass_capsys")
     def test_make_people(self):
         command = self.importer
         options = self.options
@@ -158,8 +161,9 @@ class TestImport(TestCase):
 
         command.make_letters(letter_list)
         command.make_people(people_list, letter_list)
+        stdout, stderr = self.capsys.readouterr()
 
-        assert "Created: 2 people" in sys.stdout.getvalue().strip()
+        assert "Created: 2 people" in stdout
         people = Person.objects.all()
         assert len(people) == 2
         tacitus = people.filter(nomina__icontains='Tacitus')[0]

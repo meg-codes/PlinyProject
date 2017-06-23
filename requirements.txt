@@ -1,4 +1,5 @@
 Django~=1.11
-nose
-django-nose
+pytest
+pytest-cov
+pytest-django
 django-grappelli
