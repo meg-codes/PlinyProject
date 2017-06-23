@@ -5,7 +5,6 @@ from .models import Letter, Topic, Person
 class PersonInline(admin.TabularInline):
     model = Person.letters_to.through
 
-
 class LetterAdmin(admin.ModelAdmin):
     model = Letter
     inlines = [PersonInline]

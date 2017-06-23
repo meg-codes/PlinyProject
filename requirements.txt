@@ -2,4 +2,3 @@ Django~=1.11
 pytest
 pytest-cov
 pytest-django
-django-grappelli

@@ -18,7 +18,7 @@ class Command(BaseCommand):
         parser.add_argument('letter_csv', type=str, nargs=1)
         parser.add_argument('people_csv', type=str, nargs=1)
 
-    def read_CSVs(self, **options):
+    def read_CSVs(self, *args, **options):
         letter_list = []
         people_list = []
         """Read and return the CSVs as lists of dicts"""
@@ -104,7 +104,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         # read the CSVs and return error strings to break
-        letter_list, people_list = self.read_CSVs(options)
+        letter_list, people_list = self.read_CSVs(*args, **options)
 
         if isinstance(letter_list, str):
             return self.stdout.write(letter_list)
