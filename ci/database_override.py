@@ -23,7 +23,7 @@ DATABASES = {
                 'COLLATION': 'utf8_general_ci',
                 'OPTIONS': {
                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-                },ß
+                },
             },
     },
 }
