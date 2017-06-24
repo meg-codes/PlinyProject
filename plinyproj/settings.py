@@ -20,6 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
+# As configured, will look for an environment variable named DJANGO_SECRET_KEY
+# or will respect SECRET_KEY in local_settings.py.
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 
@@ -123,3 +126,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Import local settings
+# Adapted from mezzanine and CDH @ Princeton Projects
+# It has two advantages of standard import * from .local_settings
+#   1) It gives access to local_settings everything that's in settings.py
+#   2) It means that django's autoreload sees it too.
+local = os.path.join(BASE_DIR, "plinyproj", "local_settings.py")
+if os.path.exists(local):
+    import sys
+    import imp
+    module_name = "plinyproj.local_settings"
+    module = imp.new_module(module_name)
+    module.__file__ = local
+    sys.modules[module_name] = module
+    exec(open(local, "rb").read())
