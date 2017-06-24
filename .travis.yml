@@ -10,7 +10,7 @@ install:
   - cat ci/database_override.py >> plinyproj/settings.py
 
 script:
-  - pytest --cov-config .coveragerc --cov
+  - pytest --cov
 
 sevices:
   - mysql
