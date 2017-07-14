@@ -43,7 +43,10 @@ class AKA(models.Model):
 
 
 class Person(models.Model):
-    """Persons tracked in the database to whom Pliny wrote or mentioned in his letters"""
+    """Persons tracked in the database to whom Pliny wrote or mentioned in his
+    letters.
+
+    """
 
     nomina = models.CharField(max_length=255)
     # NOTE: Do I need more than this here for looonnnng nomina or should those
