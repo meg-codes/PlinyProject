@@ -10,7 +10,9 @@ def valid_range(value):
 
 
 class SocialField(models.CharField):
-
+    """Subclass of :class:`django.db.models.CharField` that adds restrictions
+    on field choices and defaults for recording social class certainty.
+    """
     description = 'Field for modeling Roman social class identifications'
 
     def __init__(self, *args, **kwargs):

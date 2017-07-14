@@ -167,13 +167,17 @@ class TestImport(TestCase):
         people = Person.objects.all()
         assert len(people) == 2
         tacitus = people.filter(nomina__icontains='Tacitus')[0]
+        voconius = people.filter(nomina__icontains='Voconius')[0]
         assert tacitus.nomina == 'Cornelius Tacitus'
         letters = tacitus.letters_to.all()
         assert len(letters) == 1
+        assert tacitus.citizen == 'Y'
+        assert tacitus.equestrian == 'N'
+        assert tacitus.consular == 'Y'
+        assert tacitus.certainty_of_id == 5
+        assert voconius.certainty_of_id == 1
 
-        aka = AKA.objects.get(
-                person=Person.objects.get(nomina__icontains='Voconius')
-            )
+        aka = AKA.objects.get(person=voconius)
         assert isinstance(aka, AKA)
         assert aka.nomina == 'Voconius'
-        assert aka.person.nomina == 'Voconius Romanus'    
+        assert aka.person.nomina == 'Voconius Romanus'

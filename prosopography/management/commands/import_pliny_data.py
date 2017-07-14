@@ -68,9 +68,9 @@ class Command(BaseCommand):
 
             # handle the class settings
             possible_old_types = {
-                'Senatorial': ['Y', 'Y', 'Y'],
+                'Senatorial': ['Y', 'N', 'Y'],
                 'Equestrian': ['Y', 'Y', 'N'],
-                'Roman Citizen': ['Y', 'N', 'N', 'N']
+                'Roman Citizen': ['Y', 'N', 'N']
             }
 
             i = 0
