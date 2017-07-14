@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # As configured, will look for an environment variable named DJANGO_SECRET_KEY
 # or will respect SECRET_KEY in local_settings.py.
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', None)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
