@@ -36,7 +36,7 @@ class AKA(models.Model):
     """Alternate names for individuals to account for common searches or
     confusions"""
     nomina = models.CharField(max_length=255)
-    notes = models.TextField(blank=True, default='')
+    notes = models.TextField(blank=True)
     correspondent = models.ForeignKey('Person')
 
 
@@ -155,7 +155,6 @@ class Relationship(models.Model):
 
     relationship_type = models.CharField(
         max_length=4,
-        blank=True,
         choices=RELATIONSHIP_TYPES,
         db_index=True
     )
