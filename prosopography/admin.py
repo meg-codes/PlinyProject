@@ -16,6 +16,7 @@ class LettersToInline(admin.TabularInline):
 
 class MentionedInline(admin.TabularInline):
     model = Person.mentioned_in.through
+    show_change_link = True
     verbose_name_plural = "Letters in which Pliny mentions this person"
     extra = 1
 
