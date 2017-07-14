@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from .models import Person, Relationship, SocialField
+from .models import AKA, Person, Relationship, SocialField
 from letters.models import Letter
 from prosopography.management.commands import import_pliny_data
 
@@ -170,3 +170,10 @@ class TestImport(TestCase):
         assert tacitus.nomina == 'Cornelius Tacitus'
         letters = tacitus.letters_to.all()
         assert len(letters) == 1
+
+        aka = AKA.objects.get(
+                person=Person.objects.get(nomina__icontains='Voconius')
+            )
+        assert isinstance(aka, AKA)
+        assert aka.nomina == 'Voconius'
+        assert aka.person.nomina == 'Voconius Romanus'    

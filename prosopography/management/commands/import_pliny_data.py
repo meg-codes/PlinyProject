@@ -97,6 +97,13 @@ class Command(BaseCommand):
                         letter=letter['Letter'])
                     person_obj.letters_to.add(letter_obj)
 
+            # Add AKAs
+            if person['Alt.Name']:
+                AKA.objects.create(
+                    nomina=person['Alt.Name'],
+                    person=person_obj
+                )
+
             person_count += 1
 
         return self.stdout.write('Created: %s people' % person_count)

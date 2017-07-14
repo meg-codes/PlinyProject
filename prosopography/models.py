@@ -37,7 +37,7 @@ class AKA(models.Model):
     confusions"""
     nomina = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
-    correspondent = models.ForeignKey('Person')
+    person = models.ForeignKey('Person')
 
 
 class Person(models.Model):
