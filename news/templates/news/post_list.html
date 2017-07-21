@@ -11,6 +11,7 @@
         <p>Welcome text goes here</p>
       </div>
     </div>
+
       {% for post in posts %}
       <article>
       <div class='row'>
@@ -30,4 +31,13 @@
       </div>
     </article>
       {% endfor %}
+      <ul class='pagination'>
+        {% for number in page_obj.paginator.page_range %}
+          {% if page_obj.number == number %}
+          <li class='disabled'><a href='#'>{{ page_obj.number }}</a></li>
+          {% else %}
+          <li><a href='?page={{number}}'>{{ number }}</a></li>
+          {% endif %}
+        {% endfor %}
+    </ul>
 {% endblock %}
