@@ -26,10 +26,6 @@ class TestLetter(TestCase):
         })
 
         assert str(letter) == "5.12"
-        letter.letters_to.add(self.quintus)
-        assert str(letter) == "5.12 to Quintus"
-        letter.letters_to.add(self.quinta)
-        assert str(letter) == "5.12 to Quintus, Quinta"
 
     def test_add_topic(self):
         letter = Letter.objects.create(**{
