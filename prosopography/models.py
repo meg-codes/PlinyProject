@@ -15,20 +15,22 @@ class SocialField(models.CharField):
     """
     description = 'Field for modeling Roman social class identifications'
 
+    DEFINITE = 'Y'
+    MAYBE = 'M'
+    NOT = 'N'
+    UNKNOWN = 'U'
+    CLASS_POSSIBILITIES = (
+        (DEFINITE, 'Yes'),
+        (MAYBE, 'Maybe'),
+        (NOT, 'No'),
+        (UNKNOWN, 'Unknown')
+    )
+
     def __init__(self, *args, **kwargs):
-        DEFINITE = 'Y'
-        MAYBE = 'M'
-        NOT = 'N'
-        UNKNOWN = 'U'
-        CLASS_POSSIBILITIES = (
-            (DEFINITE, 'Yes'),
-            (MAYBE, 'Maybe'),
-            (NOT, 'No'),
-            (UNKNOWN, 'Unknown')
-        )
+
         kwargs['max_length'] = 1
-        kwargs['choices'] = CLASS_POSSIBILITIES
-        kwargs['default'] = NOT
+        kwargs['choices'] = self.CLASS_POSSIBILITIES
+        kwargs['default'] = self.NOT
         kwargs['blank'] = True
         kwargs['db_index'] = True
         super(SocialField, self).__init__(*args, **kwargs)

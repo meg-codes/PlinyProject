@@ -1,3 +1,6 @@
+from functools import reduce
+from operator import ior
+
 from django.views.generic import ListView
 from django.http.response import JsonResponse
 from django import forms
@@ -16,11 +19,12 @@ def person_autocomplete(request):
 
 
 class SearchForm(forms.Form):
-    nomina = forms.CharField(max_length=255)
+    nomina = forms.CharField(max_length=255, required=False)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['nomina'].widget.attrs.update({'class': 'typeahead'})
+
 
 class PersonListView(ListView):
     """View to display results of a search for all
@@ -30,20 +34,34 @@ class PersonListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PersonListView, self).get_context_data(**kwargs)
-        if not self.request.GET.get('nomina', None):
-            context['object_list'] = None
         context['form'] = SearchForm()
         params = []
         for query in self.request.GET:
             if query != 'page':
                 params.append('%s=%s' % (query, self.request.GET[query]))
-        context['saved_query'] = "&".join(params)
+        context['saved_query'] = "&" + '&'.join(params)
+        print(context)
         return context
 
     def get_queryset(self):
-        nomina = self.request.GET.get('nomina', None)
-        if not nomina:
-            return Person.objects.none()
 
         people = super(PersonListView, self).get_queryset()
-        return people.filter(nomina__icontains=nomina)
+        filters = self.request.GET
+        nomina = filters.get('nomina', '')
+        filter_list = []
+        if filters.get('senatorial'):
+            filter_list.append(people.filter(senatorial='Y'))
+        if filters.get('equestrian'):
+            filter_list.append(people.filter(equestrian='Y'))
+        if filters.get('citizen'):
+            filter_list.append(people.filter(
+                    equestrian__in=['N', 'U'],
+                    senatorial__in=['N', 'U'],
+                    citizen='Y'
+                )
+            )
+        filter_list = list(filter(None, filter_list))
+        if filter_list:
+            people = reduce(ior, filter_list)
+
+        return people.filter(nomina__icontains=nomina).order_by('nomina')
