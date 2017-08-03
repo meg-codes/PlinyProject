@@ -1,0 +1,43 @@
+{% extends 'pp_base.html' %}
+
+{% block head %}
+<title>The Pliny Project</title>
+{% endblock%}
+
+{% block body %}
+    <div class='row'>
+      <div class='col-xs-12'>
+        <h1>Welcome to the Pliny Project</h1>
+        <p>Welcome text goes here</p>
+      </div>
+    </div>
+
+      {% for post in posts %}
+      <article>
+      <div class='row'>
+        <div class='col-xs-8'>
+          <h3>{{ post.subject }}</h3>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-8'>
+          <p>{{ post.content }}</p>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-4'>
+          <span>{{ post.date_posted }}</span>
+        </div>
+      </div>
+    </article>
+      {% endfor %}
+      <ul class='pagination'>
+        {% for number in page_obj.paginator.page_range %}
+          {% if page_obj.number == number %}
+          <li class='disabled'><a href='#'>{{ page_obj.number }}</a></li>
+          {% else %}
+          <li><a href='?page={{number}}'>{{ number }}</a></li>
+          {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

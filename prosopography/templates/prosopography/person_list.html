@@ -1,0 +1,117 @@
+
+{% extends 'pp_base.html' %}
+{% load bootstrap3 static %}
+
+{% block head %}
+<script src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'></script>
+<link rel='stylesheet' href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' />
+
+<script>
+
+  function getQueryString() {
+    var filters = [], keyValuePair;
+    var query = document.URL.split('?')[1];
+    if (query != undefined) {
+      query = query.split('&');
+      for (var i in query) {
+        keyValuePair = query[i].split('=');
+          filters[keyValuePair[0]] = keyValuePair[1];
+      }
+    }
+    return filters
+  }
+
+  $(document).ready(function () {
+      $("#id_nomina").autocomplete({
+        source: function (request, response) {
+            var query = request.term
+            $.get("{% url 'people:autocomplete' %}", {q: query}, function (data) {
+                return response(data)
+            });
+        }
+      });
+
+      var filters = getQueryString();
+      for (var k in filters) {
+        $('#'+k).addClass('active').attr('aria-presssed', 'true');
+      }
+
+      $('#filter-panel button').click(
+        function() {
+            var filters = getQueryString();
+            var query = '?';
+            if ($(this).attr('id') in filters) {
+              delete filters[$(this).attr('id')];
+            }
+            else {
+              filters[$(this).attr('id')] = 'y';
+            }
+            for (var k in filters) {
+                query += (k+'='+filters[k]+'&');
+            }
+            $(location).attr('href', document.URL.split('?')[0] + query.substring(0, query.length - 1));
+        });
+  });
+
+</script>
+{% endblock %}
+
+{% block body %}
+<h1> Search the Prosopography</h1>
+
+<p>You can use the form below to search the prosopography by nomina. The results
+will be displayed below along with the letters addressed to this person.</p>
+<div class='row'>
+<div class='col-xs-6'>
+<form action="{% url 'people:search' %}" method="get" class="form-inline">
+  {% bootstrap_form form layout='inline' %}
+  <button type="submit" class="btn btn-primary">
+    Search
+  </button>
+
+<p style='padding-top: 20px;'>
+  Use the following buttons to filter results by class.
+</p>
+<div id='filter-panel'>
+<p>
+<button class='btn btn-default' id='senatorial' type='button'>Senatorial</button>
+<button class='btn btn-default' id='equestrian' type='button'>Equestrian</button>
+<button class='btn btn-default' id='citizen' type='button'>Citizen (not Senatorial or Equestrian)</button>
+</p>
+</div>
+{% if page_obj.paginator.count > 1 %}
+<h4>Found {{ page_obj.paginator.count }} people</h4>
+{% endif %}
+</div>
+
+{% if object_list %}
+<table class='table table-striped'>
+  <tr>
+    <th>Nomina</th>
+    <th>Letters</th>
+  </tr>
+  {% for person in object_list %}
+  <tr>
+    <td>{{ person.nomina }}</td>
+    <td>{% for letter in person.letters_to.all%}{{ letter }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endif %}
+{% if is_paginated %}
+<ul class='pagination'>
+  {% for number in page_obj.paginator.page_range %}
+    {% if page_obj.number == number %}
+    <li class='disabled'><a href='#'>{{ page_obj.number }}</a></li>
+    {% else %}
+    <li><a href='?page={{number}}{{saved_query}}'>{{ number }}</a></li>
+    {% endif %}
+  {% endfor %}
+
+</ul>
+{% endif %}
+
+
+
+{% endblock %}

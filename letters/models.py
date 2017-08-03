@@ -12,16 +12,10 @@ class Letter(models.Model):
 
     class Meta:
         unique_together = ('book', 'letter')
+        ordering = ['book', 'letter']
 
     def __str__(self):
-        value = "%s.%s" % (self.book, self.letter)
-        people = Person.objects.filter(letters_to__in=[self])
-        if people.exists():
-            people_string = ''
-            for person in people:
-                people_string += "%s, " % person
-            value += " to %s" % people_string
-        return value.strip(', ')
+        return "%s.%s" % (self.book, self.letter)
 
 
 class Topic(models.Model):
