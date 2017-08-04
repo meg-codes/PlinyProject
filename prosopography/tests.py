@@ -84,6 +84,43 @@ class TestPerson(TestCase):
         with self.assertRaises(ValidationError):
             quintus.full_clean()
 
+    def test_ordo(self):
+        quintus = Person.objects.create(**{
+            'nomina': 'Quintus',
+            'gender': 'M',
+            'certainty_of_id': 5
+        })
+        # consular flag
+        quintus.consular = 'Y'
+        assert quintus.ordo == 'Senatorial (cos.)'
+        # consular and senatorial flag -- still cos.
+        quintus.consular = 'Y'
+        quintus.senatorial = 'Y'
+        assert quintus.ordo == 'Senatorial (cos.)'
+        # not consular and senatorial - senatorial
+        quintus.consular = 'N'
+        assert quintus.ordo == 'Senatorial'
+        # equestrian and senatorial (i.e. became a senator)
+        quintus.equestrian = 'Y'
+        assert quintus.ordo == 'Senatorial'
+        # not senatorial
+        quintus.senatorial = 'M'
+        assert quintus.ordo == 'Equestrian'
+        # not equestrian
+        quintus.equestrian = 'N'
+        quintus.citizen = 'Y'
+        assert quintus.ordo == 'Citizen (Not Equestrian or Senatorial)'
+        # nothing
+        quintus.delete()
+        quintus = Person.objects.create(**{
+            'nomina': 'Quintus',
+            'gender': 'M',
+            'certainty_of_id': 5
+        })
+        assert quintus.ordo == 'Non-Citizen'
+
+
+
 
 class TestRelationship(TestCase):
 

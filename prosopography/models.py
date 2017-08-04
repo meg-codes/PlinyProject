@@ -133,6 +133,20 @@ class Person(models.Model):
             return '%s (fl. %s)' % (self.nomina, dates['floruit'])
         return self.nomina
 
+    @property
+    def ordo(self):
+        """The returns the social class of the :class:`Person` as a simple string based
+        on the social class flags set."""
+        if self.consular == 'Y':
+            return 'Senatorial (cos.)'
+        if self.senatorial == 'Y':
+            return 'Senatorial'
+        if self.equestrian == 'Y' :
+            return 'Equestrian'
+        if self.citizen == 'Y':
+            return 'Citizen (Not Equestrian or Senatorial)'
+
+        return 'Non-Citizen'
 
 class Relationship(models.Model):
     """A through model for a relationship between two people"""

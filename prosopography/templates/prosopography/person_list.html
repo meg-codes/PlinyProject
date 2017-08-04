@@ -95,11 +95,13 @@ will be displayed below along with the letters addressed to this person.</p>
 <table class='table table-striped'>
   <tr>
     <th>Nomina</th>
+    <th>Class (Highest known)</th>
     <th>Letters</th>
   </tr>
   {% for person in object_list %}
   <tr>
     <td>{{ person.nomina }}</td>
+    <td>{{ person.ordo }}</td>
     <td>{% for letter in person.letters_to.all%}{{ letter }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
   </tr>
   {% endfor %}

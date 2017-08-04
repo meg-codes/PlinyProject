@@ -1,30 +1,7 @@
 {% extends 'pp_base.html' %}
 
 {% block head %}
-<script>
-$(document).ready(function() {
-    $("#id_nomina").autocomplete({
-      source: function(request, response) {
-          var query = request.term
-          $.get("{% url 'people:autocomplete' %}", {q: query}, function (data) {
-              return response(data)
-          });
-      },
-      classes: {
-        "ui-autocomplete": "ui-front"
-      },
-      appendTo: $('nav')
-    });
 
-    // Snip from https://gist.github.com/mathiasbynens/286824
-    $(function() {
-     $('a[href^="mailto:"]').each(function() {
-      this.href = this.href.replace('(at)', '@').replace(/\(dot\)/g, '.');
-     });
-    });
-
-  });
-</script>
 <title>The Pliny Project</title>
 {% endblock%}
 
