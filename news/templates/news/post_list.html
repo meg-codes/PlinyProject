@@ -59,6 +59,7 @@ $(document).ready(function() {
       </div>
     </article>
       {% endfor %}
+      {% if is_paginated %}
       <ul class='pagination'>
         {% for number in page_obj.paginator.page_range %}
           {% if page_obj.number == number %}
@@ -68,4 +69,5 @@ $(document).ready(function() {
           {% endif %}
         {% endfor %}
     </ul>
+    {% endif %}
 {% endblock %}
