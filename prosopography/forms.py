@@ -2,7 +2,9 @@ from django import forms
 
 
 class SearchForm(forms.Form):
-    nomina = forms.CharField(max_length=255, required=False)
+    nomina = forms.CharField(
+        max_length=255, required=False, label='Search for a correspondent'
+    )
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
