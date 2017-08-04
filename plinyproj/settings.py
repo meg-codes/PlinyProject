@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'letters',
     'prosopography',
     'news',
+    'contentpages',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'plinyproj.context_processors.add_search_form',
             ],
         },
     },

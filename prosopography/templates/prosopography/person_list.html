@@ -62,7 +62,7 @@ will be displayed below along with the letters addressed to this person.</p>
 <div class='row'>
 <div class='col-xs-6'>
 <form action="{% url 'people:search' %}" method="get" class="form-inline">
-  {% bootstrap_form form layout='inline' %}
+  {% bootstrap_form search_form layout='inline' %}
   <button type="submit" class="btn btn-primary">
     Search
   </button>
