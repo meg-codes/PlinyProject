@@ -25,8 +25,11 @@ class TestPostListView(TestCase):
     def test_view(self):
         view_url = reverse('index')
         response = self.client.get(view_url)
-        used_templates = ['news/post_list.html', 'pp_base.html', 'footer.html',
-                          'top_nav.html']
+        used_templates = ['news/post_list.html', 'pp_base.html',
+                          'footer.html', 'top_nav.html',
+                          'django/forms/widgets/text.html',
+                          'django/forms/widgets/input.html',
+                          'django/forms/widgets/attrs.html', ]
 
         assert response.status_code == 200
         for template in response.templates:
