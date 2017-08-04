@@ -90,6 +90,7 @@ will be displayed below along with the letters addressed to this person.</p>
 </div>
 
 {% if object_list %}
+<div class='table-responsive'>
 <table class='table table-striped'>
   <tr>
     <th>Nomina</th>
@@ -102,6 +103,7 @@ will be displayed below along with the letters addressed to this person.</p>
   </tr>
   {% endfor %}
 </table>
+</div>
 
 {% endif %}
 {% if is_paginated %}
