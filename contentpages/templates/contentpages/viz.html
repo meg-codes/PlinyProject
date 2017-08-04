@@ -1,0 +1,38 @@
+{% extends 'pp_base.html' %}
+{% load static %}
+
+{% block body %}
+<h1>Network Visualization</h1>
+<div class='row'>
+  <div class='col-xs-12'>
+    <a href='{% static "contentpages/pliny-network.png" %}'>
+      <img src='{% static "contentpages/pliny-network.png" %}' width='100%' />
+    </a>
+    <table class='table'>
+      <tr><th>Key</th></tr>
+      <tr><td>Purple/Dark Purple = Senatorial; larger dot = consular</td></tr>
+      <tr><td>Green = Equestrian</td></tr>
+      <tr><td>Blue = Roman Citizen (status unknown)</td></tr>
+    </table>
+
+    <p>
+      The chart above outlines an initial sample of Pliny's social network
+      and analysis thereof. The sort is based on weighted closeness based
+      on a rough calculation where a mention or letter written to someone =
+      weight + 1.
+
+      Edges are all reciprocal and are not shown here for visibility's sake.
+      Also reflected in sort location but
+      not in ranked closeness are some preliminary additions of interconnections
+      between contacts.
+
+      Some points to note are the cluster of close contacts
+      from Como, Italy and Tifernum in the inner rings.
+
+      There are also demonstrably several senatorial contacts with a pattern of
+      2-3 letters within a second to last rung that may reflect Pliny's editorial
+      decisions. (This is a preliminary guess.)
+    </p>
+</div>
+</div>
+{% endblock %}
