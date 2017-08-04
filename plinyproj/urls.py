@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^$', PostListView.as_view(), name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^people/', include('prosopography.urls', namespace='people')),
+    url(r'^content/', include('contentpages.urls', namespace='content')),
 ]
