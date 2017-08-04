@@ -3,8 +3,8 @@ from operator import ior
 
 from django.views.generic import ListView
 from django.http.response import JsonResponse
-from django import forms
 
+from .forms import SearchForm
 from .models import Person
 
 
@@ -16,14 +16,6 @@ def person_autocomplete(request):
                  nomina__icontains=query).values_list('nomina', flat=True)
         return JsonResponse(list(people), safe=False)
     return JsonResponse({})
-
-
-class SearchForm(forms.Form):
-    nomina = forms.CharField(max_length=255, required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['nomina'].widget.attrs.update({'class': 'typeahead'})
 
 
 class PersonListView(ListView):
