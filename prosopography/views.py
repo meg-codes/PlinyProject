@@ -32,7 +32,6 @@ class PersonListView(ListView):
             if query != 'page':
                 params.append('%s=%s' % (query, self.request.GET[query]))
         context['saved_query'] = "&" + '&'.join(params)
-        print(context)
         return context
 
     def get_queryset(self):
