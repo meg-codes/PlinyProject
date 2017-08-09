@@ -1,8 +1,17 @@
+import hashlib
+
+from django.views.decorators.http import condition
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from prosopography.forms import SearchForm
 from .models import Post
 
 
+def last_mod(request):
+    return Post.objects.latest('date_updated').date_updated
+
+
+@method_decorator(condition(last_modified_func=last_mod), name='dispatch')
 class PostListView(ListView):
 
     model = Post
