@@ -1,11 +1,21 @@
+from dal import autocomplete
 from functools import reduce
 from operator import ior
 
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.http.response import JsonResponse
 
 from .forms import SearchForm
 from .models import Person
+
+
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
+class PersonAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        """Get a query set to return for DAL autocomplete in admin"""
+        return Person.objects.filter(nomina__icontains =self.q)
 
 
 def person_autocomplete(request):

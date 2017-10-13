@@ -36,6 +36,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
         ('citizen', 'equestrian', 'senatorial', 'consular'),
         ('birth', 'death', 'cos', 'floruit'),
         'certainty_of_id',
+        'related_to',
         'notes',
     )
 
