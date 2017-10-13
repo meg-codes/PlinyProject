@@ -20,7 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-nl=t7*ud&td@(y(5y@3a8+o++=d5&#dk0wao5$sj@exsyx(*6'
+
+# As configured, will look for an environment variable named DJANGO_SECRET_KEY
+# or will respect SECRET_KEY in local_settings.py.
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', None)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
+    # local apps
+    'letters',
+    'prosopography',
+    'news',
+    'contentpages',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
 ]
 
 ROOT_URLCONF = 'plinyproj.urls'
@@ -54,7 +65,7 @@ ROOT_URLCONF = 'plinyproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'plinyproj.context_processors.add_search_form',
             ],
         },
     },
@@ -105,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -118,3 +130,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media'),]
+# Import local settings
+# Adapted from mezzanine and CDH @ Princeton Projects
+# It has two advantages of standard import * from .local_settings
+#   1) It gives access to local_settings everything that's in settings.py
+#   2) It means that django's autoreload sees it too.
+local = os.path.join(BASE_DIR, "plinyproj", "local_settings.py")
+if os.path.exists(local):
+    import sys
+    import imp
+    module_name = "plinyproj.local_settings"
+    module = imp.new_module(module_name)
+    module.__file__ = local
+    sys.modules[module_name] = module
+    exec(open(local, "rb").read())

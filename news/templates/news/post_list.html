@@ -1,0 +1,50 @@
+{% extends 'pp_base.html' %}
+
+{% block head %}
+
+<title>The Pliny Project</title>
+{% endblock%}
+
+{% block body %}
+    <div class='row'>
+      <div class='col-xs-12'>
+        <h1>Welcome to the Pliny Project</h1>
+        <p>This site and its associated web application is a digital resource
+        for the correspondents of Pliny the Younger and his world, especially
+       in its social dimensions and the connections between his associates.</p>
+
+       <p>Use the quick search or menu above to explore the site.</p>
+      </div>
+    </div>
+
+      {% for post in posts %}
+      <article>
+      <div class='row'>
+        <div class='col-xs-8'>
+          <h3>{{ post.subject }}</h3>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-8'>
+          <p>{{ post.content|safe }}</p>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-4'>
+          <span>{{ post.date_posted|date:"d M Y" }}</span>
+        </div>
+      </div>
+    </article>
+      {% endfor %}
+      {% if is_paginated %}
+      <ul class='pagination'>
+        {% for number in page_obj.paginator.page_range %}
+          {% if page_obj.number == number %}
+          <li class='disabled'><a href='#'>{{ page_obj.number }}</a></li>
+          {% else %}
+          <li><a href='?page={{number}}'>{{ number }}</a></li>
+          {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

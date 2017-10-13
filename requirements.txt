@@ -1,1 +1,4 @@
 Django~=1.11
+mysqlclient
+django-bootstrap3
+gunicorn

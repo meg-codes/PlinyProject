@@ -1,0 +1,24 @@
+article > div:last-child > div > span {
+  border-bottom: 1px solid black
+}
+
+body {
+  padding-top: 70px;
+}
+
+footer {
+  text-align: center;
+  font-size: 50%;
+}
+
+#main-content {
+  padding-bottom: 100px;
+}
+
+#nav_nomina {
+  width: 200px;
+}
+
+#id_nomina {
+  width: 200px;
+}
