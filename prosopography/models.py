@@ -62,7 +62,11 @@ class Person(models.Model):
 
     # default says more about Pliny's correspondents than any overarching
     # statement about gender.
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
+    gender = models.CharField(
+                max_length=1,
+                choices=GENDER_CHOICES,
+                default='M'
+            )
 
     # Citizenship ambiguity
     citizen = SocialField()
@@ -71,10 +75,10 @@ class Person(models.Model):
     consular = SocialField()
 
     # years, all optional
-    birth = models.PositiveSmallIntegerField(blank=True, null=True)
-    death = models.PositiveSmallIntegerField(blank=True, null=True)
-    cos = models.PositiveSmallIntegerField(blank=True, null=True)
-    floruit = models.PositiveSmallIntegerField(blank=True, null=True)
+    birth = models.SmallIntegerField(blank=True, null=True)
+    death = models.SmallIntegerField(blank=True, null=True)
+    cos = models.SmallIntegerField(blank=True, null=True)
+    floruit = models.SmallIntegerField(blank=True, null=True)
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
     # Low uncertainty expresses overall issues with identification
@@ -141,12 +145,13 @@ class Person(models.Model):
             return 'Senatorial (cos.)'
         if self.senatorial == 'Y':
             return 'Senatorial'
-        if self.equestrian == 'Y' :
+        if self.equestrian == 'Y':
             return 'Equestrian'
         if self.citizen == 'Y':
             return 'Citizen (Not Equestrian or Senatorial)'
 
         return 'Non-Citizen'
+
 
 class Relationship(models.Model):
     """A through model for a relationship between two people"""
@@ -162,6 +167,7 @@ class Relationship(models.Model):
     FAMILIA = 'fam'
     AMICUS = 'ami'
     OTHER = 'oth'
+    CONCIVIS = 'coc'
 
     RELATIONSHIP_TYPES = (
         (ANCESTOR, 'ancestor'),
@@ -172,6 +178,7 @@ class Relationship(models.Model):
         (FAMILIA, 'member of same familia'),
         (AMICUS, 'amicus'),
         (OTHER, 'otherwise related'),
+        (CONCIVIS, 'Citizens of same region or municipality'),
     )
 
     relationship_type = models.CharField(

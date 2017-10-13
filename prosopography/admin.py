@@ -21,9 +21,20 @@ class MentionedInline(admin.TabularInline):
     extra = 1
 
 
+class RelationshipInline(admin.TabularInline):
+    model = Relationship
+    fk_name = 'from_person'
+
+
 class CorrespondentAdmin(admin.ModelAdmin):
-    inlines = [LettersToInline, MentionedInline, AKAInline]
+    inlines = [RelationshipInline, LettersToInline, MentionedInline, AKAInline]
     model = Person
+    list_display = ('nomina', 'gender', 'citizen', 'equestrian', 'senatorial',
+                    'consular', 'birth', 'death', 'cos', 'floruit',
+                    'certainty_of_id', 'notes')
+    list_filter = ('citizen', 'equestrian', 'senatorial', 'consular', 'cos',
+                   'certainty_of_id')
+    search_fields = ('nomina', 'notes')
     fields = (
         'nomina',
         'gender',
@@ -32,6 +43,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
         'certainty_of_id',
         'notes',
     )
+
     exclude = ['letters_to', 'mentioned_in']
 
 

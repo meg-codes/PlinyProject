@@ -1,6 +1,13 @@
 Change Log
 ----------
 
+0.5.5
+=====
+
+* Significant admin improvements:
+   * Improvements to letter and person admins
+   * Signal handling to create reciprocal relationships between people when appropriate
+   * Open up possibility of the pre-BC birth dates if necessary 
 
 0.5.0
 =====

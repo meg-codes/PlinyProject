@@ -7,6 +7,9 @@ from django.test import TestCase
 from .models import AKA, Person, Relationship, SocialField
 from letters.models import Letter
 from prosopography.management.commands import import_pliny_data
+from prosopography.signals.handlers import RECIPROCAL_RELATIONSHIP_MAP
+
+
 
 FIXTURES_DIR = os.path.join(settings.BASE_DIR, 'prosopography', 'fixtures')
 
@@ -121,7 +124,6 @@ class TestPerson(TestCase):
 
 
 
-
 class TestRelationship(TestCase):
 
     def setUp(self):
@@ -141,8 +143,34 @@ class TestRelationship(TestCase):
             to_person=self.quinta,
             relationship_type='sib'
         )
-        print(relationship)
         assert str(relationship) == 'Quintus - sibling to - Quinta'
+
+    def test_signals(self):
+        relationship = Relationship.objects.create(
+            from_person=self.quintus,
+            to_person=self.quinta,
+            relationship_type='sib'
+        )
+
+        # mirror relationship created
+        rev_rel = Relationship.objects.get(from_person=self.quinta)
+        assert rev_rel
+
+        # delete relationship
+        relationship.delete()
+        assert Relationship.objects.count() == 0
+
+    def test_relationship_map(self):
+
+        test_map = RECIPROCAL_RELATIONSHIP_MAP
+        assert test_map['anc'] == 'des'
+        assert test_map['des'] == 'anc'
+        assert test_map['sib'] == 'sib'
+        assert test_map['par'] == 'chi'
+        assert test_map['fam'] == 'fam'
+        assert test_map['ami'] == 'ami'
+        assert test_map['coc'] == 'coc'
+
 
 class TestImport(TestCase):
 
