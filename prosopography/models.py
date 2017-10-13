@@ -167,6 +167,7 @@ class Relationship(models.Model):
     FAMILIA = 'fam'
     AMICUS = 'ami'
     OTHER = 'oth'
+    CONCIVIS = 'coc'
 
     RELATIONSHIP_TYPES = (
         (ANCESTOR, 'ancestor'),
@@ -177,6 +178,7 @@ class Relationship(models.Model):
         (FAMILIA, 'member of same familia'),
         (AMICUS, 'amicus'),
         (OTHER, 'otherwise related'),
+        (CONCIVIS, 'Citizens of same region or municipality'),
     )
 
     relationship_type = models.CharField(
