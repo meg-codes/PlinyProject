@@ -62,7 +62,11 @@ class Person(models.Model):
 
     # default says more about Pliny's correspondents than any overarching
     # statement about gender.
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
+    gender = models.CharField(
+                max_length=1,
+                choices=GENDER_CHOICES,
+                default='M'
+            )
 
     # Citizenship ambiguity
     citizen = SocialField()
@@ -141,12 +145,13 @@ class Person(models.Model):
             return 'Senatorial (cos.)'
         if self.senatorial == 'Y':
             return 'Senatorial'
-        if self.equestrian == 'Y' :
+        if self.equestrian == 'Y':
             return 'Equestrian'
         if self.citizen == 'Y':
             return 'Citizen (Not Equestrian or Senatorial)'
 
         return 'Non-Citizen'
+
 
 class Relationship(models.Model):
     """A through model for a relationship between two people"""
