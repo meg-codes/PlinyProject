@@ -71,10 +71,10 @@ class Person(models.Model):
     consular = SocialField()
 
     # years, all optional
-    birth = models.PositiveSmallIntegerField(blank=True, null=True)
-    death = models.PositiveSmallIntegerField(blank=True, null=True)
-    cos = models.PositiveSmallIntegerField(blank=True, null=True)
-    floruit = models.PositiveSmallIntegerField(blank=True, null=True)
+    birth = models.NullBooleanField(blank=True, null=True)
+    death = models.NullBooleanField(blank=True, null=True)
+    cos = models.NullBooleanField(blank=True, null=True)
+    floruit = models.NullBooleanField(blank=True, null=True)
 
     # Certainty, expressed as 1-5, with 5 being highest and 1 being lowest
     # Low uncertainty expresses overall issues with identification
