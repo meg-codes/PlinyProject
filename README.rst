@@ -1,4 +1,8 @@
 PlinyProject
 ------------
 
-Future home of the Pliny Project's codebase. Buttons forthcoming.
+.. image:: https://www.travis-ci.org/bwhicks/PlinyProject.svg?branch=develop
+    :target: https://www.travis-ci.org/bwhicks/PlinyProject
+
+
+
