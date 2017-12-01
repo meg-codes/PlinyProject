@@ -1,6 +1,11 @@
 Change Log
 ----------
 
+0.5.6
+=====
+
+* Add tracking to people for their residency in Comum
+
 0.5.5
 =====
 
