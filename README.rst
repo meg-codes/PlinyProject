@@ -1,10 +1,10 @@
 PlinyProject
 ------------
 
-.. image:: https://www.travis-ci.org/bwhicks/PlinyProject.svg?branch=master
+.. image:: https://www.travis-ci.org/bwhicks/PlinyProject.svg?branch=develop
     :target: https://www.travis-ci.org/bwhicks/PlinyProject
 
-.. image:: https://codecov.io/gh/bwhicks/PlinyProject/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/bwhicks/PlinyProject/branch/develop/graph/badge.svg
   :target: https://codecov.io/gh/bwhicks/PlinyProject
 
 

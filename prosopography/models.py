@@ -110,6 +110,9 @@ class Person(models.Model):
         through='Relationship',
     )
 
+    # from Comum
+    from_comum = models.BooleanField(default=False)
+
     def str_dates(self):
         '''Produce BC/AD strings of any integer dates'''
         date_fields = ['birth', 'death', 'cos', 'floruit']
