@@ -29,7 +29,8 @@ class RelationshipInline(admin.TabularInline):
 class CorrespondentAdmin(admin.ModelAdmin):
     inlines = [RelationshipInline, LettersToInline, MentionedInline, AKAInline]
     model = Person
-    list_display = ('nomina', 'gender', 'citizen', 'equestrian', 'senatorial',
+    list_display = ('nomina', 'gender', 'from_comum',
+                    'citizen', 'equestrian', 'senatorial',
                     'consular', 'birth', 'death', 'cos', 'floruit',
                     'certainty_of_id', 'notes')
     list_filter = ('citizen', 'equestrian', 'senatorial', 'consular', 'cos',
@@ -38,6 +39,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
     fields = (
         'nomina',
         'gender',
+        'from_comum',
         ('citizen', 'equestrian', 'senatorial', 'consular'),
         ('birth', 'death', 'cos', 'floruit'),
         'certainty_of_id',
