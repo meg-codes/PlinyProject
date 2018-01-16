@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from .models import AKA, Person, Relationship, SocialField
+from .views import PersonListView
 from letters.models import Letter
 from prosopography.management.commands import import_pliny_data
 from prosopography.signals.handlers import RECIPROCAL_RELATIONSHIP_MAP

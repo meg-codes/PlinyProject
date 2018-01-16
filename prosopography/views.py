@@ -127,7 +127,9 @@ class NodeEdgeListView(ListView):
                 'weight': link['weight']
             })
         node_edge_dict['links'] += reciprocal_links
+        
         """
+        # Pulled for now not needed for ego 1.5 model
         # relationships should be reciprocal if they need to be already
         for relationship in Relationship.objects.all():
             node_edge_dict['links'].append({
