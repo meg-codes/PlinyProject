@@ -3,3 +3,4 @@ mysqlclient
 django-bootstrap3
 django-autocomplete-light
 gunicorn
+six
