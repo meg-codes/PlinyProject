@@ -1,6 +1,6 @@
 Django~=1.11
 mysqlclient
-dal
+django-autocomplete-light
 django-bootstrap3
 gunicorn
 six
