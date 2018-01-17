@@ -3,7 +3,7 @@ Change Log
 
 0.6.0
 =====
-* Add ego network visualization of pliny and his correspondents to data viz
+* Add ego network visualization of Pliny and his correspondents to data viz
 
 
 0.5.6
