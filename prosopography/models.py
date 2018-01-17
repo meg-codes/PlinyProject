@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+from django.utils.text import slugify
 
 
 def valid_range(value):
@@ -139,6 +141,13 @@ class Person(models.Model):
         if self.floruit:
             return '%s (fl. %s)' % (self.nomina, dates['floruit'])
         return self.nomina
+
+    def get_absolute_url(self):
+        return reverse('people:detail', kwargs={'slug': self.slug, 'id': self.id})
+
+    @property
+    def slug(self):
+        return slugify(self.nomina)
 
     @property
     def ordo(self):

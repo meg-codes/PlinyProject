@@ -4,15 +4,16 @@ from operator import ior
 from dal import autocomplete
 from django.contrib.auth.decorators import user_passes_test
 from django.http.response import JsonResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
-
+from django.views.generic import ListView, DetailView
 from .forms import SearchForm
 from .models import Person, SocialField
 
 
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class PersonAutoComplete(autocomplete.Select2QuerySetView):
+    """DAL autocomplete for use in the Django-admin"""
     def get_queryset(self):
         """Get a query set to return for DAL autocomplete in admin"""
         people = Person.objects.all()
@@ -20,13 +21,31 @@ class PersonAutoComplete(autocomplete.Select2QuerySetView):
 
 
 def person_autocomplete(request):
-
+    """Autocomplete view public-facing for nomina autocomplete"""
     query = request.GET.get('q')
     if query:
         people = Person.objects.filter(
                  nomina__icontains=query).values_list('nomina', flat=True)
         return JsonResponse(list(people), safe=False)
     return JsonResponse({})
+
+
+class PersonDetailView(DetailView):
+    """Get the detail view of a person based on pk"""
+    model = Person
+
+    def get_object(self, queryset=None):
+        """Override to ignore slug lookups because it's actually a property"""
+        queryset = self.get_queryset()
+        if 'id' in self.kwargs and self.kwargs['id']:
+            return queryset.get(pk=self.kwargs['id'])
+
+    def render_to_response(self, context, **kwargs):
+        print(self.object.get_absolute_url())
+        print(self.request.path)
+        if self.object.get_absolute_url() != self.request.path:
+            return redirect(self.object)
+        return super(PersonDetailView, self).render_to_response(context, **kwargs)
 
 
 class PersonListView(ListView):
