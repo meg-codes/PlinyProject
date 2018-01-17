@@ -1,21 +1,11 @@
 from functools import reduce
 from operator import ior
 
-from dal import autocomplete
-from django.contrib.auth.decorators import user_passes_test
 from django.http.response import JsonResponse
-from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
 from .forms import SearchForm
-from .models import Person, SocialField, Relationship
-
-
-@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
-class PersonAutoComplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        """Get a query set to return for DAL autocomplete in admin"""
-        return Person.objects.filter(nomina__icontains =self.q)
+from .models import Person, SocialField
 
 
 def person_autocomplete(request):
@@ -23,7 +13,7 @@ def person_autocomplete(request):
     query = request.GET.get('q')
     if query:
         people = Person.objects.filter(
-                 nomina__icontains=query).weights_list('nomina', flat=True)
+                 nomina__icontains=query).values_list('nomina', flat=True)
         return JsonResponse(list(people), safe=False)
     return JsonResponse({})
 
@@ -127,7 +117,7 @@ class NodeEdgeListView(ListView):
                 'weight': link['weight']
             })
         node_edge_dict['links'] += reciprocal_links
-        
+
         """
         # Pulled for now not needed for ego 1.5 model
         # relationships should be reciprocal if they need to be already
