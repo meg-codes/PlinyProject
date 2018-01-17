@@ -1,11 +1,22 @@
 from functools import reduce
 from operator import ior
 
+from dal import autocomplete
+from django.contrib.auth.decorators import user_passes_test
 from django.http.response import JsonResponse
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
 from .forms import SearchForm
-from .models import Person, SocialField
+from .models import Person, SocialField, Relationship
+
+
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
+class PersonAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        """Get a query set to return for DAL autocomplete in admin"""
+        people = Person.objects.all()
+        return people.filter(nomina__istartswith=self.q)
 
 
 def person_autocomplete(request):
