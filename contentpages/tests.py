@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from contentpages.views import ContentPage
-
 
 class TestContentPage(TestCase):
 
