@@ -41,8 +41,6 @@ class PersonDetailView(DetailView):
             return queryset.get(pk=self.kwargs['id'])
 
     def render_to_response(self, context, **kwargs):
-        print(self.object.get_absolute_url())
-        print(self.request.path)
         if self.object.get_absolute_url() != self.request.path:
             return redirect(self.object)
         return super(PersonDetailView, self).render_to_response(context, **kwargs)
