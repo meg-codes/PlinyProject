@@ -48,7 +48,7 @@ class TestPersonDetailView(TestCase):
                         kwargs={'slug': 'quintus', 'id': self.gaius.pk})
         res = self.client.get(route)
         self.assertRedirects(res, self.gaius.get_absolute_url())
-
+        
 
 class TestPersonListView(TestCase):
 

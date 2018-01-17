@@ -3,18 +3,94 @@
 {% load bootstrap3 static %}
 
 {% block head %}
-
+<link rel='stylesheet' href='{% static "prosopography.css" %}'>
 {% endblock %}
 
 {% block body %}
 <h1> {{ object.nomina }} </h1>
 
-
 <div class='row'>
-  <div class='col-xs-12'>
+    <div class='col-xs-12'>
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h4>Biographic Information</h4></div>
+            <div class='panel-body'>
+                <ul class='list-unstyled'>
+                    <li>Gender: {{ object.get_gender_display }}</li>
+                </ul>
+                <ul class='list-unstyled list-inline'>
+                    {% if object.birth %}
+                    <li>Birth: {{ object.birth }}</li>{% endif %} {% if object.cos %}
+                    <li>{{ object.cos }}</li>{% endif %} {% if object.floruit %}
+                    <li>{{ object.floruit }}
+                        <li>{% endif %} {% if object.death %}
+                            <li>Death: {{ object.death }}</li>{% endif %}
+                </ul>
+                {% if object.from_comum %}
+                <ul class='list-unstyled'>
+                    <li>From Comum</li>
+                </ul>
+                {% endif %}
+                <ul class='list-unstyled'>
+                    <li>Certainity of identification: {{ object.certainty_of_id}}</li>
+                    <li><small>(Rating from 1-5, with 5 being broad agreement among scholars and clear sources
+                      and 1 being considerable confusion as to the person.)</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class='panel panel-default'>
+
+            <div class='panel-heading'>
+                <h4>Social Rank</h4>
+            </div>
+            <div class='panel-body'>
+                <ul class='list-unstyled list-inline'>
+                    <li>Citizen: {{ object.get_citizen_display }}</li>
+                    <li>Equestrian: {{ object.get_equestrian_display }}</li>
+                    <li>Senatorial: {{ object.get_senatorial_display }}</li>
+                    <li>Consular: {{ object.get_consular_display }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h4>Letters to</h4>
+            </div>
+            <div class='panel-body'>
+                <ul class='list-unstyled list-inline'>
+                    {% for letter in object.letters_to.all %}
+                    <li>{{ letter }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% if object.mentioned_in.all %}
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h4>Mentioned in</h4>
+            </div>
+            <div class='panel-body'>
+                <ul class='list-unstyled list-inline'>
+                    {% for letter in object.mentioned_in.all %}
+                    <li>{{ letter }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+       {% endif %}
+       {% if object.notes %}
+       <div class='panel panel-default'>
+           <div class='panel-heading'>
+               <h4>Notes</h4>
+           </div>
+           <div class='panel-body'>
+               <p>{{ object.notes }}</p>
+           </div>
+       </div>
+       {% endif %}
+    </div>
 
 </div>
-</div>
-
 
 {% endblock %}
