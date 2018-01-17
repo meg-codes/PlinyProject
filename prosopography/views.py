@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
 from .forms import SearchForm
-from .models import Person, SocialField, Relationship
+from .models import Person, SocialField
 
 
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
@@ -16,7 +16,7 @@ class PersonAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """Get a query set to return for DAL autocomplete in admin"""
         people = Person.objects.all()
-        return people.filter(nomina__istartswith=self.q)
+        return people.filter(nomina__istartswith=self.q).order_by('nomina')
 
 
 def person_autocomplete(request):
