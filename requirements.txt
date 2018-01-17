@@ -1,5 +1,6 @@
 Django~=1.11
 mysqlclient
+dal
 django-bootstrap3
 gunicorn
 six

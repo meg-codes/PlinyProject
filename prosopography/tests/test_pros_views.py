@@ -22,6 +22,5 @@ class TestPersonAutocomplete(TestCase):
         res = self.client.get(auto, {'q': 'Qu'})
         assert res.status_code == 200
         data = res.json()
+        # should get back Quintus' nomina
         assert data[0] == 'Quintus'
-
-        
