@@ -1,11 +1,14 @@
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.http import JsonResponse
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
+from letters.models import Letter
 from prosopography.forms import SearchForm
 from prosopography.models import Person, SocialField
+from prosopography.views import NodeEdgeListView
 
 Y = SocialField.DEFINITE
 N = SocialField.NOT
@@ -78,7 +81,82 @@ class TestPersonListView(TestCase):
         assert self.quintus in context['object_list']
 
 
+class TestNodeEdgeListView(TestCase):
 
+    def setUp(self):
+        self.quintus = Person.objects.create(
+            nomina='Quintus', equestrian=Y
+        )
+        self.gaius = Person.objects.create(
+            nomina='Gaius',
+            equestrian=N,
+            senatorial=N,
+            citizen=Y
+        )
+        self.senator = Person.objects.create(
+            nomina='Senator',
+            senatorial=Y,
+            equestrian=N,
+            citizen=Y
+        )
+        self.consul = Person.objects.create(
+            nomina='Consulis',
+            senatorial=Y,
+            consular=Y,
+            citizen=Y
+        )
+
+        letter = Letter.objects.create(book=1, letter=2)
+        self.gaius.letters_to.add(letter)
+        self.quintus.letters_to.add(letter)
+        self.consul.letters_to.add(letter)
+        self.senator.letters_to.add(letter)
+        self.senator.mentioned_in.add(letter)
+
+    @patch('prosopography.views.NodeEdgeListView.get_data')
+    def test_render_to_json_response(self, mockdata):
+        mockdata.return_value = {}
+        nodes = NodeEdgeListView()
+        res = nodes.render_to_json_response()
+        assert isinstance(res, JsonResponse)
+        assert res.content == b'{}'
+
+    def test_assign_class(self):
+        nodes = NodeEdgeListView()
+        assert nodes.assign_class(self.senator) == 3
+        assert nodes.assign_class(self.gaius) == 1
+        assert nodes.assign_class(self.quintus) == 2
+        assert nodes.assign_class(self.consul) == 4
+
+    def test_get_data(self):
+        expected_dict = {
+            'nodes': [
+                {'id': 'Gaius Plinius Secundus', 'group': 9},
+                {'id': 'Gaius', 'group': 1},
+                {'id': 'Quintus', 'group': 2},
+                {'id': 'Senator', 'group': 3},
+                {'id': 'Consulis', 'group': 4},
+            ],
+            'links': [
+                {'source': 'Gaius Plinius Secundus', 'target': 'Gaius', 'weight': 1},
+                {'source': 'Gaius Plinius Secundus', 'target': 'Quintus', 'weight': 1},
+                {'source': 'Gaius Plinius Secundus', 'target': 'Senator', 'weight': 2},
+                {'source': 'Gaius Plinius Secundus', 'target': 'Consulis', 'weight': 1},
+                {'source': 'Gaius', 'target': 'Gaius Plinius Secundus', 'weight': 1},
+                {'source': 'Quintus', 'target': 'Gaius Plinius Secundus', 'weight': 1},
+                {'source': 'Senator', 'target': 'Gaius Plinius Secundus', 'weight': 2},
+                {'source': 'Consulis', 'target': 'Gaius Plinius Secundus', 'weight': 1},
+            ],
+        }
+        nodes = NodeEdgeListView()
+        data = nodes.get_data()
+
+        for link in expected_dict['links']:
+            assert link in data['links']
+        for node in expected_dict['nodes']:
+            assert node in data['nodes']
+        assert len(expected_dict['links']) == len(data['links'])
+        assert len(expected_dict['nodes']) == len(data['nodes'])        
 
 class PersonAutoCompleteDAL(TestCase):
 
