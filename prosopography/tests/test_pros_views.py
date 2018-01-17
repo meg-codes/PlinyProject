@@ -8,10 +8,46 @@ from django.urls import reverse
 from letters.models import Letter
 from prosopography.forms import SearchForm
 from prosopography.models import Person, SocialField
-from prosopography.views import NodeEdgeListView
+from prosopography.views import NodeEdgeListView, PersonDetailView
 
 Y = SocialField.DEFINITE
 N = SocialField.NOT
+
+
+class TestPersonDetailView(TestCase):
+
+    def setUp(self):
+        self.quintus = Person.objects.create(
+            nomina='Quintus', equestrian=Y
+        )
+        self.gaius = Person.objects.create(
+            nomina='Gaius',
+            equestrian=N,
+            senatorial=N,
+            citizen=Y
+        )
+
+    def test_get_object(self):
+        detailview = PersonDetailView()
+        detailview.kwargs = {}
+        detailview.kwargs['id'] = self.gaius.pk
+        detailview.kwargs['slug'] = 'quintus'
+        obj = detailview.get_object()
+        # should ignore slug and return gaius
+        assert obj == self.gaius
+
+    def test_render_to_response(self):
+        # should return the object as expected if pk and slug match
+        route = reverse('people:detail',
+                        kwargs={'slug': 'gaius', 'id': self.gaius.pk})
+        res = self.client.get(route)
+        assert res.status_code == 200
+        assert res.context['object'] == self.gaius
+        # if they do not should return 302
+        route = reverse('people:detail',
+                        kwargs={'slug': 'quintus', 'id': self.gaius.pk})
+        res = self.client.get(route)
+        self.assertRedirects(res, self.gaius.get_absolute_url())
 
 
 class TestPersonListView(TestCase):
@@ -156,7 +192,7 @@ class TestNodeEdgeListView(TestCase):
         for node in expected_dict['nodes']:
             assert node in data['nodes']
         assert len(expected_dict['links']) == len(data['links'])
-        assert len(expected_dict['nodes']) == len(data['nodes'])        
+        assert len(expected_dict['nodes']) == len(data['nodes'])
 
 class PersonAutoCompleteDAL(TestCase):
 

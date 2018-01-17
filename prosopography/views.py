@@ -31,7 +31,7 @@ def person_autocomplete(request):
 
 
 class PersonDetailView(DetailView):
-    """Get the detail view of a person based on pk"""
+    """Get the detail view of a person based on pk and redirect to proper slug."""
     model = Person
 
     def get_object(self, queryset=None):
@@ -41,6 +41,9 @@ class PersonDetailView(DetailView):
             return queryset.get(pk=self.kwargs['id'])
 
     def render_to_response(self, context, **kwargs):
+        """Override to redirect to proper slug if nomina changes"""
+        # if these don't line up, it's probably a malformed or changed slug
+        # so redirect to the right slug.
         if self.object.get_absolute_url() != self.request.path:
             return redirect(self.object)
         return super(PersonDetailView, self).render_to_response(context, **kwargs)
