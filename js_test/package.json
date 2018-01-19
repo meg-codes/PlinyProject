@@ -4,7 +4,7 @@
   "description": "Tests in mocha browser",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha-headless-chrome -f index.html"
+    "test": "node_modules/.bin/mocha-headless-chrome -f index.html -a no-sandbox -a disable-setuid-sandbox"
   },
   "author": "Benjamin Hicks",
   "license": "ISC",
