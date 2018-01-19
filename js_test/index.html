@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+
+        <script type="text/javascript"
+                src="node_modules/jquery/dist/jquery.js"></script>
+
+
+        <script type="text/javascript"
+                src="node_modules/mocha/mocha.js"></script>
+        <script type="text/javascript"
+                src="node_modules/chai/chai.js"></script>
+        <script type="text/javascript"
+                src="node_modules/sinon/pkg/sinon.js"></script>
+        <script type="text/javascript"
+                src="../regform/static/lookup-person.js"></script>
+
+        <script type="text/javascript">
+            var expect = chai.should();
+            mocha.setup('bdd');
+        </script>
+
+        
+        <script>
+        window.onload = function()
+        {
+            mocha.run();
+        }
+
+        </script>
+
+    <body>
+        <div id="mocha"></div>
+        <div id="fixtures" style="display: none; visibility: hidden;">
+            <form  method="post" > <input type='hidden' name='csrfmiddlewaretoken' value='EtJRmVYd8mgjkqwrtOjucyt6zJWy2OjmVSp0KsFi3WBIcR4nxYD2q7yta0pDKRvZ' /> <div id="div_id_id_hash" class="form-group"> <label for="id_id_hash" class="form-control-label  requiredField">
+                    Netid<span class="asteriskField">*</span> </label> <div class=""> <input type="text" name="id_hash" maxlength="255" class="textinput textInput form-control" required id="id_id_hash" /> <small id="hint_id_id_hash" class="text-muted">Your NetID is never stored in this system, only an anonymized hash for statistics tracking.</small> </div> </div> <div id="div_id_department" class="form-group"> <label for="id_department" class="form-control-label ">
+                    Department
+                </label> <div class=""> <input type="text" name="department" maxlength="255" class="textinput textInput form-control" id="id_department" /> </div> </div> <div id="div_id_department_code" class="form-group"> <label for="id_department_code" class="form-control-label ">
+                    Department code
+                </label> <div class=""> <input type="text" name="department_code" maxlength="255" class="textinput textInput form-control" id="id_department_code" /> </div> </div> <div id="div_id_help_topics" class="form-group"> <label for="id_help_topics" class="form-control-label  requiredField">
+                    Help topics<span class="asteriskField">*</span> </label> <div class=""> <select name="help_topics" class="selectmultiple form-control" required id="id_help_topics" multiple="multiple">
+    </select> </div> </div> <input type="hidden" name="other" id="id_other" />
+
+    <div
+        class="buttonHolder"> <input type="submit"
+        name="submit"
+        value="Submit"
+
+            class="btn btn-primary"
+            id="submit-id-submit"
+
+
+        />
+
+    </div> </form>
+</div>
+    </body>
+</html>
