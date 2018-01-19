@@ -3,6 +3,7 @@
 
 {% block head %}
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="{% static 'graph-viz.js' %}"></script>
 
 <style>
 .links line {
@@ -20,8 +21,10 @@
 {% block body %}
 <h1>Force Directed Network Visualization</h1>
 <svg width="1000" height="600">
+    <script>
+        calld3ForceDirected(svg, simulation)
+    </script>
 </svg>
-<script src="{% static 'graph-viz.js' %}"></script>
 
 <h1>Network Visualization</h1>
 <div class='row'>

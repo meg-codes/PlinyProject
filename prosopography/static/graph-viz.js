@@ -1,4 +1,6 @@
 //Gratuitously adapted from https://bl.ocks.org/mbostock/4062045
+function calld3ForceDirected() {
+
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -52,7 +54,7 @@ d3.json("/people/nodes.json", function(error, graph) {
         .attr("cy", function(d) { return d.y; });
   }
 });
-
+}
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
