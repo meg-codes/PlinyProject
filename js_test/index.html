@@ -6,7 +6,6 @@
 
         <script type="text/javascript"
                 src="node_modules/jquery/dist/jquery.js"></script>
-
         <script src="https://d3js.org/d3.v4.min.js"></script>
 
         <script type="text/javascript"
@@ -17,6 +16,12 @@
                 src="node_modules/sinon/pkg/sinon.js"></script>
         <script type="text/javascript"
                 src="../prosopography/static/graph-viz.js"></script>
+        <script type="text/javascript"
+                src="../media/js/site.js">
+        </script>
+        <script src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'></script>
+        <link rel='stylesheet' href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' />
+
         <script type="text/javascript">
             var expect = chai.should();
             mocha.setup('bdd');
@@ -24,6 +29,7 @@
 
 
      <script type="text/javascript" src="spec/test_functions.js"></script>
+     <script type="text/javascript" src="spec/test_site.js"></script>
        <script>
         window.onload = function()
         {
@@ -39,6 +45,8 @@
 
             <svg width="1000" height="600">
             </svg>
+
+            <a id='test-address' href="mailto:address(at)foo(dot)com">Foo</a>
 
         </div>
     </body>

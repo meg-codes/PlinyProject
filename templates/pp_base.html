@@ -18,35 +18,7 @@
   <script src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'></script>
   <link rel='stylesheet' href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' />
 
-  <script>
-  $(document).ready(function() {
-      $("#nav_nomina").autocomplete({
-        source: function(request, response) {
-            var query = request.term
-            $.get("{% url 'people:autocomplete' %}", {q: query}, function (data) {
-                return response(data)
-            });
-        },
-        classes: {
-          "ui-autocomplete": "ui-front"
-        },
-        appendTo: $('nav')
-      });
-
-      // Snip from https://gist.github.com/mathiasbynens/286824
-      $(function() {
-       $('a[href^="mailto:"]').each(function() {
-        this.href = this.href.replace('(at)', '@').replace(/\(dot\)/g, '.');
-       });
-      });
-
-    });
-
-  </script>
-
-
-
-
+  <script src="{% static 'js/site.js' %}"></script>
 
   {% block head %}
   {% endblock %}
