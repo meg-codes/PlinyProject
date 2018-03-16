@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 import re
 
@@ -39,7 +38,9 @@ class Work(models.Model):
     citation_override = models.TextField(blank=True)
 
     def _contributor_string(self, contrib_type, prefix='', suffix=''):
-        contributors = list(self.contributors.filter(contributor_type=contrib_type).order_by('order'))
+        contributors = list(self.contributors
+                            .filter(contributor_type=contrib_type)
+                            .order_by('order'))
         ret = ''
         plural = False
         if len(contributors) == 0:
@@ -55,7 +56,8 @@ class Work(models.Model):
             ret = (
                 "%s, %s, and %s" % (str(contributors[0]),
                                     ", ".join(str(contrib)
-                                              for contrib in contributors[1:-1]),
+                                              for contrib
+                                              in contributors[1:-1]),
                                     str(contributors[-1]))
             )
         if suffix == ', ed.' and plural:
@@ -77,8 +79,10 @@ class Monograph(Work):
         fields = {
             'author': self._contributor_string(Contributor.AUTHOR),
             'title': self.title,
-            'editor': self._contributor_string(Contributor.EDITOR, prefix=', ed. '),
-            'translator': self._contributor_string(Contributor.TRANSLATOR, prefix=', trans. '),
+            'editor': self._contributor_string(Contributor.EDITOR,
+                                               prefix=', ed. '),
+            'translator': self._contributor_string(Contributor.TRANSLATOR,
+                                                   prefix=', trans. '),
             'place': self.place_of_publication,
             'publisher': self.publisher,
             'year': self.year,
@@ -88,14 +92,22 @@ class Monograph(Work):
         if not fields['author']:
             # translator as author
             if fields['translator']:
-                fields['author'] = self._contributor_string(Contributor.TRANSLATOR, suffix=', trans.')
+                fields['author'] = (
+                    self._contributor_string(Contributor.TRANSLATOR,
+                                             suffix=', trans.')
+                )
                 fields['translator'] = ''
             # editor as author
             elif not fields['translator'] and fields['editor']:
-                fields['author'] = self._contributor_string(Contributor.EDITOR, suffix=', ed.')
+                fields['author'] = (
+                    self._contributor_string(Contributor.EDITOR,
+                                             suffix=', ed.')
+                )
                 fields['editor'] = ''
 
-        bibliography = ('%(author)s, <em>%(title)s</em>%(editor)s%(translator)s (%(place)s: %(publisher)s, %(year)s)' %
+        bibliography = ('%(author)s, <em>%(title)s</em>'
+                        '%(editor)s%(translator)s (%(place)s: %(publisher)s, '
+                        '%(year)s)' %
                         fields)
         bibliography = re.sub(r'(\s,\s+)', ' ', bibliography)
         return re.sub(r' +', ' ', bibliography)
@@ -118,7 +130,8 @@ class Article(Work):
             'volume': self.volume,
             'year': self.year,
         }
-        bibliography = ('%(author)s, %(title)s <em>%(journal)s</em> %(volume)s (%(year)s)' % fields)
+        bibliography = ('%(author)s, %(title)s <em>%(journal)s</em> %(volume)s'
+                        ' (%(year)s)' % fields)
         return re.sub(r' +', ' ', bibliography)
 
 
@@ -131,13 +144,22 @@ class Section(Work):
         fields = {
             'author': self._contributor_string(Contributor.AUTHOR),
             'title': '"%s,"' % self.title,
-            'book_editor': self.contained_in._contributor_string(Contributor.EDITOR, prefix=', ed. '),
-            'book_translator': self.contained_in._contributor_string(Contributor.TRANSLATOR, prefix=', trans. '),
+            'book_editor': (
+                self.contained_in._contributor_string(Contributor.EDITOR,
+                                                      prefix=', ed. ')
+            ),
+            'book_translator': (
+                self.contained_in._contributor_string(Contributor.TRANSLATOR,
+                                                      prefix=', trans. ')
+            ),
             'book_title': self.contained_in.title,
             'book_place': self.contained_in.place_of_publication,
             'book_publisher': self.contained_in.publisher,
             'book_year': self.contained_in.year,
         }
+        print(fields)
 
-        bibliography = ('%(author)s, %(title)s in <em>%(book_title)s</em>%(book_translator)s%(book_editor)s (%(book_place)s: %(book_publisher)s, %(book_year)s)' % fields)
+        bibliography = ('%(author)s, %(title)s in <em>%(book_title)s</em>'
+                        '%(book_translator)s%(book_editor)s (%(book_place)s: '
+                        '%(book_publisher)s, %(book_year)s)' % fields)
         return re.sub(r' +', ' ', bibliography)
