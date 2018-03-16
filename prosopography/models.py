@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.text import slugify
 
+from common.models import Citation
 
 def valid_range(value):
     if 0 < value < 6:
@@ -61,7 +62,8 @@ class Person(models.Model):
         ('M', 'Male'),
         ('F', 'Female')
     )
-
+    # Citations
+    citations = models.ManyToManyField(Citation, blank=True)
     # default says more about Pliny's correspondents than any overarching
     # statement about gender.
     gender = models.CharField(

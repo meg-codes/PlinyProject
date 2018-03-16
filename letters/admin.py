@@ -1,7 +1,8 @@
 from dal import autocomplete
 from django import forms
 from django.contrib import admin
-from .models import Letter, Topic, Person
+from .models import Letter, Topic
+from prosopography.models import Person
 
 
 class PersonInlineForm(forms.ModelForm):
