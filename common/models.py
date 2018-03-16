@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 import re
 
@@ -115,7 +116,7 @@ class Monograph(Work):
                         '%(editor)s%(translator)s (%(place)s: %(publisher)s, '
                         '%(year)s)' %
                         fields)
-        bibliography = re.sub(r'(\s,\s+)', ' ', bibliography)
+        bibliography = bibliography.strip(', ')
         return re.sub(r' +', ' ', bibliography)
 
 
@@ -145,6 +146,7 @@ class Article(Work):
         }
         bibliography = ('%(author)s, %(title)s <em>%(journal)s</em> %(volume)s'
                         ' (%(year)s)' % fields)
+        bibliography = bibliography.strip(', ')
         return re.sub(r' +', ' ', bibliography)
 
 
@@ -182,4 +184,41 @@ class Section(Work):
         bibliography = ('%(author)s, %(title)s in <em>%(book_title)s</em>'
                         '%(book_translator)s%(book_editor)s (%(book_place)s: '
                         '%(book_publisher)s, %(book_year)s)' % fields)
+        bibliography = bibliography.strip(', ')
         return re.sub(r' +', ' ', bibliography)
+
+
+class Citation(models.Model):
+    monograph = models.ForeignKey(Monograph, on_delete=models.SET_NULL,
+                                  blank=True, null=True)
+    article = models.ForeignKey(Article, on_delete=models.SET_NULL,
+                                blank=True, null=True)
+    section = models.ForeignKey(Section, on_delete=models.SET_NULL,
+                                blank=True, null=True)
+    pages = models.CharField(max_length=191)
+
+    def __str__(self):
+        title = ''
+        year = ''
+        for field in [self.monograph, self.article, self.section]:
+            if field:
+                title = field.title
+                year = field.year
+        return '%s (%s): %s' % (title, year, self.pages)
+
+    @property
+    def chicago(self):
+        if self.monograph or self.section:
+            return '%s, %s.' % (self.monograph.chicago, self.pages)
+        if self.article:
+            return '%s: %s.' % (self.article.chicago, self.pages)
+
+    def clean(self):
+
+        linking_fields = [self.monograph, self.article, self.section]
+        count = 0
+        for field in linking_fields:
+            if field:
+                count += 1
+            if count > 1:
+                raise ValidationError('Citation only link to one source!')

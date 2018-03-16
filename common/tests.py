@@ -1,5 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
-from common.models import Article, Contributor, Monograph, Section, Work
+import pytest
+
+from common.models import Article, Citation, Contributor, Monograph, Section, \
+                          Work
 
 
 class TestContributor(TestCase):
@@ -245,3 +249,48 @@ class TestSection(TestCase):
         # check citation override
         self.test_section.citation_override = 'Test'
         assert self.test_section.chicago == 'Test'
+
+
+class TestCitation(TestCase):
+
+    def setUp(self):
+
+        self.test_book = Monograph.objects.create(
+            year=1982,
+            title='A Test Monograph',
+            place_of_publication='London',
+            publisher='Foobar University Press'
+        )
+
+        self.article = Article.objects.create(
+            volume=59,
+            year=1972,
+            pages='101-102',
+            title='A Study of Foo',
+            journal='Foo Journal',
+            doi_or_url='http://journalstor.org/',
+        )
+
+    def test_str(self):
+        cite = Citation(monograph=self.test_book, pages='123')
+        assert str(cite) == \
+            'A Test Monograph (1982): 123'
+
+    def test_clean(self):
+
+        cite = Citation(monograph=self.test_book, pages='123-456')
+        # clean should not raise an error
+        cite.clean()
+        cite.article = self.article
+        # clean should raise an error because of two citations
+        with pytest.raises(ValidationError):
+            cite.clean()
+
+    def test_chicago(self):
+        cite = Citation(monograph=self.test_book, pages='123-456')
+        assert cite.chicago == \
+            '<em>A Test Monograph</em> (London: Foobar University Press, 1982), 123-456.'
+
+        cite = Citation(article=self.article, pages='456-789')
+        assert cite.chicago == \
+            '"A Study of Foo," <em>Foo Journal</em> 59 (1972): 456-789.'
