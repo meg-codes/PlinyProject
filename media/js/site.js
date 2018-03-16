@@ -14,9 +14,15 @@ function removeObfus(value) {
  * @param response - a callback function to operate on the data
 */
 function getAutocomplete(request, response) {
-    var query = request.term
-    $.get("/people/autocomplete/", {q: query}, function (data) {
-        return response(data)
+    var query = request.term;
+    $.ajax("/people/autocomplete/", {
+      data: {q: query},
+      success: function(data) {
+        return response(data);
+      },
+      always: function() {
+        return response()
+      }
     });
 }
 
