@@ -2,6 +2,18 @@ from django.test import TestCase
 from common.models import Article, Contributor, Monograph, Section, Work
 
 
+class TestContributor(TestCase):
+
+    def test_str(self):
+        author1 = Contributor(
+            last_name='Author',
+            first_name='First',
+            contributor_type=Contributor.AUTHOR,
+            order=0
+        )
+        str(author1) == 'First Author'
+
+
 class TestWork(TestCase):
 
     def setUp(self):
@@ -26,6 +38,9 @@ class TestWork(TestCase):
             contributor_type=Contributor.AUTHOR,
         )
         self.work.contributors.add(self.author1)
+
+    def test_str(self):
+        assert str(self.work) == 'A Test Work (1982)'
 
     def test_contributor_string(self):
 
@@ -111,6 +126,9 @@ class TestMonograph(TestCase):
         )
         self.test_book.contributors.add(self.author1)
 
+    def test_str(self):
+        assert str(self.test_book) == 'A Test Monograph (1982)'
+
     def test_chicago(self):
         # basic book, author
         assert self.test_book.chicago == \
@@ -135,6 +153,10 @@ class TestMonograph(TestCase):
         self.test_book.contributors.set([self.translator1])
         assert self.test_book.chicago == \
             'First Translator, trans., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+
+        # check citation override
+        self.test_book.citation_override = 'Test'
+        assert self.test_book.chicago == 'Test'
 
 
 class TestJournalArticle(TestCase):
@@ -161,9 +183,15 @@ class TestJournalArticle(TestCase):
         )
         self.article.contributors.set([self.author1, self.author2])
 
+    def test_str(self):
+        assert str(self.article) == "A Study of Foo, Foo Journal (1972)"
+
     def test_chicago(self):
         assert self.article.chicago == \
             'First Author and Second Author, "A Study of Foo," <em>Foo Journal</em> 59 (1972)'
+        # check citation override
+        self.article.citation_override = 'Test'
+        assert self.article.chicago == 'Test'
 
 
 class TestSection(TestCase):
@@ -206,6 +234,14 @@ class TestSection(TestCase):
         )
         self.test_section.contributors.add(self.author1)
 
+    def test_str(self):
+        assert str(self.test_section) == \
+            'A Sample Chapter in A Test Monograph (1982)'
+
     def test_chicago(self):
         assert self.test_section.chicago == \
             'First Author, "A Sample Chapter," in <em>A Test Monograph</em>, trans. Third Translator, ed. First Editor (London: Foobar University Press, 1982)'
+
+        # check citation override
+        self.test_section.citation_override = 'Test'
+        assert self.test_section.chicago == 'Test'

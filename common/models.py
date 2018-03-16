@@ -37,6 +37,9 @@ class Work(models.Model):
     # in an acceptable format
     citation_override = models.TextField(blank=True)
 
+    def __str__(self):
+        return '%s (%s)' % (self.title, self.year)
+
     def _contributor_string(self, contrib_type, prefix='', suffix=''):
         contributors = list(self.contributors
                             .filter(contributor_type=contrib_type)
@@ -65,16 +68,19 @@ class Work(models.Model):
 
         return '%s%s%s' % (prefix, ret, suffix)
 
-    def __str__(self):
-        return self.title
-
 
 class Monograph(Work):
     place_of_publication = models.CharField(max_length=191)
     publisher = models.CharField(max_length=191)
 
+    def __str__(self):
+        return '%s (%s)' % (self.title, self.year)
+
     @property
     def chicago(self):
+
+        if self.citation_override:
+            return self.citation_override
 
         fields = {
             'author': self._contributor_string(Contributor.AUTHOR),
@@ -121,8 +127,15 @@ class Article(Work):
     journal = models.CharField(max_length=191)
     doi_or_url = models.TextField(blank=True)
 
+    def __str__(self):
+        return '%s, %s (%s)' % (self.title, self.journal, self.year)
+
     @property
     def chicago(self):
+
+        if self.citation_override:
+            return self.citation_override
+
         fields = {
             'author': self._contributor_string(Contributor.AUTHOR),
             'title': '"%s,"' % self.title,
@@ -139,8 +152,16 @@ class Section(Work):
     pages = models.CharField(max_length=30)
     contained_in = models.ForeignKey(Monograph, related_name='cited_sections')
 
+    def __str__(self):
+        return '%s in %s (%s)' % (self.title, self.contained_in.title,
+                                  self.year)
+
     @property
     def chicago(self):
+
+        if self.citation_override:
+            return self.citation_override
+
         fields = {
             'author': self._contributor_string(Contributor.AUTHOR),
             'title': '"%s,"' % self.title,
@@ -157,7 +178,6 @@ class Section(Work):
             'book_publisher': self.contained_in.publisher,
             'book_year': self.contained_in.year,
         }
-        print(fields)
 
         bibliography = ('%(author)s, %(title)s in <em>%(book_title)s</em>'
                         '%(book_translator)s%(book_editor)s (%(book_place)s: '
