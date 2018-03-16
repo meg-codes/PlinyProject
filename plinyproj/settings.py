@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'prosopography',
     'news',
     'contentpages',
+    'common',
 ]
 
 MIDDLEWARE = [
