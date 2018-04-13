@@ -4,20 +4,8 @@ import re
 
 
 class Contributor(models.Model):
-    AUTHOR = 0
-    EDITOR = 1
-    TRANSLATOR = 2
-
-    CONTRIBUTORS = (
-        (AUTHOR, 'Author'),
-        (EDITOR, 'Editor'),
-        (TRANSLATOR, 'Translator'),
-    )
-
     last_name = models.CharField(max_length=191)
     first_name = models.CharField(max_length=191, blank=True)
-    contributor_type = models.PositiveSmallIntegerField(choices=CONTRIBUTORS)
-    order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return ('%s %s' % (self.first_name, self.last_name)).strip()
@@ -30,8 +18,25 @@ class Contributor(models.Model):
         return name
 
 
+class WorkContributor(models.Model):
+    AUTHOR = 0
+    EDITOR = 1
+    TRANSLATOR = 2
+
+    CONTRIBUTORS = (
+        (AUTHOR, 'Author'),
+        (EDITOR, 'Editor'),
+        (TRANSLATOR, 'Translator'),
+    )
+
+    contributor = models.ForeignKey(Contributor)
+    work = models.ForeignKey('Work')
+    contribution_type = models.PositiveSmallIntegerField(choices=CONTRIBUTORS)
+    order = models.PositiveSmallIntegerField(default=0)
+
+
 class Work(models.Model):
-    contributors = models.ManyToManyField(Contributor)
+    contributors = models.ManyToManyField(Contributor, through='WorkContributor')
     year = models.PositiveSmallIntegerField()
     title = models.TextField()
     # in case no particular programmatic setup allows for a display citation
@@ -42,9 +47,12 @@ class Work(models.Model):
         return '%s (%s)' % (self.title, self.year)
 
     def _contributor_string(self, contrib_type, prefix='', suffix=''):
-        contributors = list(self.contributors
-                            .filter(contributor_type=contrib_type)
-                            .order_by('order'))
+        workcontributors = WorkContributor.objects.\
+                           filter(work=self, contribution_type=contrib_type)\
+                           .order_by('order')
+
+        contributors = [workcontributor.contributor
+                        for workcontributor in workcontributors]
         ret = ''
         plural = False
         if len(contributors) == 0:
@@ -84,11 +92,11 @@ class Monograph(Work):
             return self.citation_override
 
         fields = {
-            'author': self._contributor_string(Contributor.AUTHOR),
+            'author': self._contributor_string(WorkContributor.AUTHOR),
             'title': self.title,
-            'editor': self._contributor_string(Contributor.EDITOR,
+            'editor': self._contributor_string(WorkContributor.EDITOR,
                                                prefix=', ed. '),
-            'translator': self._contributor_string(Contributor.TRANSLATOR,
+            'translator': self._contributor_string(WorkContributor.TRANSLATOR,
                                                    prefix=', trans. '),
             'place': self.place_of_publication,
             'publisher': self.publisher,
@@ -100,14 +108,14 @@ class Monograph(Work):
             # translator as author
             if fields['translator']:
                 fields['author'] = (
-                    self._contributor_string(Contributor.TRANSLATOR,
+                    self._contributor_string(WorkContributor.TRANSLATOR,
                                              suffix=', trans.')
                 )
                 fields['translator'] = ''
             # editor as author
             elif not fields['translator'] and fields['editor']:
                 fields['author'] = (
-                    self._contributor_string(Contributor.EDITOR,
+                    self._contributor_string(WorkContributor.EDITOR,
                                              suffix=', ed.')
                 )
                 fields['editor'] = ''
@@ -138,7 +146,7 @@ class Article(Work):
             return self.citation_override
 
         fields = {
-            'author': self._contributor_string(Contributor.AUTHOR),
+            'author': self._contributor_string(WorkContributor.AUTHOR),
             'title': '"%s,"' % self.title,
             'journal': self.journal,
             'volume': self.volume,
@@ -165,14 +173,14 @@ class Section(Work):
             return self.citation_override
 
         fields = {
-            'author': self._contributor_string(Contributor.AUTHOR),
+            'author': self._contributor_string(WorkContributor.AUTHOR),
             'title': '"%s,"' % self.title,
             'book_editor': (
-                self.contained_in._contributor_string(Contributor.EDITOR,
+                self.contained_in._contributor_string(WorkContributor.EDITOR,
                                                       prefix=', ed. ')
             ),
             'book_translator': (
-                self.contained_in._contributor_string(Contributor.TRANSLATOR,
+                self.contained_in._contributor_string(WorkContributor.TRANSLATOR,
                                                       prefix=', trans. ')
             ),
             'book_title': self.contained_in.title,
