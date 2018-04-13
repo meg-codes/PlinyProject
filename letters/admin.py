@@ -29,9 +29,11 @@ class PersonInline(admin.TabularInline):
 class LetterAdmin(admin.ModelAdmin):
     model = Letter
     inlines = [PersonInline]
-    fields = ('book', 'letter', 'topics', 'date')
+    fields = ('book', 'letter', 'topics', 'date', 'citations')
     search_fields = ('book', 'letter', 'letters_to__nomina')
     list_filter = ('book',)
+    filter_horizontal = ('citations',)
+
 
 admin.site.register(Letter, LetterAdmin)
 admin.site.register(Topic)
