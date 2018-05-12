@@ -4,5 +4,30 @@
      University Center for Digital Humanities</p>
      <p class='text-muted'>Image of Pliny from Wolfgang Sauber (Own work) [<a href="http://www.gnu.org/copyleft/fdl.html">GFDL</a> or <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>],
        <a href="https://commons.wikimedia.org/wiki/File%3AComo_-_Dom_-_Fassade_-_Plinius_der_J%C3%BCngere.jpg">via Wikimedia Commons</a></p>
+       <button type="button" class="btn btn-xs" data-toggle="modal"
+       data-target=".privacy-modal">Privacy Opt-In/Out</button>
+
+       <div class="modal fade privacy-modal" tabindex="-1" role="dialog" aria-labelledby="privacyopt">
+         <div class="modal-dialog modal-sm" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 id='privacyopt'>Privacy Opt-In/Out</h3>
+             </div>
+             <div class="modal-body">
+             <p> This site would like to use cookies to track anonymized usage
+               through Google Analytics. You may make your selection below or
+               or close this dialogue to keep the setting as is.</p>
+             </div>
+               <form>
+               <div class="checkbox">
+                 <label>
+                   <input type="checkbox" id="analytics-optin"> Opt-In to Analytics
+                 </label>
+             </form>
+           </div>
+           </div>
+         </div>
+       </div>
   </div>
 </footer>

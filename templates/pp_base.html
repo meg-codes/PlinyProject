@@ -17,28 +17,95 @@
   crossorigin="anonymous"></script>
   <script src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'></script>
   <link rel='stylesheet' href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' />
+  <script src="{% static 'js/bootstrap-accessibility.min.js' %}"></script>
+  <link rel='stylesheet' href="{% static 'css/bootstrap-accessibility.css' %}"></script>
 
   <script src="{% static 'js/site.js' %}"></script>
+  <script src="{% static 'js/cookies.min.js' %}"></script>
+
+<script>
+$(document).ready(function() {
+
+  var $optinToggle = $('#analytics-optin');
+  $('.alert').hide();
+
+  $optinToggle.change(function() {
+    if (this.checked) {
+      Cookies.set('pliny_analytics_optin', 'true');
+      renderGA();
+    } else {
+      Cookies.expire('pliny_analytics_optin');
+      Cookies.expire('_gat_gtag_UA_104408652_1');
+      Cookies.expire('_ga');
+      Cookies.expire('_gid');
+    }
+  });
+
+  $('#close-priv-alert').click(function() {
+      $('.alert').alert('close');
+  });
+
+  function checkOptInCookie() {
+    var optin = Cookies.get('pliny_analytics_optin');
+    if (optin == undefined ) {
+      getCountry();
+    }
+
+    if (optin === 'true') {
+      $optinToggle.prop('checked', true);
+
+    }
+  }
+
+  function renderGA() {
+    $.getScript("https://www.googletagmanager.com/gtag/js?id=UA-104408652-1", function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-104408652-1', { 'anonymize_ip': true });
+    })
+  }
+
+  function getCountry() {
+    $.ajax({
+      url: '{% url "country-lookup" %}',
+      success: function(data) {
+        euMembers = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES',
+          'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT',
+          'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'UK']
+        if ($.inArray(data, euMembers) == -1) {
+          $optinToggle.prop('checked', true);
+          renderGA();
+        } else {
+          $('.alert').fadeIn(800);
+        }
+      }
+    });
+  }
+
+  checkOptInCookie()
+
+
+});
+</script>
 
   {% block head %}
   {% endblock %}
 
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-104408652-1', 'auto');
-  ga('send', 'pageview');
-
-  </script>
 
   </head>
 
   <body>
     {% include 'top_nav.html' %}
     <div id='main-content' class='container'>
+      <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          This site would like to use cookies. Click to review these settings
+          <strong><a href="#" id="close-priv-alert"
+                     data-toggle="modal" data-target=".privacy-modal">here.</a></strong>
+      </div>
   {% block body %}
   {% endblock%}
     </div>
