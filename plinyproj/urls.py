@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+
 from news.views import PostListView
 
 admin.site.site_header = "Pliny Project"

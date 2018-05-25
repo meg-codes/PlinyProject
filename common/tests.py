@@ -3,7 +3,7 @@ from django.test import TestCase
 import pytest
 
 from common.models import Article, Citation, Contributor, Monograph, Section, \
-                          Work
+                          Work, WorkContributor
 
 
 class TestContributor(TestCase):
@@ -12,8 +12,6 @@ class TestContributor(TestCase):
         author1 = Contributor(
             last_name='Author',
             first_name='First',
-            contributor_type=Contributor.AUTHOR,
-            order=0
         )
         str(author1) == 'First Author'
 
@@ -28,20 +26,21 @@ class TestWork(TestCase):
         self.author1 = Contributor.objects.create(
             last_name='Author',
             first_name='First',
-            contributor_type=Contributor.AUTHOR,
-            order=0
         )
         self.author2 = Contributor.objects.create(
             last_name='Author',
             first_name='Second',
-            contributor_type=Contributor.AUTHOR,
         )
         self.author3 = Contributor.objects.create(
             last_name='Author',
             first_name='Third',
-            contributor_type=Contributor.AUTHOR,
         )
-        self.work.contributors.add(self.author1)
+        WorkContributor.objects.create(
+            work=self.work,
+            contributor=self.author1,
+            contribution_type=WorkContributor.AUTHOR,
+            order=0
+        )
 
     def test_str(self):
         assert str(self.work) == 'A Test Work (1982)'
@@ -49,23 +48,40 @@ class TestWork(TestCase):
     def test_contributor_string(self):
 
         # Basic name handling for 1, 2, and many
-        assert self.work._contributor_string(Contributor.AUTHOR) == \
+        assert self.work._contributor_string(WorkContributor.AUTHOR) == \
             'First Author'
-        self.work.contributors.add(self.author2)
-        assert self.work._contributor_string(Contributor.AUTHOR) == \
+        WorkContributor.objects.create(
+            work=self.work,
+            contributor=self.author2,
+            contribution_type=WorkContributor.AUTHOR,
+            order=1
+        )
+        assert self.work._contributor_string(WorkContributor.AUTHOR) == \
             'First Author and Second Author'
-        self.work.contributors.add(self.author3)
-        assert self.work._contributor_string(Contributor.AUTHOR) == \
+        WorkContributor.objects.create(
+            work=self.work,
+            contributor=self.author3,
+            contribution_type=WorkContributor.AUTHOR,
+            order=2
+        )
+        assert self.work._contributor_string(WorkContributor.AUTHOR) == \
             'First Author, Second Author, and Third Author'
-        self.work.contributors.set([self.author1])
-        # Basic prefixing works
+        WorkContributor.objects.\
+            filter(contributor__in=[self.author2, self.author3])\
+            .delete()
+        # Basic prefixing work
         assert self.work._contributor_string(
-            Contributor.AUTHOR,
+            WorkContributor.AUTHOR,
             prefix='trans. ', suffix=', ed.'
         ) == 'trans. First Author, ed.'
-        self.work.contributors.add(self.author2)
+        WorkContributor.objects.create(
+            work=self.work,
+            contributor=self.author2,
+            contribution_type=WorkContributor.AUTHOR,
+            order=1
+        )
         assert self.work._contributor_string(
-            Contributor.AUTHOR,
+            WorkContributor.AUTHOR,
             suffix=', ed.'
         ) == 'First Author and Second Author, eds.'
 
@@ -77,50 +93,38 @@ class TestMonograph(TestCase):
         self.author1 = Contributor.objects.create(
             last_name='Author',
             first_name='First',
-            contributor_type=Contributor.AUTHOR,
-            order=0
         )
         self.author2 = Contributor.objects.create(
             last_name='Author',
             first_name='Second',
-            contributor_type=Contributor.AUTHOR,
         )
         self.author3 = Contributor.objects.create(
             last_name='Author',
             first_name='Third',
-            contributor_type=Contributor.AUTHOR,
         )
         self.translator1 = Contributor.objects.create(
             last_name='Translator',
             first_name='First',
-            contributor_type=Contributor.TRANSLATOR,
-            order=0
         )
         self.translator2 = Contributor.objects.create(
             last_name='Translator',
             first_name='Second',
-            contributor_type=Contributor.TRANSLATOR,
         )
         self.translator3 = Contributor.objects.create(
             last_name='Translator',
             first_name='Third',
-            contributor_type=Contributor.TRANSLATOR,
         )
         self.editor1 = Contributor.objects.create(
             last_name='Editor',
             first_name='First',
-            contributor_type=Contributor.EDITOR,
-            order=0
         )
         self.editor2 = Contributor.objects.create(
             last_name='Editor',
             first_name='Second',
-            contributor_type=Contributor.EDITOR,
         )
         self.editor3 = Contributor.objects.create(
             last_name='Editor',
             first_name='Third',
-            contributor_type=Contributor.EDITOR,
         )
         self.test_book = Monograph.objects.create(
             year=1982,
@@ -128,33 +132,62 @@ class TestMonograph(TestCase):
             place_of_publication='London',
             publisher='Foobar University Press'
         )
-        self.test_book.contributors.add(self.author1)
 
     def test_str(self):
         assert str(self.test_book) == 'A Test Monograph (1982)'
 
     def test_chicago(self):
         # basic book, author
+        first_auth = WorkContributor.objects.create(
+            contributor=self.author1,
+            work=self.test_book,
+            contribution_type=WorkContributor.AUTHOR,
+            order=0
+        )
         assert self.test_book.chicago == \
             'First Author, <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
         # book and editor
-        self.test_book.contributors.add(self.editor1)
+        edit1 = WorkContributor.objects.create(
+            contributor=self.editor1,
+            work=self.test_book,
+            contribution_type=WorkContributor.EDITOR,
+            order=0
+        )
         assert self.test_book.chicago == \
             'First Author, <em>A Test Monograph</em>, ed. First Editor (London: Foobar University Press, 1982)'
+        first_auth.delete()
         # editor as author
-        self.test_book.contributors.set([self.editor1])
         assert self.test_book.chicago == \
             'First Editor, ed., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
         # multiple editors
-        self.test_book.contributors.set([self.editor1, self.editor2])
+        edit2 = WorkContributor.objects.create(
+            contributor=self.editor2,
+            work=self.test_book,
+            contribution_type=WorkContributor.EDITOR,
+            order=1
+        )
         assert self.test_book.chicago == \
             'First Editor and Second Editor, eds., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+        edit1.delete()
+        edit2.delete()
+
         # translator
-        self.test_book.contributors.set([self.author1, self.translator1])
+        first_auth = WorkContributor.objects.create(
+            contributor=self.author1,
+            work=self.test_book,
+            contribution_type=WorkContributor.AUTHOR,
+            order=0
+        )
+        translator = WorkContributor.objects.create(
+            contributor=self.translator1,
+            work=self.test_book,
+            contribution_type=WorkContributor.TRANSLATOR,
+            order=0
+        )
         assert self.test_book.chicago == \
             'First Author, <em>A Test Monograph</em>, trans. First Translator (London: Foobar University Press, 1982)'
         # translator as author
-        self.test_book.contributors.set([self.translator1])
+        first_auth.delete()
         assert self.test_book.chicago == \
             'First Translator, trans., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
 
@@ -169,13 +202,10 @@ class TestJournalArticle(TestCase):
         self.author1 = Contributor.objects.create(
             last_name='Author',
             first_name='First',
-            contributor_type=Contributor.AUTHOR,
-            order=0
         )
         self.author2 = Contributor.objects.create(
             last_name='Author',
             first_name='Second',
-            contributor_type=Contributor.AUTHOR,
         )
         self.article = Article.objects.create(
             volume=59,
@@ -185,7 +215,22 @@ class TestJournalArticle(TestCase):
             journal='Foo Journal',
             doi_or_url='http://journalstor.org/',
         )
-        self.article.contributors.set([self.author1, self.author2])
+
+        WorkContributor.objects.create(
+            work=self.article,
+            contributor=self.author2,
+            contribution_type=WorkContributor.AUTHOR,
+            order=1
+        )
+        
+        WorkContributor.objects.create(
+            work=self.article,
+            contributor=self.author1,
+            contribution_type=WorkContributor.AUTHOR,
+            order=0
+        )
+
+
 
     def test_str(self):
         assert str(self.article) == "A Study of Foo, Foo Journal (1972)"
@@ -205,20 +250,16 @@ class TestSection(TestCase):
         self.author1 = Contributor.objects.create(
             last_name='Author',
             first_name='First',
-            contributor_type=Contributor.AUTHOR,
-            order=0
+
         )
 
         self.translator3 = Contributor.objects.create(
             last_name='Translator',
             first_name='Third',
-            contributor_type=Contributor.TRANSLATOR,
         )
         self.editor1 = Contributor.objects.create(
             last_name='Editor',
             first_name='First',
-            contributor_type=Contributor.EDITOR,
-            order=0
         )
 
         self.test_book = Monograph.objects.create(
@@ -228,7 +269,19 @@ class TestSection(TestCase):
             publisher='Foobar University Press'
         )
 
-        self.test_book.contributors.set([self.translator3, self.editor1])
+        WorkContributor.objects.create(
+            work=self.test_book,
+            contributor=self.editor1,
+            contribution_type=WorkContributor.EDITOR,
+            order=0
+        )
+        WorkContributor.objects.create(
+            work=self.test_book,
+            contributor=self.translator3,
+            contribution_type=WorkContributor.TRANSLATOR,
+            order=0
+        )
+
 
         self.test_section = Section.objects.create(
             pages='101-124',
@@ -236,7 +289,13 @@ class TestSection(TestCase):
             year=1982,
             contained_in=self.test_book
         )
-        self.test_section.contributors.add(self.author1)
+
+        WorkContributor.objects.create(
+            work=self.test_section,
+            contributor=self.author1,
+            contribution_type=WorkContributor.AUTHOR,
+            order=0
+        )
 
     def test_str(self):
         assert str(self.test_section) == \

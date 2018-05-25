@@ -1,7 +1,7 @@
 /**
  * Obscure email addresses via Javascript by replacing (at) with @
  * @param value - a string to replace (at) with @
-*/
+ */
 function removeObfus(value) {
     // Snip from https://gist.github.com/mathiasbynens/28682
     // adapted for use
@@ -12,7 +12,7 @@ function removeObfus(value) {
  * Perform an person name query using a jQuery ajax call.
  * @param request - the autocomplete request
  * @param response - a callback function to operate on the data
-*/
+ */
 function getAutocomplete(request, response) {
     var query = request.term;
     $.ajax("/people/autocomplete/", {
@@ -29,6 +29,7 @@ function getAutocomplete(request, response) {
 
 $(document).ready(function() {
 
+    // Initialize the autocomplete for main search box
     $("#nav_nomina").autocomplete({
       source: getAutocomplete,
       classes: {
