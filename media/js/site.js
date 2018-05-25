@@ -67,9 +67,7 @@ $(document).ready(function() {
    */
   function checkOptInCookie() {
     var optin = Cookies.get('pliny_analytics_optin');
-    if (optin == undefined ) {
-      getCountry();
-    }
+
     if (optin === 'true') {
       $optinToggle.prop('checked', true);
       renderGA();
@@ -108,27 +106,6 @@ $(document).ready(function() {
           'event_category': 'GPDR',
           'event_label': getClientID(),
         });
-      }
-    });
-  }
-
-  /**
-   * Do a lookup using the url to local API. Ajax call returns a country code
-   * and sets GA if a non-EU country by default.
-   */
-  function getCountry() {
-    $.ajax({
-      url: $('#country-lookup').text(),
-      success: function(data) {
-        euMembers = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES',
-          'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT',
-          'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'UK']
-        if ($.inArray(data, euMembers) == -1 && data !== '') {
-          $optinToggle.prop('checked', true);
-          renderGA();
-        } else {
-          $('.alert').fadeIn(800);
-        }
       }
     });
   }

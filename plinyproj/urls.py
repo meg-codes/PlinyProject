@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from common.views import get_country
 from news.views import PostListView
 
 admin.site.site_header = "Pliny Project"
@@ -26,5 +25,4 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^people/', include('prosopography.urls', namespace='people')),
     url(r'^content/', include('contentpages.urls', namespace='content')),
-    url(r'^country_lookup/$', get_country, name='country-lookup'),
 ]
