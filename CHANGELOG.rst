@@ -1,7 +1,7 @@
 Change Log
 ----------
 
-0.5.7
+0.5.8
 =====
 * Add ego network visualization of Pliny and his correspondents to data viz
 * Add citation models and backend functionality for scholarly citations of letters and people.

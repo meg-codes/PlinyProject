@@ -26,9 +26,10 @@ function getAutocomplete(request, response) {
     });
 }
 
+
 $(document).ready(function() {
 
-    // Initialize the
+    // Initialize the autocomplete for main search box
     $("#nav_nomina").autocomplete({
       source: getAutocomplete,
       classes: {
