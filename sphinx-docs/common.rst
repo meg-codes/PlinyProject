@@ -28,13 +28,6 @@ common.models module
 .. automodule:: common.models
     :members:
 
-common.views module
--------------------
-
-.. automodule:: common.views
-    :members:
-
-
 Module contents
 ---------------
 

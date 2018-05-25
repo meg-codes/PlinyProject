@@ -4,6 +4,7 @@ import re
 
 
 class Contributor(models.Model):
+    """A contributor to a published work."""
     last_name = models.CharField(max_length=191)
     first_name = models.CharField(max_length=191, blank=True)
 
@@ -12,6 +13,7 @@ class Contributor(models.Model):
 
     @property
     def last_first(self):
+        """The name of the author in last, first order."""
         name = '%s, %s' % (self.last_name, self.first_name)
         if not self.first_name:
             name = name.strip(', ')
@@ -19,6 +21,20 @@ class Contributor(models.Model):
 
 
 class WorkContributor(models.Model):
+    """Through model to connect :class:`~common.models.Work` and
+    :class:`~common.models.Contributor`.
+
+    Attributes:
+        contributor: :class:`~django.db.models.ForeignKey`
+            to :class:`~common.models.Contributor`
+        work: :class:`~django.db.models.ForeignKey` to
+            :class:`~common.models.Work`.
+        contribution_type: :class:`~django.db.models.PositiveSmallIntegerField`
+            with value based on ``WorkContributor.AUTHOR``,
+            ``WorkContributor.EDITOR``, ``WorkContributor.TRANSLATOR``.
+        order: :class:`~django.db.models.PositiveSmallIntegerField` to indicate
+            ordering of authors.
+    """
     AUTHOR = 0
     EDITOR = 1
     TRANSLATOR = 2
@@ -79,6 +95,12 @@ class Work(models.Model):
 
 
 class Monograph(Work):
+    """A database representation of a monograph.
+
+        Attributes:
+            place_of_publication (CharField): city where a work is published
+            publisher (CharField): name of a monograph's publisher.
+    """
     place_of_publication = models.CharField(max_length=191)
     publisher = models.CharField(max_length=191)
 
@@ -87,7 +109,8 @@ class Monograph(Work):
 
     @property
     def chicago(self):
-
+        """Render a monograph's Chicago Manual of Style Entry as
+        an HTML string."""
         if self.citation_override:
             return self.citation_override
 
@@ -129,6 +152,16 @@ class Monograph(Work):
 
 
 class Article(Work):
+    """An article in a scholarly journal.
+
+        Attributes:
+            volume (PositiveSmallIntegerField):
+                volume number as an integer value
+            pages (CharField): pages as a range
+            journal (CharField): journal name
+            doi_or_url(TextField): doi or uri for resource
+
+    """
     volume = models.PositiveSmallIntegerField()
     pages = models.CharField(max_length=30)
     # this should really be a Work instance, but it complicates things
@@ -141,7 +174,7 @@ class Article(Work):
 
     @property
     def chicago(self):
-
+        """Return an article's Chicago Manual of Style representation."""
         if self.citation_override:
             return self.citation_override
 
@@ -159,6 +192,11 @@ class Article(Work):
 
 
 class Section(Work):
+    """A section of a larger monograph.
+        Attributes:
+            pages (CharField): A page range, max number of characters 30.
+            contained_in (ForeignKey): A link to :class:`common.models.Monograph`
+    """
     pages = models.CharField(max_length=30)
     contained_in = models.ForeignKey(Monograph, related_name='cited_sections')
 
@@ -168,7 +206,7 @@ class Section(Work):
 
     @property
     def chicago(self):
-
+        """The Chicago Manual of Style entry for a book section."""
         if self.citation_override:
             return self.citation_override
 
@@ -197,6 +235,8 @@ class Section(Work):
 
 
 class Citation(models.Model):
+    """Through model representing a citation of a work."""
+
     monograph = models.ForeignKey(Monograph, on_delete=models.SET_NULL,
                                   blank=True, null=True)
     article = models.ForeignKey(Article, on_delete=models.SET_NULL,
@@ -216,13 +256,14 @@ class Citation(models.Model):
 
     @property
     def chicago(self):
+        """Chicago Manual of Style representation of a citation."""
         if self.monograph or self.section:
             return '%s, %s.' % (self.monograph.chicago, self.pages)
         if self.article:
             return '%s: %s.' % (self.article.chicago, self.pages)
 
     def clean(self):
-
+        """Validate a citation to ensure it is to only one Work.""""
         linking_fields = [self.monograph, self.article, self.section]
         count = 0
         for field in linking_fields:
