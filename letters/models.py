@@ -1,5 +1,5 @@
 from django.db import models
-from prosopography.models import Person
+from common.models import Citation
 
 
 class Letter(models.Model):
@@ -9,6 +9,7 @@ class Letter(models.Model):
     letter = models.PositiveSmallIntegerField()
     topics = models.ManyToManyField('Topic', blank=True)
     date = models.PositiveSmallIntegerField(blank=True, null=True)
+    citations = models.ManyToManyField(Citation, blank=True)
 
     class Meta:
         unique_together = ('book', 'letter')

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+
+        <script type="text/javascript"
+                src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+
+        <script type="text/javascript"
+                src="node_modules/mocha/mocha.js"></script>
+        <script type="text/javascript"
+                src="node_modules/chai/chai.js"></script>
+        <script type="text/javascript"
+                src="node_modules/sinon/pkg/sinon.js"></script>
+        <script type="text/javascript"
+                src="../prosopography/static/graph-viz.js"></script>
+        <script type="text/javascript"
+                src="../media/js/site.js">
+        </script>
+        <script src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'></script>
+        <link rel='stylesheet' href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' />
+        <script src="../media/js/cookies.min.js"></script>
+        <script type="text/javascript">
+            var expect = chai.should();
+            mocha.setup('bdd');
+        </script>
+
+
+     <script type="text/javascript" src="spec/test_functions.js"></script>
+     <script type="text/javascript" src="spec/test_site.js"></script>
+       <script>
+
+        window.onload = function()
+        {
+
+            mocha.run();
+        }
+
+        </script>
+
+    <body>
+        <div id="mocha"></div>
+        <div id="fixtures" style="display: none; visibility: hidden;">
+
+            <svg width="1000" height="600">
+            </svg>
+
+            <a id='test-address' href="mailto:address(at)foo(dot)com">Foo</a>
+            <button type="button" class="btn btn-xs" data-toggle="modal"
+            data-target=".privacy-modal">Privacy Opt-In/Out</button>
+
+            <div class="modal fade privacy-modal" tabindex="-1" role="dialog" aria-labelledby="privacyopt">
+              <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 id='privacyopt'>Privacy Opt-In/Out</h3>
+                  </div>
+                  <div class="modal-body">
+                  <p> This site would like to use cookies to track anonymized usage
+                    through Google Analytics. You may make your selection below or
+                    or close this dialogue to keep the setting as is.</p>
+                  </div>
+                    <form>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" id="analytics-optin"> Opt-In to Analytics
+                      </label>
+                  </form>
+                </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+    </body>
+</html>

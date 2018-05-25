@@ -1,0 +1,33 @@
+{% extends 'pp_base.html' %}
+{% load bootstrap3 static %}
+
+{% block head %}
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class='row'>
+<div class='col-xs-6 col-xs-offset-3'>
+    <h3>Force Directed Network Visualization</h3>
+<svg width="600" height="600">
+</svg>
+<script src="{% static 'graph-viz.js' %}"></script>
+
+
+</div>
+</div>
+
+
+{% endblock %}

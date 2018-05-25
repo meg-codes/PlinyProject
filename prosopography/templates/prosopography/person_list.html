@@ -61,7 +61,7 @@
 will be displayed below along with the letters addressed to this person.</p>
 <p class='text-danger'>
   Some individuals may appear more than once. These are individuals where
-  identification is uncertain. Roman naming conventions make for difficultly in
+  identification is uncertain. Roman naming conventions make for difficulty in
   this process.
 </p>
 
@@ -100,7 +100,7 @@ will be displayed below along with the letters addressed to this person.</p>
   </tr>
   {% for person in object_list %}
   <tr>
-    <td>{{ person.nomina }}</td>
+    <td><a href="{{ person.get_absolute_url }}">{{ person.nomina }}</a></td>
     <td>{{ person.ordo }}</td>
     <td>{% for letter in person.letters_to.all%}{{ letter }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
   </tr>

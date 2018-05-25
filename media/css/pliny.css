@@ -6,9 +6,12 @@ body {
   padding-top: 70px;
 }
 
-footer {
-  text-align: center;
+footer > .container > p {
   font-size: 50%;
+}
+
+footer > .container {
+  text-align: center;
 }
 
 #main-content {
@@ -21,4 +24,8 @@ footer {
 
 #id_nomina {
   width: 200px;
+}
+
+em > em {
+  font-style: normal;
 }

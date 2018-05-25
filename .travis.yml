@@ -2,18 +2,25 @@ language: 'python'
 
 python:
   - '3.6'
-
+node_js:
+  - "8.9.4"
+before_install:
+  - "export CHROME_BIN=chromium-browser"
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 install:
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
   - pip install codecov
   - cat ci/database_override.py >> plinyproj/settings.py
-
+  - cd js_test && npm install && cd ..
 script:
-  - python -m pytest --cov
+  - pytest --cov
+  - cd js_test && npm test && cd ..
 
 sevices:
   - mysql
-
+addons:
+  chrome: stable
 after_success:
   - codecov

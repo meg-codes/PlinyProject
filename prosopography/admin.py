@@ -36,6 +36,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
     list_filter = ('citizen', 'equestrian', 'senatorial', 'consular', 'cos',
                    'certainty_of_id')
     search_fields = ('nomina', 'notes')
+    filter_horizontal = ('citations',)
     fields = (
         'nomina',
         'gender',
@@ -44,6 +45,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
         ('birth', 'death', 'cos', 'floruit'),
         'certainty_of_id',
         'notes',
+        'citations',
     )
 
     exclude = ['letters_to', 'mentioned_in']
