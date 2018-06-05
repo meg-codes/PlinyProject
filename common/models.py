@@ -52,6 +52,14 @@ class WorkContributor(models.Model):
 
 
 class Work(models.Model):
+    """A scholarly work associated with the PlinyProject.
+        Attributes:
+            contributors: :class:`~django.db.models.ManyToManyField` to
+                :class:`~common.models.Contributor`
+            year (PositiveSmallIntegerField): year work was published
+            title (TextField): title of the work
+            citation_override (TextField): override of default citation style
+    """
     contributors = models.ManyToManyField(Contributor, through='WorkContributor')
     year = models.PositiveSmallIntegerField()
     title = models.TextField()
@@ -63,6 +71,7 @@ class Work(models.Model):
         return '%s (%s)' % (self.title, self.year)
 
     def _contributor_string(self, contrib_type, prefix='', suffix=''):
+        """Return a string representing the work's contributors."""
         workcontributors = WorkContributor.objects.\
                            filter(work=self, contribution_type=contrib_type)\
                            .order_by('order')
@@ -263,7 +272,7 @@ class Citation(models.Model):
             return '%s: %s.' % (self.article.chicago, self.pages)
 
     def clean(self):
-        """Validate a citation to ensure it is to only one Work.""""
+        """Validate a citation to ensure it is to only one Work."""
         linking_fields = [self.monograph, self.article, self.section]
         count = 0
         for field in linking_fields:
