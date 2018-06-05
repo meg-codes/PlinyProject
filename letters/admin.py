@@ -1,11 +1,12 @@
 from dal import autocomplete
 from django import forms
 from django.contrib import admin
-from .models import Letter, Topic
+from letters.models import Letter, Topic
 from prosopography.models import Person
 
 
 class PersonInlineForm(forms.ModelForm):
+    """Configure inline admin form for :class:`prosopography.models.Person` """
     class Meta:
         model = Person.letters_to.through
         fields = ('__all__')
@@ -22,11 +23,13 @@ class PersonInlineForm(forms.ModelForm):
 
 
 class PersonInline(admin.TabularInline):
+    """:class:`prosopography.models.Person` admin inline for M2M."""
     model = Person.letters_to.through
     form = PersonInlineForm
 
 
 class LetterAdmin(admin.ModelAdmin):
+    """ModelAdmin for :class:`letters.models.Letter`"""
     model = Letter
     inlines = [PersonInline]
     fields = ('book', 'letter', 'topics', 'date', 'citations')
