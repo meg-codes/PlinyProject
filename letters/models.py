@@ -3,7 +3,15 @@ from common.models import Citation
 
 
 class Letter(models.Model):
-    """A letter from one of Pliny's books of personal correspondence"""
+    """A letter from one of Pliny's books of personal correspondence
+        Attributes:
+            book (PositiveSmallIntegerField): book number.
+            manuscript_correspondent_name (CharField): override if manuscript
+                correspondent as written differs from database name
+            letter (PositiveSmallIntegerField): letter number
+            date (PositiveSmallIntegerField): Year of letter if known.
+            citations (ManyToManyField): Citations related to the letter
+    """
     book = models.PositiveSmallIntegerField()
     manuscript_correspondent_name = models.CharField(blank=True, max_length=255)
     letter = models.PositiveSmallIntegerField()
