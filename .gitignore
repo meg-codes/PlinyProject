@@ -1,3 +1,7 @@
+# Sphinx related ignores
+_build/
+docs/
+
 # Logs
 logs
 *.log

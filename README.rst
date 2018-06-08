@@ -40,7 +40,7 @@ To run the unit tests::
         pip install -r dev-requirements.txt
         pytest --cov
 
-    
+
 
 Bibliography
 ============
@@ -55,7 +55,5 @@ for Pliny the Younger.
 * ------. "Pliny's less successful friends," *Historia* 9 (1960): 362-79.
 * ------. "People in Pliny," *Journal of Roman Studies* 58 (1968): 135-151.
 * ------. "Correspondents of Pliny," *Historia* 34 (1985): 324-59.
-  
-
   
 

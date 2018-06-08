@@ -145,7 +145,8 @@ class TestMonograph(TestCase):
             order=0
         )
         assert self.test_book.chicago == \
-            'First Author, <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+            ('First Author, <em>A Test Monograph</em> (London: Foobar '
+             'University Press, 1982)')
         # book and editor
         edit1 = WorkContributor.objects.create(
             contributor=self.editor1,
@@ -154,11 +155,13 @@ class TestMonograph(TestCase):
             order=0
         )
         assert self.test_book.chicago == \
-            'First Author, <em>A Test Monograph</em>, ed. First Editor (London: Foobar University Press, 1982)'
+            ('First Author, <em>A Test Monograph</em>, ed. First Editor '
+             '(London: Foobar University Press, 1982)')
         first_auth.delete()
         # editor as author
         assert self.test_book.chicago == \
-            'First Editor, ed., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+            ('First Editor, ed., <em>A Test Monograph</em> (London: Foobar'
+             ' University Press, 1982)')
         # multiple editors
         edit2 = WorkContributor.objects.create(
             contributor=self.editor2,
@@ -167,7 +170,8 @@ class TestMonograph(TestCase):
             order=1
         )
         assert self.test_book.chicago == \
-            'First Editor and Second Editor, eds., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+            ('First Editor and Second Editor, eds., <em>A Test Monograph</em>'
+             ' (London: Foobar University Press, 1982)')
         edit1.delete()
         edit2.delete()
 
@@ -178,18 +182,20 @@ class TestMonograph(TestCase):
             contribution_type=WorkContributor.AUTHOR,
             order=0
         )
-        translator = WorkContributor.objects.create(
+        WorkContributor.objects.create(
             contributor=self.translator1,
             work=self.test_book,
             contribution_type=WorkContributor.TRANSLATOR,
             order=0
         )
         assert self.test_book.chicago == \
-            'First Author, <em>A Test Monograph</em>, trans. First Translator (London: Foobar University Press, 1982)'
+            ('First Author, <em>A Test Monograph</em>, trans. First Translator'
+             ' (London: Foobar University Press, 1982)')
         # translator as author
         first_auth.delete()
         assert self.test_book.chicago == \
-            'First Translator, trans., <em>A Test Monograph</em> (London: Foobar University Press, 1982)'
+            ('First Translator, trans., <em>A Test Monograph</em> (London: '
+             'Foobar University Press, 1982)')
 
         # check citation override
         self.test_book.citation_override = 'Test'
@@ -222,7 +228,7 @@ class TestJournalArticle(TestCase):
             contribution_type=WorkContributor.AUTHOR,
             order=1
         )
-        
+
         WorkContributor.objects.create(
             work=self.article,
             contributor=self.author1,
@@ -230,14 +236,13 @@ class TestJournalArticle(TestCase):
             order=0
         )
 
-
-
     def test_str(self):
         assert str(self.article) == "A Study of Foo, Foo Journal (1972)"
 
     def test_chicago(self):
         assert self.article.chicago == \
-            'First Author and Second Author, "A Study of Foo," <em>Foo Journal</em> 59 (1972)'
+            ('First Author and Second Author, "A Study of Foo," '
+             '<em>Foo Journal</em> 59 (1972)')
         # check citation override
         self.article.citation_override = 'Test'
         assert self.article.chicago == 'Test'
@@ -250,7 +255,6 @@ class TestSection(TestCase):
         self.author1 = Contributor.objects.create(
             last_name='Author',
             first_name='First',
-
         )
 
         self.translator3 = Contributor.objects.create(
@@ -282,7 +286,6 @@ class TestSection(TestCase):
             order=0
         )
 
-
         self.test_section = Section.objects.create(
             pages='101-124',
             title='A Sample Chapter',
@@ -303,7 +306,9 @@ class TestSection(TestCase):
 
     def test_chicago(self):
         assert self.test_section.chicago == \
-            'First Author, "A Sample Chapter," in <em>A Test Monograph</em>, trans. Third Translator, ed. First Editor (London: Foobar University Press, 1982)'
+            ('First Author, "A Sample Chapter," in <em>A Test Monograph</em>, '
+             'trans. Third Translator, ed. First Editor (London: Foobar '
+             'University Press, 1982)')
 
         # check citation override
         self.test_section.citation_override = 'Test'
@@ -316,7 +321,7 @@ class TestCitation(TestCase):
 
         self.test_book = Monograph.objects.create(
             year=1982,
-            title='A Test Monograph',
+            title='A Test Monograph with a Long: Title Here',
             place_of_publication='London',
             publisher='Foobar University Press'
         )
@@ -333,7 +338,7 @@ class TestCitation(TestCase):
     def test_str(self):
         cite = Citation(monograph=self.test_book, pages='123')
         assert str(cite) == \
-            'A Test Monograph (1982): 123'
+            'A Test Monograph with a (1982): 123'
 
     def test_clean(self):
 
@@ -348,7 +353,8 @@ class TestCitation(TestCase):
     def test_chicago(self):
         cite = Citation(monograph=self.test_book, pages='123-456')
         assert cite.chicago == \
-            '<em>A Test Monograph</em> (London: Foobar University Press, 1982), 123-456.'
+            ('<em>A Test Monograph with a Long: Title Here</em> (London: Foobar University Press,'
+             ' 1982), 123-456.')
 
         cite = Citation(article=self.article, pages='456-789')
         assert cite.chicago == \
