@@ -1,6 +1,10 @@
 Change Log
 ----------
 
+0.5.9
+=====
+* Minor updates to make citation admin functionality more useful
+
 0.5.8
 =====
 * Add ego network visualization of Pliny and his correspondents to data viz
