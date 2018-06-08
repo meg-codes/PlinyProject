@@ -321,7 +321,7 @@ class TestCitation(TestCase):
 
         self.test_book = Monograph.objects.create(
             year=1982,
-            title='A Test Monograph',
+            title='A Test Monograph with a Long: Title Here',
             place_of_publication='London',
             publisher='Foobar University Press'
         )
@@ -338,7 +338,7 @@ class TestCitation(TestCase):
     def test_str(self):
         cite = Citation(monograph=self.test_book, pages='123')
         assert str(cite) == \
-            'A Test Monograph (1982): 123'
+            'A Test Monograph with a (1982): 123'
 
     def test_clean(self):
 
@@ -353,7 +353,7 @@ class TestCitation(TestCase):
     def test_chicago(self):
         cite = Citation(monograph=self.test_book, pages='123-456')
         assert cite.chicago == \
-            ('<em>A Test Monograph</em> (London: Foobar University Press,'
+            ('<em>A Test Monograph with a Long: Title Here</em> (London: Foobar University Press,'
              ' 1982), 123-456.')
 
         cite = Citation(article=self.article, pages='456-789')

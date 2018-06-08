@@ -255,13 +255,15 @@ class Citation(models.Model):
     pages = models.CharField(max_length=191)
 
     def __str__(self):
-        title = ''
-        year = ''
+        title = year = ''
         for field in [self.monograph, self.article, self.section]:
             if field:
-                title = field.title
+                title = ' '.join(field.title.split()[:5]).rstrip(':')
                 year = field.year
         return '%s (%s): %s' % (title, year, self.pages)
+
+    class Meta:
+        unique_together = ('pages', 'monograph', 'article', 'section')
 
     @property
     def chicago(self):
