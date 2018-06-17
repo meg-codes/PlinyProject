@@ -1,7 +1,7 @@
 //Gratuitously adapted from https://bl.ocks.org/mbostock/4062045
 function calld3ForceDirected() {
 
-var svg = d3.select("svg"),
+var svg = d3.select("#force-directed"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
