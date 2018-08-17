@@ -42,7 +42,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
         'gender',
         'from_comum',
         ('citizen', 'equestrian', 'senatorial', 'consular'),
-        ('birth', 'death', 'cos', 'floruit'),
+        ('birth', 'death', 'cos', 'cos_suff' , 'floruit'),
         'certainty_of_id',
         'notes',
         'citations',
