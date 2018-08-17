@@ -23,8 +23,9 @@
                 <ul class='list-unstyled list-inline'>
                     {% if object.birth %}
                     <li>Birth: {{ object.birth }}</li>{% endif %} {% if object.cos %}
-                    <li>{{ object.cos }}</li>{% endif %} {% if object.floruit %}
-                    <li>{{ object.floruit }}
+                    <li>Cos: {{ object.cos }}</li>{% endif %} {% if object.floruit %}
+                    {% if object.cos_suff %}<li>Cos. Suff.: {{ object.cos_suff }}</li>{% endif %}
+                    <li>Floruit: {{ object.floruit }}
                         <li>{% endif %} {% if object.death %}
                             <li>Death: {{ object.death }}</li>{% endif %}
                 </ul>
