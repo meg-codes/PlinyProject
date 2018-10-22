@@ -1,6 +1,11 @@
 Change Log
 ----------
 
+0.6.0
+=====
+* Finalize visualizations for now (TODO: better accessibility)
+* Fix bug where filtering people list by social class could result in 404s
+
 0.5.9
 =====
 * Minor updates to make citation admin functionality more useful
