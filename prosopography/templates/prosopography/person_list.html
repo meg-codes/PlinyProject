@@ -7,13 +7,14 @@
 <script>
 
   function getQueryString() {
-    var filters = [], keyValuePair;
+    var filters = {};
+    var keyValuePair = [];
     var query = document.URL.split('?')[1];
     if (query != undefined) {
       query = query.split('&');
       for (var i in query) {
         keyValuePair = query[i].split('=');
-          filters[keyValuePair[0]] = keyValuePair[1];
+        filters[keyValuePair[0]] = keyValuePair[1];
       }
     }
     return filters
@@ -30,13 +31,21 @@
       });
 
       var filters = getQueryString();
+      console.log(filters)
       for (var k in filters) {
-        $('#'+k).addClass('active').attr('aria-presssed', 'true');
+        if (filters.hasOwnProperty(k)) {
+          $('#'+k).addClass('active').attr('aria-presssed', 'true');
+        }
       }
 
       $('#filter-panel button').click(
         function() {
             var filters = getQueryString();
+            // clear page so that selecting a filter change
+            // always reset to 1ls
+            if ('page' in filters) {
+              delete filters['page']
+            }
             var query = '?';
             if ($(this).attr('id') in filters) {
               delete filters[$(this).attr('id')];
@@ -44,10 +53,8 @@
             else {
               filters[$(this).attr('id')] = 'y';
             }
-            for (var k in filters) {
-                query += (k+'='+filters[k]+'&');
-            }
-            $(location).attr('href', document.URL.split('?')[0] + query.substring(0, query.length - 1));
+            var query = $.param(filters)
+            $(location).attr('href', document.URL.split('?')[0] + '?' + query);
         });
   });
 
