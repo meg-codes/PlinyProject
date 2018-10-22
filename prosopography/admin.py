@@ -31,7 +31,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
     model = Person
     list_display = ('nomina', 'gender', 'from_comum',
                     'citizen', 'equestrian', 'senatorial',
-                    'consular', 'birth', 'death', 'cos', 'floruit',
+                    'consular', 'birth', 'death', 'cos', 'cos_suff', 'floruit',
                     'certainty_of_id', 'notes')
     list_filter = ('citizen', 'equestrian', 'senatorial', 'consular', 'cos',
                    'certainty_of_id')
@@ -42,7 +42,7 @@ class CorrespondentAdmin(admin.ModelAdmin):
         'gender',
         'from_comum',
         ('citizen', 'equestrian', 'senatorial', 'consular'),
-        ('birth', 'death', 'cos', 'floruit'),
+        ('birth', 'death', 'cos', 'cos_suff', 'floruit'),
         'certainty_of_id',
         'notes',
         'citations',

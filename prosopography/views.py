@@ -184,3 +184,49 @@ class NodeEdgeListView(ListView):
 
     def render_to_response(self, context, **kwargs):
         return self.render_to_json_response()
+
+
+class SocialClassView(ListView):
+    model = Person
+
+    def render_to_json_response(self, **kwargs):
+        """Contextless rendering of queryset from get_data"""
+        return JsonResponse(self.get_data())
+
+    def get_data(self):
+        people = self.get_queryset()
+
+        book = self.request.GET.get('q', '')
+        if book:
+            try:
+                book = int(book)
+                people = people.filter(letters_to__book=book)
+            except ValueError:
+                pass
+        # data for Chart.js
+        data = {
+            'datasets': [{
+                # get people as senatorial, equestrian, and citizen
+                'data': [
+                    people.filter(senatorial='Y').count(),
+                    people.filter(equestrian='Y', senatorial='N').count(),
+                    people.filter(citizen='Y',
+                                  equestrian='N', senatorial='N').count()
+                    ],
+                'backgroundColor': [
+                    'rgb(127, 63, 191)',
+                    'rgb(191, 63, 63)',
+                    'rgb(63, 191, 191)'
+                ],
+
+            }],
+            'labels': [
+                'Senatorial',
+                'Equestrian',
+                'Citizen',
+            ]
+        }
+        return data
+
+    def render_to_response(self, context, **kwargs):
+        return self.render_to_json_response()

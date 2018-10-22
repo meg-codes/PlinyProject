@@ -2,70 +2,99 @@
 {% load bootstrap3 static %}
 
 {% block head %}
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="{% static 'graph-viz.js' %}"></script>
-<style>
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+  <script src="{% static 'graph-viz.js' %}"></script>
+  <script src="{% static 'donut-chart.js'%}"></script>
 
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-</style>
+  <style>
+    .links line {
+      stroke: #999;
+      stroke-opacity: 0.6;
+    }
+
+    .nodes circle {
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+  </style>
 {% endblock %}
 
 {% block body %}
 
+  <h1>Force Directed Network Visualization</h1>
+  <div class="row">
+    <div class="col-xs-12" align="center">
+      <svg id="force-directed" width="600" height="600" style="margin-bottom: -150px;">
+        <script>
+          calld3ForceDirected()
+        </script>
+      </div>
+    </div>
 
-<h1>Network Visualization</h1>
-<div class='row'>
-  <div class='col-xs-12'>
-    <a href='{% static "contentpages/pliny-network.png" %}'>
-      <img src='{% static "contentpages/pliny-network.png" %}' width='100%' />
-    </a>
-    <table class='table'>
-      <tr><th>Key</th></tr>
-      <tr><td>Purple/Dark Purple = Senatorial; larger dot = consular</td></tr>
-      <tr><td>Green = Equestrian</td></tr>
-      <tr><td>Teal = Roman Citizen (status unknown)</td></tr>
-    </table>
+    <div class="row">
+      <div class='col-xs-12'>
+        <p>
+          This is an experimental visualization that draws from the live database and uses a force directed weighting for each connection (based on mentions and letters written to a person).
 
-    <p>
-      The chart above outlines an initial sample of Pliny's social network
-      and analysis thereof. The sort is based on weighted closeness based
-      on a rough calculation where a mention or letter written to someone =
-      weight + 1.
+          <table class='table'>
+            <tr>
+              <th>Key</th>
+            </tr>
+            <tr>
+              <td>Purple/Dark Purple = Senatorial; larger dot = consular</td>
+            </tr>
+            <tr>
+              <td>Green = Equestrian</td>
+            </tr>
+            <tr>
+              <td>Teal = Roman Citizen (status unknown)</td>
+            </tr>
+          </table>
 
-      Edges are all reciprocal and are not shown here for visibility's sake.
-      Also reflected in sort location but
-      not in ranked closeness are some preliminary additions of interconnections
-      between contacts.
+        </p>
+      </div>
+    </div>
 
-      Some points to note are the cluster of close contacts
-      from Como, Italy and Tifernum in the inner rings.
+    <h1>Doughnut Chart of Correspondents' Social Class</h1>
+    <div class="row">
+      <div class="col-xs-6 col-xs-offset-4">
+        <form class='select-book' style="margin: auto;">
+          <div class='form-group'>
+            <label for="book-select">Book:</label>
 
-      There are also demonstrably several senatorial contacts with a pattern of
-      2-3 letters within a second to last rung that may reflect Pliny's editorial
-      decisions. (This is a preliminary guess.)
-    </p>
-</div>
-</div>
-<h1>Force Directed Network Visualization</h1>
-<div class="row">
-  <div class="col-xs-12">
-<svg width="600" height="600">
-  <script>calld3ForceDirected()</script>
-</svg>
-<p> This is an experimental visualization that draws from the live database and
-  uses a force directed weighting for each connection (based on mentions and
-  letters written to a person).
+            <select id="book-select"></select>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-offset-2 col-xs-8 col-xs-offset-2">
+        <div style="width: 600px; height: 600px; margin-bottom: -250px">
+          <canvas id="donut-chart">
+            <script>
+              renderDonutChart()
+            </script>
+          </canvas>
+        </div>
+    </div>
+  </div>
 
-  The key is similar, with a large purple dot representing a consular. This
-  diagram allows users to hover over a dot for a label with the individual's
-  name and also drag them for easier examination.
-</div>
+    <h1>Network Visualization</h1>
+    <div class='row'>
+      <div class='col-xs-12'>
+        <a href='{% static "contentpages/pliny-network.png" %}'>
+          <img src='{% static "contentpages/pliny-network.png" %}' width='100%'/>
+        </a>
+
+        <p>
+          The chart above outlines an initial sample of Pliny's social network and analysis thereof. The sort is based on weighted closeness based on a rough calculation where a mention or letter written to someone = weight + 1. Edges are all reciprocal and
+          are not shown here for visibility's sake. Also reflected in sort location but not in ranked closeness are some preliminary additions of interconnections between contacts. Some points to note are the cluster of close contacts from Como, Italy and
+          Tifernum in the inner rings. There are also demonstrably several senatorial contacts with a pattern of 2-3 letters within a second to last rung that may reflect Pliny's editorial decisions. (This is a preliminary guess.)
+        </p>
+      </div>
+    </div>
+
+  </div>
 </div>
 {% endblock %}

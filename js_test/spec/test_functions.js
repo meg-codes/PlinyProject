@@ -75,3 +75,46 @@ describe('test functions for d3 force directed visualization', () => {
     });
 
 });
+
+describe('test chart.js visualization', function() {
+  beforeEach(function() {
+      this.server = sinon.fakeServer.create();
+      this.server.respondWith("GET", "/people/social_class.json",
+         [200, { "Content-Type": "application/json" },
+          '"datasets": [{"data": [45, 23, 35], "backgroundColor": ' +
+          '["rgb(127, 63, 191)", "rgb(191, 63, 63)", "rgb(63, 191, 191)"]}],' +
+          '"labels": ["Senatorial", "Equestrian", "Citizen"'
+          ]);
+      this.server.autoRespond = true
+      this.server.respsondImmediately = true
+  });
+
+  afterEach(function() {
+      $("option").remove();
+      this.server.requests = []
+      this.server.restore();
+      $("#book-select").unbind();
+
+  });
+
+  it("should make an initial ajax call when invoked", function() {
+    renderDonutChart();
+    const requestArray = this.server.requests;
+    requestArray.length.should.equal(1);
+    requestArray[0].url.should.equal("/people/social_class.json");
+  });
+
+  it("should populate 9 book + any option", function() {
+    renderDonutChart();
+    $("#book-select").children().length.should.equal(10);
+  });
+
+  it("should do a lookup using a callback on select", function() {
+      renderDonutChart();
+      $("#book-select").val(3).change();
+      const requestArray = this.server.requests;
+      requestArray.length.should.equal(2);
+      requestArray[1].url.should.equal('/people/social_class.json?q=3');
+  });
+
+});
