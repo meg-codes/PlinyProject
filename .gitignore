@@ -1,3 +1,6 @@
+# webpack cruft
+webpack-stats.json
+
 # Sphinx related ignores
 _build/
 docs/
