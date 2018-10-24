@@ -11,6 +11,8 @@ import 'jquery-ui/themes/base/autocomplete.css';
 import 'jquery-ui/ui/core';
 import 'jquery-ui/ui/widgets/autocomplete';
 
+window.$ = jQuery;
+
 /**
  * Obscure email addresses via Javascript by replacing (at) with @
  * @param value - a string to replace (at) with @
