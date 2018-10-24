@@ -13,10 +13,8 @@ install:
   - pip install -r dev-requirements.txt
   - pip install codecov
   - cat ci/database_override.py >> plinyproj/settings.py
-  - cd js_test && npm install && cd ..
 script:
   - pytest --cov
-  - cd js_test && npm test && cd ..
 
 sevices:
   - mysql
