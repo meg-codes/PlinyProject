@@ -1,0 +1,44 @@
+{
+  "name": "plinyproject",
+  "version": "0.7.0",
+  "description": "A online repository for the correspondents of Pliny",
+  "private": true,
+  "main": "media/js/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "NODE_ENV='development' npx webpack-dev-server --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bwhicks/PlinyProject.git"
+  },
+  "keywords": [
+    "classics",
+    "jQuery",
+    "dataset"
+  ],
+  "author": "Benjamin Hicks",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bwhicks/PlinyProject/issues"
+  },
+  "homepage": "https://github.com/bwhicks/PlinyProject#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "babel-loader": "^8.0.4",
+    "bootstrap": "^3.3.7",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "jquery": "^3.3.1",
+    "jquery-ui": "^1.12.1",
+    "mini-css-extract-plugin": "^0.4.4",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.22.0",
+    "webpack-bundle-tracker": "^0.4.2-beta",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}

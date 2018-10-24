@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'news',
     'contentpages',
     'common',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -130,12 +131,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': '/', # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media'),
+                    os.path.join(BASE_DIR, 'build')]
 # Import local settings
 # Adapted from mezzanine and CDH @ Princeton Projects
 # It has two advantages of standard import * from .local_settings

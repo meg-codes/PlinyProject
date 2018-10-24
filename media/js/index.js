@@ -1,3 +1,16 @@
+
+import 'bootstrap';
+import './bootstrap-accessibility.min.js';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../css/bootstrap-accessibility.css';
+import 'jquery-ui/themes/base/core.css';
+import 'jquery-ui/themes/base/theme.css';
+import 'jquery-ui/themes/base/menu.css';
+import 'jquery-ui/themes/base/selectmenu.css';
+import 'jquery-ui/themes/base/autocomplete.css';
+import 'jquery-ui/ui/core';
+import 'jquery-ui/ui/widgets/autocomplete';
+
 /**
  * Obscure email addresses via Javascript by replacing (at) with @
  * @param value - a string to replace (at) with @

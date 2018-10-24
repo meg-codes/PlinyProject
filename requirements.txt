@@ -4,3 +4,4 @@ django-autocomplete-light<3.3
 django-bootstrap3
 requests
 six
+django-webpack-loader
