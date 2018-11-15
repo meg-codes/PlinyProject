@@ -41,7 +41,6 @@ To run the unit tests::
         pytest --cov
 
 
-
 Bibliography
 ============
 
