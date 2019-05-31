@@ -45,8 +45,8 @@ class WorkContributor(models.Model):
         (TRANSLATOR, 'Translator'),
     )
 
-    contributor = models.ForeignKey(Contributor)
-    work = models.ForeignKey('Work')
+    contributor = models.ForeignKey(Contributor, on_delete=models.CASCADE)
+    work = models.ForeignKey('Work', on_delete=models.CASCADE)
     contribution_type = models.PositiveSmallIntegerField(choices=CONTRIBUTORS)
     order = models.PositiveSmallIntegerField(default=0)
 
@@ -207,7 +207,11 @@ class Section(Work):
             contained_in (ForeignKey): A link to :class:`common.models.Monograph`
     """
     pages = models.CharField(max_length=30)
-    contained_in = models.ForeignKey(Monograph, related_name='cited_sections')
+    contained_in = models.ForeignKey(
+        Monograph,
+        related_name='cited_sections',
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return '%s in %s (%s)' % (self.title, self.contained_in.title,

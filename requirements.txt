@@ -1,4 +1,4 @@
-Django~=1.11
+Django~=2.2
 mysqlclient
 django-autocomplete-light<3.3
 django-bootstrap3
