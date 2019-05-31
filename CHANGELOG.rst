@@ -1,6 +1,11 @@
 Change Log
 ----------
 
+0.7.0
+=====
+* Add support for Django 2.2 and update dependencies as possible.ß
+
+
 0.6.0
 =====
 * Finalize visualizations for now (TODO: better accessibility)
