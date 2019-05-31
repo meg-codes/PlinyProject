@@ -3,6 +3,8 @@ from .views import (PersonListView, person_autocomplete,
                     PersonAutoComplete, NodeEdgeListView,
                     PersonDetailView, SocialClassView)
 
+app_name = 'prosopography'
+
 urlpatterns = [
     url(r'^(?P<slug>[-\w\d]+)-(?P<id>\d+)/$', PersonDetailView.as_view(), name='detail'),
     url(r'^$', PersonListView.as_view(), name='search'),
