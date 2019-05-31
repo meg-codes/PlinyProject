@@ -44,7 +44,7 @@ class AKA(models.Model):
     confusions"""
     nomina = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Person', on_delete=models.CASCADE)
 
 
 class Person(models.Model):
@@ -170,8 +170,12 @@ class Person(models.Model):
 
 class Relationship(models.Model):
     """A through model for a relationship between two people"""
-    from_person = models.ForeignKey(Person, related_name='from_person')
-    to_person = models.ForeignKey(Person)
+    from_person = models.ForeignKey(
+        Person,
+        related_name='from_person',
+        on_delete=models.CASCADE
+    )
+    to_person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     # List of controlled vocabulary and indexed relationship field
     ANCESTOR = 'anc'
