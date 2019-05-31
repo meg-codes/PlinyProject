@@ -20,11 +20,13 @@ function renderDonutChart() {
     $('#book-select').append($('<option />').val(i).text(i));
   }
 
+  let classDonutChart
+
   // Perform an AJAX call to render initial values and render the form.
   $.ajax({
     url: "/people/social_class.json",
     success: function(data) {
-      var classDonutChart = new Chart(donutChart, {
+      classDonutChart = new Chart(donutChart, {
         type: 'doughnut',
         data: data,
       })
