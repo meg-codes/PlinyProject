@@ -38,9 +38,17 @@ export default class Home extends React.Component<HomeProps> {
 
   render() {
     return (
-      <main>
-      <h1>The Pliny Project</h1>
-      <ActiveLink href='/'><a>Home</a></ActiveLink>
+      <div>
+      <div className='img-banner'>&nbsp;</div>
+      <div className='site-header'>The Pliny Project</div>
+      <nav>
+        <ul>
+          <li>
+          <ActiveLink href='/'><a>Home</a></ActiveLink>
+          <ActiveLink href='/about'><a>About</a></ActiveLink>
+          </li>
+        </ul>
+      </nav>
       <p>This site and its associated web application is a digital resource 
       for the correspondents of Pliny the Younger and his world,
       especially in its social dimensions and the connections between 
@@ -48,7 +56,7 @@ export default class Home extends React.Component<HomeProps> {
 
       <p>Use the quick search or menu above to explore the site.</p>
       <Posts posts={this.props.posts} />
-      </main>
+      </div>
     )
   }
 
@@ -60,7 +68,9 @@ export default class Home extends React.Component<HomeProps> {
         posts: data
       }
     } catch(exception) {
-      console.log(exception)
+      return {
+        posts: []
+      }
     }
   }
 }
