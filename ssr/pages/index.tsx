@@ -1,8 +1,9 @@
-import React from 'react';
-import fetch from 'isomorphic-unfetch';
+import * as React from 'react';
+import axios from 'axios';
 import moment from 'moment';
 
-import ActiveLink from '../components/ActiveLink';
+import Header from '../components/Header';
+import { axisBottom } from 'd3';
 
 interface Post {
   id: number,
@@ -39,39 +40,33 @@ export default class Home extends React.Component<HomeProps> {
   render() {
     return (
       <div>
-      <div className='img-banner'>&nbsp;</div>
-      <div className='site-header'>The Pliny Project</div>
-      <nav>
-        <ul>
-          <li>
-          <ActiveLink href='/'><a>Home</a></ActiveLink>
-          <ActiveLink href='/about'><a>About</a></ActiveLink>
-          </li>
-        </ul>
-      </nav>
-      <p>This site and its associated web application is a digital resource 
+      <Header />
+      <main>
+      <p>This site and its associated web application are a digital resource 
       for the correspondents of Pliny the Younger and his world,
       especially in its social dimensions and the connections between 
       his associates.</p>
 
       <p>Use the quick search or menu above to explore the site.</p>
       <Posts posts={this.props.posts} />
+      </main>
       </div>
     )
   }
 
-  static async getInitialProps() {
+  static async getInitialProps({ req }: any) {
     try {
-      const res = await fetch('http://localhost:8000/api/posts');
-      const data = await res.json();
+      const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
+      const res = await axios.get(baseUrl + '/api/posts');
       return {
-        posts: data
+          posts: res.data
       }
-    } catch(exception) {
+    } catch(err) {
       return {
         posts: []
       }
     }
   }
+
 }
 
