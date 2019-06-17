@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'news',
     'contentpages',
     'common',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

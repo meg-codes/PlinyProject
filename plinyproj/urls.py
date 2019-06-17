@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^people/', include('prosopography.urls', namespace='people')),
     url(r'^content/', include('contentpages.urls', namespace='content')),
+    url(r'^api/', include('api.urls', namespace='api'))
 ]
