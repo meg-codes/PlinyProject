@@ -1,6 +1,8 @@
 import * as React from 'react';
+import Router from 'next/router';
 
 import ActiveLink from './ActiveLink';
+import QuickSearch from './QuickSearch'
 
 const Header:React.FC = () =>
 <div className='header'>
@@ -12,18 +14,11 @@ const Header:React.FC = () =>
             <li><ActiveLink href='/'><a>Home</a></ActiveLink></li>
             <li><ActiveLink href='/about'><a>About</a></ActiveLink></li>
             <li><ActiveLink href='/viz'><a>Visualization</a></ActiveLink></li>
-            <li><ActiveLink href='/prosopography/'><a>Prosopography</a></ActiveLink></li>
+            <li><ActiveLink href='/people/'><a>People</a></ActiveLink></li>
             <li className='form-holder'>
-              <form action='/prosopography' onSubmit={
-                e => {
-                  e.preventDefault();
-
-                }
-              }>
-                <label htmlFor='quicksearch'>Search Correspondents</label>
-                <input type='text' id='quicksearch' name='nomina' placeholder='Enter a nomina...'></input>
-              </form>
-           </li>
+              <QuickSearch action='/people/' id='quicksearch' name='nomina' placeholder='Enter nomima...' 
+              label='Search Correspondents' />
+            </li>
           </ul>
         </nav>
 </div>

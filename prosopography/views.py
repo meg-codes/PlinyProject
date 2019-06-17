@@ -105,13 +105,13 @@ class NodeEdgeListView(ListView):
         Y = SocialField.DEFINITE
         group = 0
         if person.citizen == Y:
-            group = 1
+            group = 'citizen' 
         if person.equestrian == Y:
-            group = 2
+            group = 'equestrian'
         if person.senatorial == Y:
-            group = 3
+            group = 'senatorial'
         if person.consular == Y:
-            group = 4
+            group = 'consular'
         return group
 
     def get_data(self):
@@ -119,7 +119,7 @@ class NodeEdgeListView(ListView):
         people = self.get_queryset()
         # filter out a nodelist in the format d3v4 expects
         node_edge_dict = {
-            'nodes': [{'id': 'Gaius Plinius Secundus', 'group': 9}],
+            'nodes': [{'id': 'Gaius Plinius Secundus', 'group': 'consular'}],
             'links': [],
         }
         # generate nodes

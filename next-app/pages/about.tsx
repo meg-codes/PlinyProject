@@ -22,7 +22,8 @@ export default class About extends React.Component<React.ComponentProps> {
     I collected a considerable amount of data from a thorough analysis of Pliny's letters under the auspices of a 
     fellowship at the American Academy in Rome. Subsequently I am now mining it 
     for conclusions, and attempting to make it available online for other
-     scholars to use in their research.
+     scholars to use in their research, with the gracious support of research release time at the 
+     <a href="https://cdh.princeton.edu">Center for Digital Humanities</a> at Princeton.
      </p>
      </main>
   </div>

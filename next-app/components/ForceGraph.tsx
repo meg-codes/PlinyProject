@@ -30,7 +30,7 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
           0: 'gray',
           'citizen': 'aquamarine',
           'equestrian': 'green',
-          'sentorial': 'purple',
+          'senatorial': 'purple',
           'consular': 'indigo',
       };
 
@@ -106,7 +106,11 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
 
         title.append('span')
         .text(d => {
-          return 
+          if (d.id === 'Gaius Plinius Secundus') {
+            return ` (${d.group})`
+          }
+          const weight = data.links.find(el => el.target == d.id).weight
+          return ` (${d.group}) with a connection weight of ${weight}`
         })
 
     simulation.on("tick", () => {
