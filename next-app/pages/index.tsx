@@ -3,6 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import Header from '../components/Header';
+import { axisBottom } from 'd3';
 
 interface Post {
   id: number,
