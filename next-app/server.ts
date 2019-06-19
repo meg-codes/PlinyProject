@@ -14,7 +14,7 @@ const devProxy: Proxy = {
   '/api': {
     target: 'http://localhost:8000',
   },
-  '/people/': {
+  '/people/nodes.json': {
     target: 'http://localhost:8000'
   }
 }
@@ -31,9 +31,6 @@ app
         server.use(proxyMiddleware(context, devProxy[context]))
       });
     }
-    server.get('/', (req, res) => {
-      return app.render(req, res, '/')
-    })
 
     server.get('*', (req, res) => {
       return handle(req, res);

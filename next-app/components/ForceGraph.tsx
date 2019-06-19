@@ -38,6 +38,12 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
   
   }
 
+  const generateTitleID = (d) => {
+    const nomina = d.id.toLowerCase().split(" ");
+    const id_string = nomina.join('_')
+    return `title_${id_string}`
+  }
+
     const drag = simulation => {
   
       function dragstarted(d) {
@@ -86,7 +92,8 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
       .data(links)
       .join("line")
         .attr("stroke-width", d => Math.sqrt(d.value));
-  
+
+
     const node = svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
@@ -96,11 +103,14 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
         .attr("r", 8)
         .attr("fill", (d) => setColor(d))
         .attr("role", "img")
+        .attr("alt", (d) => generateTitleID(d))
         .attr("tabindex", "-1")
         .call(drag(simulation))
   
     const title = node.append("title")
-        title.append('span')
+                      .attr("id", (d) => generateTitleID(d))
+        
+         title.append('span')
         .attr('lang', 'la')
         .text(d => d.id)
 

@@ -5,7 +5,7 @@ import ActiveLink from './ActiveLink';
 import QuickSearch from './QuickSearch'
 
 const Header:React.FC = () =>
-<div className='header'>
+<header className='header'>
   <div className='img-banner'>&nbsp;</div>
         <div className='site-header'>The Pliny Project</div>
         
@@ -21,6 +21,6 @@ const Header:React.FC = () =>
             </li>
           </ul>
         </nav>
-</div>
+</header>
 
 export default Header

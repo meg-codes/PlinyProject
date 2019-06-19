@@ -1,9 +1,9 @@
 import * as React from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import Head from 'next/head';
 
 import Header from '../components/Header';
-import { axisBottom } from 'd3';
 
 interface Post {
   id: number,
@@ -39,9 +39,13 @@ export default class Home extends React.Component<HomeProps> {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
+      <Head>
+        <title>The Pliny Project</title>
+      </Head>
       <Header />
       <main>
+        <h1>The Pliny Project</h1>
       <p>This site and its associated web application are a digital resource 
       for the correspondents of Pliny the Younger and his world,
       especially in its social dimensions and the connections between 
@@ -50,7 +54,7 @@ export default class Home extends React.Component<HomeProps> {
       <p>Use the quick search or menu above to explore the site.</p>
       <Posts posts={this.props.posts} />
       </main>
-      </div>
+      </React.Fragment>
     )
   }
 
