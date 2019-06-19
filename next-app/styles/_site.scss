@@ -20,7 +20,7 @@ body {
     transform: scale(2.0);
     height: 15rem;
   }
- 
+
 }
 
 main {
@@ -29,7 +29,7 @@ main {
   @media screen and (max-width: 900px) {
     margin-top: 23rem;
   }
- 
+
 }
 
 .header {
@@ -48,7 +48,7 @@ main {
   margin-right: 2rem;
 }
 
-nav {
+nav.main-nav {
   margin-bottom: 2rem;
   font-family: $roboto-slab;
 
@@ -113,7 +113,7 @@ nav {
 
       }
 
-     
+
   }
 
   }
@@ -139,7 +139,7 @@ nav {
     &:focus, &:hover {
       text-shadow: 2px 2px 7px white;
       border-bottom: 0.19rem solid white;
- 
+
     }
 
     &:focus {
@@ -169,5 +169,60 @@ small {
 
   @media screen and (max-width: 375px) {
     flex-wrap: wrap;
+  }
+}
+
+div  {
+  &.responsive-table {
+    overflow-x: auto;
+  }
+
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  & th {
+    border: 0.016rem solid black;
+    padding: 1rem;
+    background: lightgray;
+  }
+
+  & tr {
+    border: 0.016rem solid black;
+    &:nth-child(odd) {
+      background-color: white;
+    }
+    &:nth-child(even) {
+      background-color: lightgray;;
+    }
+  }
+  & td {
+    border: 0.016rem solid black;
+    padding: 1rem;
+  }
+}
+
+ul {
+  &.pagination {
+    text-align: center;
+  & li {
+    margin: 0.75rem;
+    display: inline-flex;
+    border: 0.016rem solid gray;
+    & a {
+      padding: 1rem;
+
+
+      &.disabled {
+        color: currentColor;
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.5;
+        text-decoration: none;
+      }
+    }
+  }
   }
 }

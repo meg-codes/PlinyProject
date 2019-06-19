@@ -2,7 +2,7 @@ import express from "express";
 import next from "next";
 
 const env = process.env.NODE_ENV;
-const dev: boolean = env !== 'production';
+const dev = env !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 

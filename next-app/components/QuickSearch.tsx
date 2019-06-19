@@ -23,7 +23,7 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
-    Router.push(`/prosopography/?nomina=${this.state.value}`)
+    Router.push(`${this.props.action}?nomina=${this.state.value}`)
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -35,7 +35,7 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
     return (
       <form action={this.props.action} method={this.props.method} onSubmit={this.handleSubmit}>
         <label htmlFor={this.props.id}>{this.props.label}</label>
-        <input type='text' id={this.props.id} value={this.state.value} name={this.props.name} 
+        <input type='text' id={this.props.id} value={this.state.value} name={this.props.name}
         placeholder={this.props.placeholder} onChange={this.handleChange}>
         </input>
       </form>
