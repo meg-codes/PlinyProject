@@ -4,6 +4,7 @@ import { NextFunctionComponent, QueryStringMapObject } from 'next';
 import Link from 'next/link';
 
 import Header from '../components/Header';
+import PeopleFilter from '../components/PeopleFilter';
 
 interface Person {
   pk: number
@@ -16,7 +17,6 @@ interface Person {
 interface CorrespondentListProps {
   correspondents: Array<Person>,
 }
-
 
 interface PaginationProps {
   query: QueryStringMapObject,
@@ -33,13 +33,21 @@ interface PaginationState {
 function queryMapToString(query: QueryStringMapObject) {
 
     const queryArray = [];
+    if (query) {
+      for (let prop in query) {
+        if (Array.isArray(query[prop])) {
+          //@ts-ignore
+          query[prop].forEach((el) => {
+            queryArray.push(`${prop}=${el}`)
+          })
+        } else {
+          queryArray.push(`${prop}=${query[prop]}`);
+        }
+      }
 
-    for (let prop in query) {
-      queryArray.push(`${prop}=${query[prop]}`);
-    }
-
-    if (queryArray.length > 0) {
-      return `?${queryArray.join('&')}`
+      if (queryArray.length > 0) {
+        return `?${queryArray.join('&')}`
+      }
     }
 
     return ''
@@ -119,6 +127,7 @@ const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, cou
       Below is a list of Pliny's correspondents. You may use the form below to
       filter the results by name or nomina.
     </p>
+    <PeopleFilter query={query} />
     <Pagination count={count} page={page} query={query} />
     <CorrespondentList correspondents={correspondents}/>
   </main>

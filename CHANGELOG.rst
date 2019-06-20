@@ -1,10 +1,13 @@
 Change Log
 ----------
+0.8.0
+=====
+*
+
 
 0.7.0
 =====
-* Add support for Django 2.2 and update dependencies as possible.ß
-
+* Add support for Django 2.2 and update dependencies as possible
 
 0.6.0
 =====

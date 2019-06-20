@@ -29,11 +29,11 @@ class PersonListView(mixins.ListModelMixin, generics.GenericAPIView):
                 if q_object is None:
                     q_object = Q(**{ordo: 'Y'})
                 else:
-                    q_object |= Q(**{ordo: 'Y'})    
-            queryset = queryset.filter(q_object)        
-    
+                    q_object |= Q(**{ordo: 'Y'})
+            queryset = queryset.filter(q_object)
+
         return queryset
-    
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
