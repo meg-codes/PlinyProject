@@ -29,7 +29,6 @@ function filterStateToString(state: PeopleFilterState) {
             }
         }
     }
-    console.log(queryString)
     return queryString.length > 0 ? `?${queryString.join('&')}` : ''
 }
 
@@ -88,24 +87,25 @@ export default class PeopleFilter extends React.Component<PeopleFilterProps, Peo
                 />
                 <fieldset name="socialClass">
                     <legend>Ordo (Social Class) Filters</legend>
-                    <label htmlFor="socialClass_1">Citizen</label>
                     <input type="checkbox" id="socialClass_1"
                         name="socialClass" value="citizen"
                         checked={this.state.citizen}
                         onChange={this.handleCheckedChange}
                     />
-                    <label htmlFor="socialClass_2">Equestrian</label>
+                   <label htmlFor="socialClass_1">Citizen</label>
+
                     <input type="checkbox" id="socialClass_2"
                         name="socialClass" value="equestrian"
                         checked={this.state.equestrian}
                         onChange={this.handleCheckedChange}
                     />
-                    <label htmlFor="socialClass_3">Senatorial</label>
+                    <label htmlFor="socialClass_2">Equestrian</label>
                     <input type="checkbox" id="socialClass_3"
                         name="socialClass" value="senatorial"
                         checked={this.state.senatorial}
                         onChange={this.handleCheckedChange}
                         />
+                    <label htmlFor="socialClass_3">Senatorial</label>
                 </fieldset>
             </form>
         )

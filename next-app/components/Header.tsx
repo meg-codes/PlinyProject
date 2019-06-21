@@ -9,7 +9,7 @@ const Header:React.FC = () =>
   <div className='img-banner'>&nbsp;</div>
         <div className='site-header'>The Pliny Project</div>
 
-        <nav class='main-nav' arial-label='main navigation'>
+        <nav className='main-nav' arial-label='main navigation'>
           <ul>
             <li><ActiveLink href='/'><a>Home</a></ActiveLink></li>
             <li><ActiveLink href='/about'><a>About</a></ActiveLink></li>

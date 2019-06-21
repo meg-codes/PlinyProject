@@ -3,12 +3,12 @@ import { withRouter, WithRouterProps } from "next/router";
 import Link from 'next/link';
 import { LinkProps } from 'next/link';
 
-interface Props extends WithRouterProps, LinkProps, {}
+interface ActiveLinkProps extends WithRouterProps, LinkProps {}
 
-const ActiveLink:React.FC<Props> = ({ children, router, href, ...props}) => (
+const ActiveLink:React.FC<ActiveLinkProps> = ({ children, router, href, ...props}) => (
   <Link href={href} {...props}>
     {React.cloneElement(React.Children.only(children), {
-      className: router.asPath === href ? `active` : null
+      className: href === router.pathname ? `active` : null
     })}
   </Link>
 )

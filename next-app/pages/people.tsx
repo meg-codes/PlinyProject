@@ -16,6 +16,7 @@ interface Person {
 
 interface CorrespondentListProps {
   correspondents: Array<Person>,
+  count: number;
 }
 
 interface PaginationProps {
@@ -56,9 +57,12 @@ function queryMapToString(query: QueryStringMapObject) {
 class Pagination extends React.Component<PaginationProps, PaginationState> {
   constructor(props: PaginationProps) {
     super(props)
-
+    const pages = [...Array(Math.ceil(this.props.count / 20)).keys()].map(x => x+1)
+    if (pages.length == 1) {
+      pages.shift()
+    }
     this.state = {
-      pages: [...Array(Math.ceil(this.props.count / 20)).keys()].map(x => x+1)
+      pages: pages
     }
   }
 
@@ -68,7 +72,7 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
         <ul className='pagination'>
           {this.state.pages.map((el) => {
             if (el == this.props.page) {
-              return (<li>
+              return (<li key={el}>
                         <a href="#" className='disabled'
                         aria-label={`${el} is current page`}
                         tabIndex={-1}>{el}</a>
@@ -89,34 +93,37 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
 }
 
 
- const CorrespondentList: React.FC<CorrespondentListProps> = ({ correspondents }) => (
-   <div className="responsive-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Nomina</th>
-          <th>Ordo (Social Class)</th>
-          <th>Letters To</th>
-        </tr>
-      </thead>
-      <tbody>
-      {correspondents.map((el) => (
-        <tr key={el.pk}>
-          <td><Link href={el.url}><a>{el.nomina}</a></Link></td>
-          <td>{el.ordo}</td>
-          <td>{el.letters_to.join(', ')}</td>
-        </tr>
-      ))}
-      </tbody>
-    </table>
-  <style jsx>
-    {`div {
-      overflow-x: auto;
-    }`}
-  </style>
-  </div>
-
- )
+ const CorrespondentList: React.FC<CorrespondentListProps> = ({ correspondents, count }) => {
+   
+  if (!count) {
+    return (<div className='responsive-table'><h2>No correspondents.</h2></div>)
+  } else {
+   return (
+    <div className="responsive-table">
+      <h2>{`${count} ${count > 1 ? 'correspondents' : 'correspondent'}.`}</h2>
+      <table>
+        <caption>Results</caption>
+        <thead>
+          <tr>
+            <th>Nomina</th>
+            <th>Ordo (Social Class)</th>
+            <th>Letters To</th>
+          </tr>
+        </thead>
+        <tbody>
+        {correspondents.map((el) => (
+          <tr key={`${el.pk}_${el.nomina.split(' ').join('_').toLowerCase()}`}>
+            <td><Link href={el.url}><a>{el.nomina}</a></Link></td>
+            <td>{el.ordo}</td>
+            <td>{el.letters_to.join(', ')}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    </div>
+    )
+  }
+ }
 
 const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, count, page, query}) => (
   <React.Fragment>
@@ -125,11 +132,15 @@ const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, cou
     <h1>Pliny's Correspondents</h1>
     <p>
       Below is a list of Pliny's correspondents. You may use the form below to
-      filter the results by name or nomina.
+      filter the results by nomina or social class. 'Citizen' denotes those correspondents
+      for whom their only status was citizenship (as compared to the more exclusive equestrian
+      or senatorial orders).
+
+      To search for a particular nomina, simply hit the <code>Enter</code> key after typing a name.
     </p>
     <PeopleFilter query={query} />
     <Pagination count={count} page={page} query={query} />
-    <CorrespondentList correspondents={correspondents}/>
+    <CorrespondentList correspondents={correspondents} count={count}/>
   </main>
   </React.Fragment>
 )

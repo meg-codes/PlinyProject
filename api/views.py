@@ -24,14 +24,23 @@ class PersonListView(mixins.ListModelMixin, generics.GenericAPIView):
 
         social_class = self.request.query_params.getlist('socialClass', None)
         if social_class:
-            q_object = None
-            for ordo in social_class:
-                if q_object is None:
-                    q_object = Q(**{ordo: 'Y'})
+            cumulative_query = None
+            if 'citizen' in social_class:
+                cumulative_query = Q(citizen='Y') & Q(equestrian='N') \
+                    & Q(senatorial='N')
+            if 'equestrian' in social_class:
+                equestrian = Q(equestrian='Y')
+                if cumulative_query is None:
+                    cumulative_query = equestrian
                 else:
-                    q_object |= Q(**{ordo: 'Y'})
-            queryset = queryset.filter(q_object)
-
+                    cumulative_query |= equestrian
+            if 'senatorial' in social_class:
+                senatorial = Q(senatorial='Y')
+                if cumulative_query is None:
+                    cumulative_query = senatorial
+                else:
+                    cumulative_query |= senatorial
+            queryset = queryset.filter(cumulative_query)
         return queryset
 
     def get(self, request, *args, **kwargs):

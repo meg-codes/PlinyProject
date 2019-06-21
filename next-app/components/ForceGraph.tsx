@@ -8,25 +8,23 @@ type ForceGraphProps = {
   title: string
 }
 
-type ForceGraphState = {
-  simulation: any
-}
-
-export default class ForceGraph extends React.Component<ForceGraphProps, ForceGraphState> {
-
-  simulation: d3.Simulation
-
-  constructor(props: ForceGraphProps) {
-    super(props);  
-  }
+export default class ForceGraph extends React.Component<ForceGraphProps> {
 
   async componentDidMount() {
-    const data = await d3.json('/people/nodes.json')
-    const links = data.links.map(d => Object.create(d));
+    // prevent erroring out if d3 can't connect
+    try {
+      var data = await d3.json('/people/nodes.json') 
+    } catch(err) {
+      data = {
+        links: [],
+        nodes: []
+      }
+    }
+    const links = data.links.map(d  => Object.create(d));
     const nodes = data.nodes.map(d => Object.create(d));
 
     const setColor = (d) => {
-      var colors = {
+      const colors = {
           0: 'gray',
           'citizen': 'aquamarine',
           'equestrian': 'green',
@@ -36,7 +34,7 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
 
       return colors[d.group];
   
-  }
+      }
 
   const generateTitleID = (d) => {
     const nomina = d.id.toLowerCase().split(" ");
@@ -139,8 +137,8 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
     const circles = document.querySelectorAll('circle')
     let i = -1;
     d3.select('svg').on("keydown", () => {
-      console.log(d3.event)
-      if (d3.event.key === "ArrowDown" && d3.event.shiftKey === true) {
+      if (d3.event.key === "ArrowDown") {
+        d3.event.preventDefault()
           if (i < circles.length - 1) {
             i++
           } else {
@@ -148,7 +146,8 @@ export default class ForceGraph extends React.Component<ForceGraphProps, ForceGr
           }
           circles[i].focus()
         }
-      if (d3.event.key === "ArrowUp" && d3.event.shiftKey === true) {
+      if (d3.event.key === "ArrowUp") {
+        d3.event.preventDefault()
         if (i > 0) {
           i-- } else {
             i = circles.length - 1;
