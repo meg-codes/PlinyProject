@@ -32,6 +32,13 @@ app
       });
     }
 
+    server.get(/\/people\/\D*(\d+)$/, (req,res) => {
+      const realPage = '/people-detail'
+      const query = {id: req.params[0]}
+      app.render(req, res, realPage, query)
+    });
+
+
     server.get('*', (req, res) => {
       return handle(req, res);
     });

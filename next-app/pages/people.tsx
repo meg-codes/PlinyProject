@@ -94,7 +94,7 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
 
 
  const CorrespondentList: React.FC<CorrespondentListProps> = ({ correspondents, count }) => {
-   
+
   if (!count) {
     return (<div className='responsive-table'><h2>No correspondents.</h2></div>)
   } else {
@@ -113,7 +113,7 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
         <tbody>
         {correspondents.map((el) => (
           <tr key={`${el.pk}_${el.nomina.split(' ').join('_').toLowerCase()}`}>
-            <td><Link href={el.url}><a>{el.nomina}</a></Link></td>
+            <td><Link href={`/people-detail?id=${el.pk}`} as={el.url}><a>{el.nomina}</a></Link></td>
             <td>{el.ordo}</td>
             <td>{el.letters_to.join(', ')}</td>
           </tr>

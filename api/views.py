@@ -47,6 +47,15 @@ class PersonListView(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
+class PersonDetailView(generics.RetrieveAPIView):
+
+    serializer_class = api_serializers.PersonDetailSerializer
+    queryset = Person.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
 class PostListView(generics.ListAPIView):
     serializer_class = api_serializers.PostSerializer
     queryset = Post.objects.all()

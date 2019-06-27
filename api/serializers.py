@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from news.models import Post 
+from news.models import Post
 from prosopography.models import Person
 
 
@@ -22,10 +22,27 @@ class MultiKwargHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
                        format=format)
 
 
+class PersonDetailSerializer(serializers.ModelSerializer):
+
+    letters_to = serializers.StringRelatedField(many=True)
+    citations = serializers.StringRelatedField(many=True)
+    gender = serializers.CharField(source="get_gender_display")
+    citizen = serializers.CharField(source="get_citizen_display")
+    equestrian = serializers.CharField(source='get_equestrian_display')
+    senatorial = serializers.CharField(source='get_senatorial_display')
+    consular = serializers.CharField(source='get_consular_display')
+
+
+
+    class Meta:
+        model = Person
+        fields = ('__all__')
+
+
 class PersonListSerializer(serializers.ModelSerializer):
 
     url = MultiKwargHyperlinkedIdentityField(
-        view_name='prosopography:detail', 
+        view_name='prosopography:detail',
         lookup_fields=[
             ('pk', 'id'),
             ('slug', 'slug')
