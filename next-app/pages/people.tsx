@@ -2,6 +2,7 @@ import * as React from 'react';
 import axios from 'axios';
 import { NextFunctionComponent, QueryStringMapObject } from 'next';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import Header from '../components/Header';
 import PeopleFilter from '../components/PeopleFilter';
@@ -127,6 +128,9 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
 
 const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, count, page, query}) => (
   <React.Fragment>
+  <Head>
+    <title>Pliny's Correspondents</title>
+  </Head>
   <Header />
   <main>
     <h1>Pliny's Correspondents</h1>
