@@ -32,9 +32,9 @@ app
       });
     }
 
-    server.get(/\/people\/\D*(\d+)$/, (req,res) => {
+    server.get(/\/people\/(\D*)?-?(\d+)$/, (req,res) => {
       const realPage = '/people-detail'
-      const query = {id: req.params[0]}
+      const query = {id: req.params[1] || 1, nomina: req.params[0] || ''}
       app.render(req, res, realPage, query)
     });
 

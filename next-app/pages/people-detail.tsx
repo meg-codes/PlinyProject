@@ -1,14 +1,13 @@
 import * as React from 'react';
 import Head from 'next/head';
-import { withRouter,  WithRouterProps } from 'next/router';
 import axios from 'axios'
 
 import Header from '../components/Header'
 
 interface DetailedPerson {
     id: number
-    letters_to: Array<String>,
-    citations: Array<String>,
+    letters_to: Array<string>,
+    citations: Array<string>,
     nomina: string
     gender: string,
     citizen: string,
@@ -23,12 +22,12 @@ interface DetailedPerson {
     certainty_of_id: number,
     notes: string,
     from_comum: boolean,
-    mentioned_in: Array<String>
-    related_to: Array<String>
+    mentioned_in: Array<string>
+    related_to: Array<string>
 
 }
 
-interface PersonDetailProps extends WithRouterProps {
+interface PersonDetailProps {
     id: number,
     person?: DetailedPerson
 }
@@ -42,33 +41,78 @@ function hasDates(person: DetailedPerson): boolean {
         || person.floruit)
 }
 
-const PersonDates: React.FC<{hasDates: boolean}> = ({ hasDates }) => {
+interface Dates {
+    birth?: number,
+    death?: number,
+    cos?: number,
+    cos_suff?: number,
+    floruit?: number,
+    [index:string]: number
+}
+
+interface PersonDateProps {
+    hasDates: boolean,
+    dates: Dates
+}
+
+const PersonDates: React.FC<PersonDateProps> = ({ hasDates, dates}) => {
     if (hasDates) {
-        return (<section>
-            I have dates!
+        return (
+        <section>
+            <div>
+                <h2>Key Dates</h2>
+            </div>
+                <ul>
+                    {Object.keys(dates).map((key) => {
+                        console.log(key)
+                        switch(key) {
+                            case 'cos': {
+                                if (dates.cos) {
+                                    return <li key={key}>Cos. {dates.cos}</li>
+                                }
+                                break
+                            }
+                            case 'cos_suff': {
+                                if (dates.cos_suff) {
+                                    return <li key={key}>Cos. suff.: {dates.cos_suff}</li>
+                                }
+                                break
+                            }
+
+                            case 'birth': {
+                                if (dates.birth) {
+                                    return <li key={key}>Birth: {dates.birth}</li>
+                                }
+                                break
+                            }
+
+                            case 'death': {
+                                if (dates.death) {
+                                    return <li key={key}>Death: {dates.death}</li>
+                                }
+                                break
+                            }
+
+                            case 'floruit': {
+                                if (dates.floruit) {
+                                    return <li key={key}>Floruit: {dates.floruit}</li>
+                                }
+                                break
+                            }
+
+                        }
+                    }
+                    )}
+                </ul>
         </section>)
     }
-    return ('')
+    return (<section></section>)
 }
 
 class PersonDetail extends React.Component<PersonDetailProps> {
 
     constructor(props: PersonDetailProps) {
         super(props)
-    }
-
-    componentDidMount() {
-        // map references for a tidier set of calls below
-        const router = this.props.router
-        const person = this.props.person
-        const id = this.props.id
-
-        if (router && person &&
-            router.asPath.search(slugify(person.nomina)) === -1) {
-                router.push(`/person-detail?id=${id}`,
-                    `/people/${slugify(person.nomina)}-${id}`)
-        }
-
     }
 
     render() {
@@ -101,6 +145,15 @@ class PersonDetail extends React.Component<PersonDetailProps> {
                     <div className='person-details'>
                         <section>
                             <div>
+                                <h2>Basic Info</h2>
+                            </div>
+                            <p>Gender: {person.gender}</p>
+                            <p>Certainity of identification: {person.certainty_of_id}</p>
+                            <code>(Rating from 1-5, with 5 being agreement among scholars and 1 being 
+                            considerable confusion as to the person.)</code>
+                        </section>
+                        <section className='inline'>
+                            <div>
                                 <h2>Social Class Info</h2>
                             </div>
                             <ul>
@@ -110,7 +163,35 @@ class PersonDetail extends React.Component<PersonDetailProps> {
                                 <li>Consular: {person.consular}</li>
                             </ul>
                         </section>
-                        <PersonDates hasDates={hasDates(person)} />
+                        <PersonDates hasDates={hasDates(person)}
+                            dates={{
+                                birth: person.birth,
+                                death: person.death,
+                                cos: person.cos,
+                                cos_suff: person.cos_suff,
+                                floruit: person.floruit
+                            }}
+                            />
+                        <section>
+                            <div>
+                                <h2>Letters to</h2>
+                            </div>
+                            <ul>
+                                {person.letters_to.map((el, index) => 
+                                    <li key={index}>{el}</li>
+                                )}
+                            </ul>
+                        </section>
+                        <section>
+                            <div>
+                                <h2>Citations</h2>
+                            </div>
+                            <ul className="vertical">
+                                    {person.citations.map( (el, index) =>
+                                        <li key={index} dangerouslySetInnerHTML={{__html: el}}></li>
+                                    )}
+                            </ul>
+                        </section>
                     </div>
                 </main>
 
@@ -119,24 +200,32 @@ class PersonDetail extends React.Component<PersonDetailProps> {
         )
     }
 
-    static async getInitialProps({ req, query}: any) {
-        const id = query.id || 1
+    static async getInitialProps({res, req, query}: any) {
         try {
             const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
-            const res = await axios.get(baseUrl + `/api/people/${id}`);
-            return {
-                id: id,
-                person: res.data
+            const data = await axios.get(baseUrl + `/api/people/${query.id}`);
+            const person = data.data
+            if (req) {
+                if (req.url.search(slugify(person.nomina)) === -1) {
+                    res.writeHead(302, 
+                        {Location: `/people/${slugify(person.nomina)}-${query.id}`})
+                    res.end();
+                } 
             }
-        }
-        catch(err) {
 
             return {
-                id: id,
+                id: query.id,
+                person: person
+            }
+
+        }
+        catch(err) {
+            return {
+                id: query.id,
                 person: null
             }
         }
     }
 }
 
-export default withRouter(PersonDetail)
+export default PersonDetail

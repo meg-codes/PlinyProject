@@ -11,6 +11,11 @@ class TwentyPagesPagination(pagination.PageNumberPagination):
     page_size = 20
 
 
+class PersonAutocompleteView(generics.ListAPIView):
+    serializer_class = api_serializers.PersonAutocomplete
+    queryset = Person.objects.all()
+
+
 class PersonListView(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = api_serializers.PersonListSerializer
     pagination_class = TwentyPagesPagination

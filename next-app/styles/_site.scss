@@ -120,6 +120,28 @@ nav.main-nav {
             }
           }
 
+          ul {
+            display: block;
+
+            &.hidden {
+              display: none;
+            }
+
+
+            position: absolute;
+            background: white;
+            color: black;
+            border: 0.016rem solid black;
+            width: 20rem;
+            padding: 0.5rem;
+
+            & li {
+              &:nth-child(even) {
+                background: lightgray;
+              }
+            }
+          }
+
       }
 
 
@@ -304,7 +326,7 @@ ul {
 }
 
 .person-details {
-  margin-top: 3rem;
+  margin-top: 1rem;
   width: 80vw;
   section {
     display: flex;
@@ -312,6 +334,16 @@ ul {
     align-items: stretch;
     border: 0.0625rem solid darkgray;
     border-radius: 0.25rem;
+
+    p {
+      width: 100%;
+      padding-left: 1rem;
+    }
+
+    code {
+      padding-left: 1rem;
+      padding-bottom: 1rem;
+    }
 
     & > div {
       width: 100%;
@@ -321,11 +353,15 @@ ul {
       padding-left: 1rem;
     }
 
-
-
     ul {
       display: inline-flex;
+      flex-wrap: wrap;
       padding-left: 1rem;
+      
+      &.vertical {
+        display: block;
+      }
+
       & li {
         list-style: none;
         margin-right: 1rem;
