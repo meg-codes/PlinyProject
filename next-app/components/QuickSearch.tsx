@@ -20,14 +20,18 @@ interface InputState {
 }
 
 export default class QuickSearch extends React.Component<InputProps, InputState> {
+
+  form: React.RefObject<HTMLFormElement>
+
   constructor(props: InputProps) {
     super(props)
+    this.form = React.createRef()
     this.state = {
       value: '',
       expanded: false,
       options: [],
       filteredOptions: [],
-      focusedOption: 0
+      focusedOption: undefined
     }
 
   }
@@ -41,6 +45,14 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
       this.setState({options: []})
     }
 
+    document.addEventListener('mousedown', this.handleClick)
+
+  }
+
+  handleClick = (event: MouseEvent): void => {
+    if (this.form.current && !this.form.current.contains(event.target as Node)) {
+      this.setState({focusedOption: undefined, expanded: false})
+    }
   }
 
   filterOptions = (value: string): void => {
@@ -52,9 +64,9 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
               return true;
             }
           }
-        })
+        }),
+        focusedOption: undefined
       })
-    this.setState({focusedOption: 0})
   }
 
   setScroll = (): void => {
@@ -88,9 +100,8 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
 
     if (event.key === "Enter") {
       if (this.state.expanded) {
-        event.preventDefault()
         this.setState({
-          value: this.state.filteredOptions[this.state.focusedOption],
+          value: this.state.filteredOptions[this.state.focusedOption] || event.target.value,
           expanded: false
         })
       }
@@ -105,8 +116,10 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
 
 }
 
-  handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault()
+  handleSubmit = (event?: React.FormEvent<HTMLFormElement>): void => {
+    if (event) { 
+      event.preventDefault()
+    }
     Router.push(`${this.props.action}?nomina=${this.state.value}`)
   }
 
@@ -127,21 +140,19 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
     }
   }
 
-  handleBlur = (): void => {
-    this.setState({expanded: false})
-  }
-
   clickChoice = (event: React.MouseEvent<HTMLLIElement, MouseEvent>): void => {
-    console.log(event)
-    /*
-    event.stopPropagation()
-    this.setState({expanded: false, value: event.target.textContent || ''})
-    */
+    const target = event.target as HTMLLIElement
+    this.setState({expanded: false, value: target.textContent || ''}, () => {
+      if (this.form.current) {
+        this.handleSubmit()
+      }
+    })
+    
   }
 
   render() {
     return (
-      <form action={this.props.action} method={this.props.method} onSubmit={this.handleSubmit}>
+      <form action={this.props.action} method={this.props.method} ref={this.form} onSubmit={this.handleSubmit}>
         <label id={`label_${this.props.id}`} htmlFor={this.props.id}>{this.props.label}</label>
           <input type='text' aria-autocomplete="list"
           autoComplete="off"
@@ -159,7 +170,8 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
         <ul
         aria-labelledby={`label_${this.props.id}`}
         className={this.state.expanded ? '' : 'hidden'}
-        role="listbox" id={`quicksearch-listbox-${this.props.id}`}>
+        role="listbox" id={`quicksearch-listbox-${this.props.id}`}
+        >
           {this.state.filteredOptions.map((el, index) =>
               <li
               key={index}
@@ -167,8 +179,8 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
               aria-selected={index === this.state.focusedOption ? true : undefined}
               className={index === this.state.focusedOption ? 'focused' : ''}
               id={`${this.props.id}_choice_${index}`}
-              z-index={10}
-              onClick={() => console.log('clicked!')}
+              onMouseEnter={() => this.setState({focusedOption: index})}
+              onClick={this.clickChoice}
               >{el}</li>
             )}
         </ul>

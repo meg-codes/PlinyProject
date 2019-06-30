@@ -142,7 +142,7 @@ const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, cou
 
       To search for a particular nomina, simply hit the <code>Enter</code> key after typing a name.
     </p>
-    <PeopleFilter query={query} />
+    <PeopleFilter key={queryMapToString(query)} query={query} />
     <Pagination count={count} page={page} query={query} />
     <CorrespondentList correspondents={correspondents} count={count}/>
   </main>
@@ -151,7 +151,7 @@ const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, cou
 
 PeopleList.getInitialProps = async ({ query, req }: any) => {
   try {
-
+    console.log(query)
     const queryString = queryMapToString(query)
     const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
     const res = await axios.get(baseUrl + `/api/people${queryString}`);

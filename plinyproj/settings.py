@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'letters',
     'prosopography',
     'news',
-    'contentpages',
     'common',
     'rest_framework',
 ]

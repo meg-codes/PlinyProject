@@ -122,15 +122,17 @@ nav.main-nav {
           }
 
           ul {
-            display: block;
             max-height: 20rem;
             overflow-y: scroll;
 
             &.hidden {
-              display: none;
+              max-height: 0rem;
+              padding: 0;
+              overflow-y: hidden;
             }
 
-            position: absolute;
+            position: relative;
+            display: block;
             background: white;
             color: black;
             border: 0.016rem solid black;
@@ -138,6 +140,7 @@ nav.main-nav {
             padding: 0.5rem;
 
             & li {
+              cursor: pointer;
               &:nth-child(even) {
                 background: lightgray;
               }

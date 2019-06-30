@@ -8,113 +8,10 @@ from django.urls import reverse
 from letters.models import Letter
 from prosopography.forms import SearchForm
 from prosopography.models import Person, SocialField
-from prosopography.views import NodeEdgeListView, PersonDetailView
+from prosopography.views import NodeEdgeListView
 
 Y = SocialField.DEFINITE
 N = SocialField.NOT
-
-
-class TestPersonDetailView(TestCase):
-
-    def setUp(self):
-        self.quintus = Person.objects.create(
-            nomina='Quintus', equestrian=Y
-        )
-        self.gaius = Person.objects.create(
-            nomina='Gaius',
-            equestrian=N,
-            senatorial=N,
-            citizen=Y
-        )
-
-    def test_get_object(self):
-        detailview = PersonDetailView()
-        detailview.kwargs = {}
-        detailview.kwargs['id'] = self.gaius.pk
-        detailview.kwargs['slug'] = 'quintus'
-        obj = detailview.get_object()
-        # should ignore slug and return gaius
-        assert obj == self.gaius
-
-    def test_render_to_response(self):
-        # should return the object as expected if pk and slug match
-        route = reverse('people:detail',
-                        kwargs={'slug': 'gaius', 'id': self.gaius.pk})
-        res = self.client.get(route)
-        assert res.status_code == 200
-        assert res.context['object'] == self.gaius
-        # if they do not should return 302
-        route = reverse('people:detail',
-                        kwargs={'slug': 'quintus', 'id': self.gaius.pk})
-        res = self.client.get(route)
-        self.assertRedirects(res, self.gaius.get_absolute_url())
-        
-
-class TestPersonListView(TestCase):
-
-    def setUp(self):
-        self.route = reverse('people:search')
-        self.quintus = Person.objects.create(
-            nomina='Quintus', equestrian=Y
-        )
-        self.gaius = Person.objects.create(
-            nomina='Gaius',
-            equestrian=N,
-            senatorial=N,
-            citizen=Y
-        )
-        self.senator = Person.objects.create(
-            nomina='Senator',
-            senatorial=Y,
-            equestrian=N,
-            citizen=Y
-        )
-
-    def test_get_context_data(self):
-
-        res = self.client.get(self.route, {'foo': 'bar', 'page': '1'})
-        context = res.context
-        assert isinstance(context['form'], SearchForm)
-        assert context['saved_query'] == '&foo=bar'
-
-    def test_get_queryset(self):
-        # no query string at all
-        res = self.client.get(self.route)
-        context = res.context
-        # all objects in query list
-        assert 'object_list' in context
-        assert len(context['object_list']) == 3
-        # search for Gaius
-        res = self.client.get(self.route, {'nomina': 'Gai'})
-        context = res.context
-        assert 'object_list' in context
-        assert len(context['object_list']) == 1
-        assert context['object_list'][0] == self.gaius
-        # search for senatorial class
-        res = self.client.get(self.route, {'senatorial': 'Y'})
-        context = res.context
-        assert 'object_list' in context
-        assert len(context['object_list']) == 1
-        assert context['object_list'][0] == self.senator
-        # search for equestrian
-        res = self.client.get(self.route, {'equestrian': 'Y'})
-        context = res.context
-        assert 'object_list' in context
-        assert len(context['object_list']) == 1
-        assert context['object_list'][0] == self.quintus
-        # search for citizen only
-        res = self.client.get(self.route, {'citizen': 'Y'})
-        context = res.context
-        assert 'object_list' in context
-        assert len(context['object_list']) == 1
-        assert context['object_list'][0] == self.gaius
-        # compound search citizen only and equestrian
-        res = self.client.get(self.route, {'citizen': 'Y', 'equestrian': 'Y'})
-        context = res.context
-        assert 'object_list' in context
-        assert len(context['object_list']) == 2
-        assert self.gaius in context['object_list']
-        assert self.quintus in context['object_list']
 
 
 class TestNodeEdgeListView(TestCase):
@@ -159,19 +56,19 @@ class TestNodeEdgeListView(TestCase):
 
     def test_assign_class(self):
         nodes = NodeEdgeListView()
-        assert nodes.assign_class(self.senator) == 3
-        assert nodes.assign_class(self.gaius) == 1
-        assert nodes.assign_class(self.quintus) == 2
-        assert nodes.assign_class(self.consul) == 4
+        assert nodes.assign_class(self.senator) == 'senatorial'
+        assert nodes.assign_class(self.gaius) == 'citizen'
+        assert nodes.assign_class(self.quintus) == 'equestrian'
+        assert nodes.assign_class(self.consul) == 'consular'
 
     def test_get_data(self):
         expected_dict = {
             'nodes': [
-                {'id': 'Gaius Plinius Secundus', 'group': 9},
-                {'id': 'Gaius', 'group': 1},
-                {'id': 'Quintus', 'group': 2},
-                {'id': 'Senator', 'group': 3},
-                {'id': 'Consulis', 'group': 4},
+                {'id': 'Gaius Plinius Secundus', 'group': 'consular'},
+                {'id': 'Gaius', 'group': 'citizen'},
+                {'id': 'Quintus', 'group': 'equestrian'},
+                {'id': 'Senator', 'group': 'senatorial'},
+                {'id': 'Consulis', 'group': 'consular'},
             ],
             'links': [
                 {'source': 'Gaius Plinius Secundus', 'target': 'Gaius', 'weight': 1},
@@ -193,6 +90,7 @@ class TestNodeEdgeListView(TestCase):
             assert node in data['nodes']
         assert len(expected_dict['links']) == len(data['links'])
         assert len(expected_dict['nodes']) == len(data['nodes'])
+
 
 class PersonAutoCompleteDAL(TestCase):
 
@@ -230,25 +128,3 @@ class PersonAutoCompleteDAL(TestCase):
         # should get back Quintus' nomina
         print(data['results'])
         assert data['results'][0]['text'] == 'Quintus'
-
-
-class PersonAutocomplete(TestCase):
-
-    def setUp(self):
-
-        self.quintus = Person.objects.create(nomina='Quintus')
-        self.gaius = Person.objects.create(nomina='Gaius')
-
-    def test_get(self):
-        auto = reverse('people:autocomplete')
-        # no query string
-        res = self.client.get(auto)
-        assert res.status_code == 200
-        data = res.json()
-        assert not data
-        # search for Qu
-        res = self.client.get(auto, {'q': 'Qu'})
-        assert res.status_code == 200
-        data = res.json()
-        # should get back Quintus' nomina
-        assert data[0] == 'Quintus'
