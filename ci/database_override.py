@@ -4,9 +4,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # Django needs to make databases in the test mysql server
-        'NAME': 'pliny',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'pliny'
         'OPTIONS': {
             # In each case, we want strict mode on to catch truncation issues
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

@@ -1,7 +1,7 @@
 language: 'python'
 dist: xenial
 python:
-  - '3.6'
+  - '3.7'
 node_js:
   - '10.16.0'
 install:
@@ -11,6 +11,7 @@ install:
   - cat ci/database_override.py >> plinyproj/settings.py
   - cd next-app && npm ci
   - cd ..
+  - mysql -e 'CREATE DATABASE pliny CHARSET utf8mb4;'
 script:
   - pytest --cov
   - cd next-app && npm test
