@@ -1,5 +1,5 @@
 language: 'python'
-
+dist: 'xenial'
 python:
   - '3.7'
 node_js:
@@ -9,7 +9,7 @@ install:
   - pip install -r dev-requirements.txt
   - pip install codecov
   - cat ci/database_override.py >> plinyproj/settings.py
-  - cd next-app && npm install && npm install -D codecov
+  - cd next-app && npm ci && npm install -D codecov
 script:
   - pytest --cov
   - cd next-app && npm test
