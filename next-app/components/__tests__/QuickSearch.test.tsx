@@ -89,6 +89,5 @@ describe('Quicksearch', () => {
     });
   });
 
-  it('should ')
 
 });
