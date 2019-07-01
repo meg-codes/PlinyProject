@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ForceGraph renders an svg of the specified props 1`] = `
+initialize {
+  "0": Object {
+    "attribs": Object {
+      "height": "300",
+      "id": "test",
+      "role": "group",
+      "tabindex": "0",
+      "width": "300",
+    },
+    "children": Array [
+      Object {
+        "attribs": Object {
+          "id": "test_title",
+        },
+        "children": Array [
+          Object {
+            "data": "test graph",
+            "next": null,
+            "parent": [Circular],
+            "prev": null,
+            "type": "text",
+          },
+        ],
+        "name": "title",
+        "namespace": "http://www.w3.org/2000/svg",
+        "next": null,
+        "parent": [Circular],
+        "prev": null,
+        "type": "tag",
+        "x-attribsNamespace": Object {
+          "id": undefined,
+        },
+        "x-attribsPrefix": Object {
+          "id": undefined,
+        },
+      },
+    ],
+    "name": "svg",
+    "namespace": "http://www.w3.org/2000/svg",
+    "next": null,
+    "parent": null,
+    "prev": null,
+    "root": Object {
+      "attribs": Object {},
+      "children": Array [
+        [Circular],
+      ],
+      "name": "root",
+      "namespace": "http://www.w3.org/1999/xhtml",
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "type": "root",
+      "x-attribsNamespace": Object {},
+      "x-attribsPrefix": Object {},
+    },
+    "type": "tag",
+    "x-attribsNamespace": Object {
+      "height": undefined,
+      "id": undefined,
+      "role": undefined,
+      "tabindex": undefined,
+      "width": undefined,
+    },
+    "x-attribsPrefix": Object {
+      "height": undefined,
+      "id": undefined,
+      "role": undefined,
+      "tabindex": undefined,
+      "width": undefined,
+    },
+  },
+  "_root": [Circular],
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "normalizeWhitespace": false,
+    "withDomLvl1": true,
+    "xml": false,
+  },
+}
+`;

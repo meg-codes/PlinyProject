@@ -46,7 +46,7 @@ class PersonDetailSerializer(serializers.ModelSerializer):
 class PersonAutocomplete(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = ('pk', 'nomina')
+        fields = ('nomina',)
 
 class PersonListSerializer(serializers.ModelSerializer):
 

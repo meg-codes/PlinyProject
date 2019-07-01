@@ -1,17 +1,22 @@
 language: 'python'
 
 python:
-  - '3.6'
+  - '3.7'
+node_js:
+  - '10.16.0'
 install:
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
   - pip install codecov
   - cat ci/database_override.py >> plinyproj/settings.py
+  - cd next-app && npm install && npm install -D codecov
 script:
   - pytest --cov
+  - cd next-app && npm test
 sevices:
   - mysql
 addons:
   chrome: stable
 after_success:
   - codecov
+  - cd next-app && npx codecov

@@ -33,7 +33,6 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
       filteredOptions: [],
       focusedOption: undefined
     }
-
   }
 
   async componentDidMount() {
