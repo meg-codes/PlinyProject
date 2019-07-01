@@ -7,12 +7,9 @@ DATABASES = {
         'NAME': 'pliny',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
         'OPTIONS': {
             # In each case, we want strict mode on to catch truncation issues
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            # Load the socket info from .my.cnf in the travis user
-            'read_default_file': '~travis/.my.cnf'
         },
         'PORT': '',
         'TEST': {
