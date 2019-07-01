@@ -7,7 +7,7 @@ DATABASES = {
         'NAME': 'pliny',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'OPTIONS': {
             # In each case, we want strict mode on to catch truncation issues
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

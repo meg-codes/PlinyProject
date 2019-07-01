@@ -16,8 +16,6 @@ script:
   - cd next-app && npm test
 sevices:
   - mysql
-addons:
-  chrome: stable
 after_success:
   - codecov
   - cd next-app && npx codecov
