@@ -7,7 +7,7 @@ DATABASES = {
         'NAME': 'pliny',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'OPTIONS': {
             # In each case, we want strict mode on to catch truncation issues
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -19,8 +19,8 @@ DATABASES = {
                 # We also want the test databse to for utf8 and the general
                 # collation to keep case sensitive unicode searches working
                 # as we would expect on production
-                'CHARSET': 'utf8',
-                'COLLATION': 'utf8_general_ci',
+                'CHARSET': 'utf8mb4',
+                'COLLATION': 'utf8mb4_general_ci',
                 'OPTIONS': {
                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 },
