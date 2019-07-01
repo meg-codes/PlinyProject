@@ -15,7 +15,7 @@ install:
 script:
   - pytest --cov
   - cd next-app && npm test
-sevices:
+services:
   - mysql
 after_success:
   - cd .. && codecov
