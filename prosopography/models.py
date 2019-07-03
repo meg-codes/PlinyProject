@@ -146,7 +146,7 @@ class Person(models.Model):
         return self.nomina
 
     def get_absolute_url(self):
-        return reverse('people:detail', kwargs={'slug': self.slug, 'id': self.id})
+        return '%s-%s' % (slugify(self.nomina), self.pk)
 
     @property
     def slug(self):

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'prosopography',
     'news',
     'common',
+    'api',
     'rest_framework',
 ]
 

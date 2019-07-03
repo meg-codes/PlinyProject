@@ -1,0 +1,111 @@
+[
+{
+    "model": "prosopography.person",
+    "pk": 3,
+    "fields": {
+        "nomina": "Novius Maximus",
+        "gender": "M",
+        "citizen": "Y",
+        "equestrian": "N",
+        "senatorial": "Y",
+        "consular": "Y",
+        "birth": null,
+        "death": null,
+        "cos": null,
+        "cos_suff": null,
+        "floruit": null,
+        "certainty_of_id": 5,
+        "notes": "",
+        "from_comum": false,
+        "citations": [
+            91
+        ],
+        "letters_to": [
+            36,
+            80,
+            95,
+            121,
+            167,
+            193,
+            199,
+            221
+        ],
+        "mentioned_in": []
+    }
+},
+{
+    "model": "prosopography.person",
+    "pk": 2,
+    "fields": {
+        "nomina": "L. Calpurnius Fabatus",
+        "gender": "M",
+        "citizen": "Y",
+        "equestrian": "Y",
+        "senatorial": "N",
+        "consular": "N",
+        "birth": null,
+        "death": null,
+        "cos": null,
+        "cos_suff": null,
+        "floruit": null,
+        "certainty_of_id": 5,
+        "notes": "",
+        "from_comum": true,
+        "citations": [
+            52
+        ],
+        "letters_to": [
+            62,
+            101,
+            122,
+            138,
+            152,
+            157,
+            164,
+            173,
+            184
+        ],
+        "mentioned_in": []
+    }
+},
+{
+    "model": "prosopography.person",
+    "pk": 1,
+    "fields": {
+        "nomina": "Cornelius Tacitus",
+        "gender": "M",
+        "citizen": "Y",
+        "equestrian": "N",
+        "senatorial": "Y",
+        "consular": "Y",
+        "birth": null,
+        "death": null,
+        "cos": null,
+        "cos_suff": 97,
+        "floruit": null,
+        "certainty_of_id": 5,
+        "notes": "",
+        "from_comum": false,
+        "citations": [
+            15,
+            64,
+            65,
+            66
+        ],
+        "letters_to": [
+            6,
+            19,
+            73,
+            119,
+            125,
+            129,
+            161,
+            174,
+            181,
+            208,
+            212
+        ],
+        "mentioned_in": []
+    }
+}
+]
