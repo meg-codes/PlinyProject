@@ -2,8 +2,10 @@
 import { mount, ReactWrapper, shallow } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-
+import Router from 'next/router'
 import QuickSearch from '../QuickSearch';
+import { doesNotReject } from 'assert';
+import { statement } from '@babel/template';
 
 describe('Quicksearch', () => {
 
@@ -30,6 +32,7 @@ describe('Quicksearch', () => {
       action='/api/post'
       method='POST'
       />);
+    Router.push =  jest.fn()
   })
 
   it('should render based on an ajax call', done => {
@@ -87,6 +90,45 @@ describe('Quicksearch', () => {
 
       done();
     });
+  });
+
+  it('should filter results based on input', done => {
+    setTimeout(() => {
+        const input = quicksearch.find('input');
+        input.simulate('focus');
+        input.simulate('change', { target: {value: 'ta'} });
+        // Tacitus hsould be the only option
+        expect(quicksearch.state('filteredOptions')).toHaveLength(1);
+        expect(quicksearch.state('filteredOptions')).toEqual(['Cornelius Tacitus']);
+        done();
+    });
+  });
+
+  it('should close on click outside', done => {
+    const div = global.document.createElement('div');
+    global.document.body.appendChild(div);    
+    const quicksearch = mount(<QuickSearch title='foo' id='bar'/>, {attachTo: div})
+    setTimeout(() => {
+      quicksearch.find('input').simulate('focus');
+      quicksearch.find('input').simulate('change', {target: {value: 'ta'}});
+      expect(quicksearch.find('.hidden')).toHaveLength(0);
+      expect(quicksearch.state('expanded')).toBeTruthy();
+      div.click()
+      setTimeout(() => {
+        expect(quicksearch.state('focusedOption')).toBe(undefined);
+        expect(quicksearch.state('expanded')).toBeFalsy();
+        quicksearch.detach();
+        done();
+      });
+    });
+  });
+
+  it('should navigate on clicking an option', () => {
+    quicksearch.find('input').simulate('focus');
+    quicksearch.find('input').simulate('change', {target: {value: 'ta'}});
+    quicksearch.find('li').first().simulate('click')
+    expect(quicksearch.find('.hidden')).toHaveLength(1);
+    expect(quicksearch.state('value')).toBe('Cornelius Tacitus')
   });
 
 

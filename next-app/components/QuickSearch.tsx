@@ -44,7 +44,7 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
       this.setState({options: []})
     }
 
-    document.addEventListener('mousedown', this.handleClick)
+    document.addEventListener('click', this.handleClick)
 
   }
 
