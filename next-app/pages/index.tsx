@@ -2,10 +2,12 @@ import * as React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Head from 'next/head';
+import { NextContext } from 'next';
+import { Request } from 'express';
 
 import Header from '../components/Header';
 
-interface Post {
+export interface Post {
   id: number,
   date_updated: Date,
   subject: string,
@@ -16,7 +18,7 @@ type HomeProps = {
   posts: Post[]
 }
 
-const Posts: React.FC<{ posts: Post[] }> = ({ posts }) =>
+export const Posts: React.FC<{ posts: Post[] }> = ({ posts }) =>
   <section>
     <h2>News</h2>
     <hr/>
@@ -58,16 +60,18 @@ export default class Home extends React.Component<HomeProps> {
     )
   }
 
-  static async getInitialProps({ req }: any) {
+  static async getInitialProps({ req }: NextContext) {
     try {
-      const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
+      const baseUrl = req ? 
+      `${(req as Request).protocol}://${(req as Request).get('Host')}` 
+      : '';
       const res = await axios.get(baseUrl + '/api/posts');
       return {
-          posts: res.data
+          posts: res.data as Post[]
       }
     } catch(err) {
       return {
-        posts: []
+        posts: [] as Post[]
       }
     }
   }

@@ -4,8 +4,6 @@ import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import Router from 'next/router'
 import QuickSearch from '../QuickSearch';
-import { doesNotReject } from 'assert';
-import { statement } from '@babel/template';
 
 describe('Quicksearch', () => {
 
