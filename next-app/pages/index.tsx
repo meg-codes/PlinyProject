@@ -6,6 +6,7 @@ import { NextContext } from 'next';
 import { Request } from 'express';
 
 import Header from '../components/Header';
+import ExpressContext from 'lib/app-context';
 
 export interface Post {
   id: number,
@@ -60,10 +61,10 @@ export default class Home extends React.Component<HomeProps> {
     )
   }
 
-  static async getInitialProps({ req }: NextContext) {
+  static async getInitialProps({ req }: ExpressContext) {
     try {
       const baseUrl = req ? 
-      `${(req as Request).protocol}://${(req as Request).get('Host')}` 
+      `${req.protocol}://${req.get('Host')}` 
       : '';
       const res = await axios.get(baseUrl + '/api/posts');
       return {

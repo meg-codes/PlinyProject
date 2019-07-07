@@ -3,6 +3,7 @@ import Head from 'next/head';
 import axios from 'axios'
 
 import Header from '../components/Header'
+import ExpressContext from 'lib/app-context';
 
 interface DetailedPerson {
     id: number
@@ -200,12 +201,12 @@ class PersonDetail extends React.Component<PersonDetailProps> {
         )
     }
 
-    static async getInitialProps({res, req, query}: any) {
+    static async getInitialProps({res, req, query}: ExpressContext) {
         try {
             const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
             const data = await axios.get(baseUrl + `/api/people/${query.id}`);
             const person = data.data
-            if (req) {
+            if (req && res) {
                 if (req.url.search(slugify(person.nomina)) === -1) {
                     res.writeHead(302, 
                         {Location: `/people/${slugify(person.nomina)}-${query.id}`})

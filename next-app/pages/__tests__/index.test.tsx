@@ -5,7 +5,7 @@ import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import Home from '../index';
 import { Post, Posts } from '../index';
-import { NextContext } from 'next';
+import ExpressContext from 'lib/app-context';
 
 const mockData:Post[] = [
   {
@@ -40,7 +40,7 @@ describe('Home', () => {
       .onGet('/api/posts')
       .reply(200, mockData);
     expect.assertions(1);
-    return Home.getInitialProps({req: undefined} as NextContext)
+    return Home.getInitialProps({req: undefined} as ExpressContext)
     .then(posts => expect(posts).toEqual({posts: mockData}));
   });
 
@@ -57,7 +57,7 @@ describe('Home', () => {
               if ((prop) === 'Host') return 'localhost:3000'
             }
           }
-        } as unknown as NextContext
+        } as unknown as ExpressContext
       ).then(posts => expect(posts).toEqual({posts: mockData}));    
   });
 
@@ -66,8 +66,9 @@ describe('Home', () => {
       .onGet('/api/posts')
       .reply(500)
     expect.assertions(1)
-    return Home.getInitialProps({req: undefined} as NextContext)
+    return Home.getInitialProps({req: undefined} as ExpressContext)
       .then(posts => expect(posts).toEqual({posts: []}))
   });
+  
 });
 
