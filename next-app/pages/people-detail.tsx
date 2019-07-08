@@ -5,7 +5,7 @@ import axios from 'axios'
 import Header from '../components/Header'
 import ExpressContext from 'lib/app-context';
 
-interface DetailedPerson {
+export interface DetailedPerson {
     id: number
     letters_to: Array<string>,
     citations: Array<string>,
@@ -15,12 +15,12 @@ interface DetailedPerson {
     equestrian: string,
     senatorial: string,
     consular: string,
-    birth: number,
-    death: number,
-    cos: number,
-    cos_suff: number,
-    floruit: number,
-    certainty_of_id: number,
+    birth: number | null,
+    death: number | null,
+    cos: number | null,
+    cos_suff: number | null,
+    floruit: number | null,
+    certainty_of_id: number | null,
     notes: string,
     from_comum: boolean,
     mentioned_in: Array<string>
@@ -43,12 +43,12 @@ function hasDates(person: DetailedPerson): boolean {
 }
 
 interface Dates {
-    birth?: number,
-    death?: number,
-    cos?: number,
-    cos_suff?: number,
-    floruit?: number,
-    [index:string]: number
+    birth: number | null,
+    death: number | null,
+    cos: number | null,
+    cos_suff: number | null,
+    floruit: number | null,
+    [index:string]: number | null
 }
 
 interface PersonDateProps {
@@ -56,7 +56,7 @@ interface PersonDateProps {
     dates: Dates
 }
 
-const PersonDates: React.FC<PersonDateProps> = ({ hasDates, dates}) => {
+const PersonDates: React.FC<PersonDateProps> = ({ hasDates, dates }) => {
     if (hasDates) {
         return (
         <section>
@@ -65,7 +65,6 @@ const PersonDates: React.FC<PersonDateProps> = ({ hasDates, dates}) => {
             </div>
                 <ul>
                     {Object.keys(dates).map((key) => {
-                        console.log(key)
                         switch(key) {
                             case 'cos': {
                                 if (dates.cos) {
@@ -223,7 +222,7 @@ class PersonDetail extends React.Component<PersonDetailProps> {
         catch(err) {
             return {
                 id: query.id,
-                person: null
+                person: undefined 
             }
         }
     }
