@@ -1,15 +1,18 @@
 import * as React from 'react';
 import Chart, { ChartData } from 'chart.js';
 import axios, { AxiosResponse } from 'axios';
+import { RefObject } from 'react';
 
 interface DoughnutState {
   book?: number,
   chart?: Chart,
-  data?: ChartData 
+  data?: ChartData
 };
 
 
-export default class ClassDoughnut extends React.Component<null, DoughnutState>  {
+export default class ClassDoughnut extends React.Component<any, DoughnutState>  {
+
+  canvas: RefObject<HTMLCanvasElement> = React.createRef();
 
   constructor(props: any) {
     super(props);
@@ -22,16 +25,18 @@ export default class ClassDoughnut extends React.Component<null, DoughnutState> 
 
   async componentDidMount() {
     let data: AxiosResponse | undefined;
-  
+
     try {
       data = await axios.get('/people/social_class.json');
     } catch(err) {
       data = undefined;
     }
-
     if (data) {
       this.setState({data: data.data}, () => {
-        const ctx = document.getElementById("social-chart") as HTMLCanvasElement
+        let ctx: HTMLCanvasElement | null = null;
+        if (this.canvas && this.canvas.current) {
+           ctx = this.canvas.current;
+        }
         if (this.state.data && ctx) {
           const chart = new Chart(ctx, {
             type: 'doughnut',
@@ -56,7 +61,6 @@ export default class ClassDoughnut extends React.Component<null, DoughnutState> 
     } catch(err) {
       data = undefined
     }
-
     if (data) {
       this.setState({data: data.data}, () => {
         if (this.state.chart) {
@@ -90,15 +94,15 @@ export default class ClassDoughnut extends React.Component<null, DoughnutState> 
               return <option key={x}>{x + 1}</option>
             })}
           </select>
-          <canvas id="social-chart" width={400} height={400} tabIndex={0} role="img"
+          <canvas ref={this.canvas} id="social-chart" width={400} height={400} tabIndex={0} role="img"
             aria-label={ this.state.data ?
-              `Doughnut chart of letters per class 
+              `Doughnut chart of letters per class
               ${this.state.book ? " for book " + this.state.book : ""} of Pliny's Letters.
                Senatorial: ${this.state.data.datasets![0].data![0]} Equestrian: ${this.state.data.datasets![0].data![1]}
-                Citizen: ${this.state.data.datasets![0].data![2]}` : `Doughnut chart of Pliny's Letters` 
+                Citizen: ${this.state.data.datasets![0].data![2]}` : `Doughnut chart of Pliny's Letters`
             }
           >
-          </canvas> 
+          </canvas>
         </div>
       </React.Fragment>
     )

@@ -9,4 +9,5 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '__fixtures__'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   collectCoverage: true,
+  testEnvironment: "jest-environment-jsdom-fourteen"
 }
