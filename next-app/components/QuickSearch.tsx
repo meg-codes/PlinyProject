@@ -116,7 +116,7 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
 }
 
   handleSubmit = (event?: React.FormEvent<HTMLFormElement>): void => {
-    if (event) { 
+    if (event) {
       event.preventDefault()
     }
     Router.push(`${this.props.action}?nomina=${this.state.value}`)
@@ -146,7 +146,7 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
         this.handleSubmit()
       }
     })
-    
+
   }
 
   render() {
@@ -163,7 +163,6 @@ export default class QuickSearch extends React.Component<InputProps, InputState>
           id={this.props.id} value={this.state.value} name={this.props.name}
           placeholder={this.props.placeholder} onChange={this.handleChange}
           onKeyDown={this.handleKeyDown} onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
           >
           </input>
         <ul
