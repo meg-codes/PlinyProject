@@ -16,6 +16,9 @@ const devProxy: Proxy = {
   },
   '/people/nodes.json': {
     target: 'http://localhost:8000'
+  },
+  '/people/social_class.json': {
+    target: 'http://localhost:8000'
   }
 }
 

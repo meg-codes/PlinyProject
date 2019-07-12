@@ -25,10 +25,9 @@ export default class ForceGraph extends React.Component<ForceGraphProps> {
 
     const setColor = (d) => {
       const colors = {
-          0: 'gray',
-          'citizen': 'aquamarine',
-          'equestrian': 'green',
-          'senatorial': 'purple',
+          'citizen': '#3FBFBF',
+          'equestrian': '#BF3F3F',
+          'senatorial': '#7F3FBF',
           'consular': 'indigo',
       };
 
@@ -42,35 +41,10 @@ export default class ForceGraph extends React.Component<ForceGraphProps> {
     return `title_${id_string}`
   }
 
-    const drag = simulation => {
-  
-      function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
-      
-      function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-      }
-      
-      function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
-      
-      return d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended);
-    }
-  
 
 
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("link", d3.forceLink(links).id(d => d.id).strength(3))
         .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(this.props.width / 2, this.props.height / 2));
     
@@ -79,9 +53,9 @@ export default class ForceGraph extends React.Component<ForceGraphProps> {
     const svg = d3.select('svg')
     
     svg.append('rect')
+      .attr('fill', 'grey')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('fill', 'grey')
   
     const link = svg.append("g")
         .attr("stroke", "black")
@@ -101,9 +75,8 @@ export default class ForceGraph extends React.Component<ForceGraphProps> {
         .attr("r", 8)
         .attr("fill", (d) => setColor(d))
         .attr("role", "img")
-        .attr("alt", (d) => generateTitleID(d))
-        .attr("tabindex", "-1")
-        .call(drag(simulation))
+        .attr("aria-label", (d) => d.id)
+        .attr("tabIndex", "-1")
   
     const title = node.append("title")
                       .attr("id", (d) => generateTitleID(d))
