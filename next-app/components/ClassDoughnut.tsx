@@ -43,7 +43,7 @@ export default class ClassDoughnut extends React.Component<any, DoughnutState>  
             data: Object.assign({}, this.state.chartData),
             options: {
               legend: {
-                onClick: (e) => e.stopPropagation
+                onClick: (e) => e.stopPropagation()
               }
             }
           });

@@ -3,7 +3,7 @@ import { mount, ReactWrapper, shallow } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import Router from 'next/router'
-import QuickSearch from '../QuickSearch';
+import QuickSearch from '../components/QuickSearch';
 
 describe('Quicksearch', () => {
 

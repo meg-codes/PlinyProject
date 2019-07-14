@@ -2,7 +2,7 @@
 import { mount } from 'enzyme';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import ClassDoughnut from '../ClassDoughnut';
+import ClassDoughnut from '../components/ClassDoughnut';
 
 import mockAllData from './__fixtures__/mockclassdata';
 import mockbookData from './__fixtures__/mockclassdatabookone'

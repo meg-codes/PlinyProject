@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import { shallow } from 'enzyme';
 
-import { ActiveLink } from '../ActiveLink'
+import { ActiveLink } from '../components/ActiveLink'
 
 describe('ActiveLink', () => {
 

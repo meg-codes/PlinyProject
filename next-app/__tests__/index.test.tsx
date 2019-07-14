@@ -3,8 +3,8 @@ import { shallow } from 'enzyme';
 
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import Home from '../index';
-import { Post, Posts } from '../index';
+import Home from '../pages/index';
+import { Post, Posts } from '../pages/index';
 import ExpressContext from 'lib/app-context';
 
 const mockData:Post[] = [

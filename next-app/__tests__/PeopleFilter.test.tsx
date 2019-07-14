@@ -1,11 +1,10 @@
 /* eslint-env jest */
 import { shallow } from 'enzyme';
-import { QueryStringMapObject } from 'next';
 
 jest.mock('next/router');
 import Router from 'next/router';
 
-import PeopleFilter from '../PeopleFilter';
+import PeopleFilter from '../components/PeopleFilter';
 
 
 describe('PeopleFilter', () => {

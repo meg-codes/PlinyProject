@@ -1,9 +1,9 @@
 /* eslint-env jest */
 import { shallow } from 'enzyme'
 
-jest.mock('../../components/Header');
-import Header from '../../components/Header';
-import About from '../about';
+jest.mock('../components/Header');
+import Header from '../components/Header';
+import About from '../pages/about';
 
 
 (Header as jest.Mock).mockReturnValue(<head></head>)

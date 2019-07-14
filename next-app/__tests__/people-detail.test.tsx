@@ -1,10 +1,10 @@
 /* eslint-env jest */
 import { shallow } from 'enzyme';
-import PersonDetail from '../people-detail';
+import PersonDetail from '../pages/people-detail';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import { tacitus, fakeDatesTacitus } from './__fixtures__/people-fixtures';
-import ExpressContext from '../../lib/app-context';
+import ExpressContext from '../lib/app-context';
 
 
 describe('Person Detail', () => {

@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import { shallow } from 'enzyme';
 
-import ForceGraph from '../ForceGraph';
+import ForceGraph from '../components/ForceGraph';
 
 describe('ForceGraph', () => {
   it('renders an svg of the specified props', () => {

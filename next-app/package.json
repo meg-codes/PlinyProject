@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest",
-    "dev": "NODE_ENV='dev' ts-node server.ts"
+    "test": "jest",
+    "dev": "ts-node server.ts",
+    "prod": "next build && NODE_ENV='production' ts-node server.ts"
   },
   "keywords": [],
   "author": "",

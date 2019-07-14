@@ -1,9 +1,9 @@
 /* eslint-env jest */
 import { shallow, ShallowWrapper} from 'enzyme';
 
-import ActiveLink from '../ActiveLink';
-import QuickSearch from '../QuickSearch';
-import Header from '../Header';
+import ActiveLink from '../components/ActiveLink';
+import QuickSearch from '../components/QuickSearch';
+import Header from '../components/Header';
 
 describe('Header', () => {
 
