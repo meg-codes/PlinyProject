@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     'letters',
     'prosopography',
     'news',
-    'contentpages',
     'common',
+    'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

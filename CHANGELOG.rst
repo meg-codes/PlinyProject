@@ -1,10 +1,14 @@
 Change Log
 ----------
+0.8.0
+=====
+* Fully refactor Javascript to use Next.js/React
+* Refactor Django application as an API server
+* Revise and make visualizations more thoroughly accessible.
 
 0.7.0
 =====
-* Add support for Django 2.2 and update dependencies as possible.ß
-
+* Add support for Django 2.2 and update dependencies as possible
 
 0.6.0
 =====

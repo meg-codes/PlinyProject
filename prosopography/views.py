@@ -20,77 +20,6 @@ class PersonAutoComplete(autocomplete.Select2QuerySetView):
         return people.filter(nomina__istartswith=self.q).order_by('nomina')
 
 
-def person_autocomplete(request):
-    """Autocomplete view public-facing for nomina autocomplete"""
-    query = request.GET.get('q')
-    if query:
-        people = Person.objects.filter(
-                 nomina__icontains=query).values_list('nomina', flat=True)
-        return JsonResponse(list(people), safe=False)
-    return JsonResponse({})
-
-
-class PersonDetailView(DetailView):
-    """Get the detail view of a person based on pk and redirect to proper slug."""
-    model = Person
-
-    def get_object(self, queryset=None):
-        """Override to ignore slug lookups because it's actually a property"""
-        queryset = self.get_queryset()
-        if 'id' in self.kwargs and self.kwargs['id']:
-            return queryset.get(pk=self.kwargs['id'])
-
-    def render_to_response(self, context, **kwargs):
-        """Override to redirect to proper slug if nomina changes"""
-        # if these don't line up, it's probably a malformed or changed slug
-        # so redirect to the right slug.
-        if self.object.get_absolute_url() != self.request.path:
-            return redirect(self.object)
-        return super(PersonDetailView, self).render_to_response(context, **kwargs)
-
-
-class PersonListView(ListView):
-    """View to display results of a search for all
-    :class:`prosopography.models.Person` instances in the database with filters"""
-    model = Person
-    paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super(PersonListView, self).get_context_data(**kwargs)
-        context['form'] = SearchForm()
-        params = []
-        for query in self.request.GET:
-            if query != 'page':
-                params.append('%s=%s' % (query, self.request.GET[query]))
-        context['saved_query'] = "&" + '&'.join(params)
-        return context
-
-    def get_queryset(self):
-        """
-        Get queryset for people and filter by query string params
-        """
-        people = super(PersonListView, self).get_queryset()
-        filters = self.request.GET
-        nomina = filters.get('nomina', '')
-        filter_list = []
-        if filters.get('senatorial'):
-            filter_list.append(people.filter(senatorial='Y'))
-        if filters.get('equestrian'):
-            filter_list.append(people.filter(equestrian='Y'))
-        if filters.get('citizen'):
-            filter_list.append(people.filter(
-                    equestrian__in=['N', 'U'],
-                    senatorial__in=['N', 'U'],
-                    citizen='Y'
-                )
-            )
-        filter_list = list(filter(None, filter_list))
-        if filter_list:
-            people = reduce(ior, filter_list)
-
-        return people.filter(nomina__icontains=nomina).order_by('nomina')
-
-
 class NodeEdgeListView(ListView):
     """Provide node-edge json for use """
     model = Person
@@ -105,13 +34,13 @@ class NodeEdgeListView(ListView):
         Y = SocialField.DEFINITE
         group = 0
         if person.citizen == Y:
-            group = 1
+            group = 'citizen' 
         if person.equestrian == Y:
-            group = 2
+            group = 'equestrian'
         if person.senatorial == Y:
-            group = 3
+            group = 'senatorial'
         if person.consular == Y:
-            group = 4
+            group = 'consular'
         return group
 
     def get_data(self):
@@ -119,7 +48,7 @@ class NodeEdgeListView(ListView):
         people = self.get_queryset()
         # filter out a nodelist in the format d3v4 expects
         node_edge_dict = {
-            'nodes': [{'id': 'Gaius Plinius Secundus', 'group': 9}],
+            'nodes': [{'id': 'Gaius Plinius Secundus', 'group': 'consular'}],
             'links': [],
         }
         # generate nodes

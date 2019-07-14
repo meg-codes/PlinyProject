@@ -1,0 +1,379 @@
+@import 'variables';
+
+body {
+  font-family: $roboto;
+  font-size: 16px;
+  background: ivory;
+}
+
+code {
+  color: #981b1e;
+}
+
+
+.img-banner {
+  background-image: url('/static/pliny-banner.png');
+  background-color: black;
+  filter: brightness(80%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10rem;
+  z-index: -1;
+  position: fixed;
+
+  @media screen and (max-width: 900px) {
+    transform: scale(2.0);
+    height: 15rem;
+  }
+
+}
+
+main {
+  margin-top: 10rem;
+
+  @media screen and (max-width: 900px) {
+    margin-top: 23rem;
+  }
+
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.site-header {
+  font-family: $goudy;
+  font-size: 4rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.98);
+  text-shadow: 0 0 0.25rem rgba(148, 78, 78, 0.25);
+  display: inline;
+  margin-right: 2rem;
+}
+
+nav.main-nav {
+  margin-bottom: 2rem;
+  font-family: $roboto-slab;
+
+  & ul {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-evenly;
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+
+    @media screen and (max-width: 900px) {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    & li {
+
+      @media screen and (max-width: 900px) {
+        width: 100%;
+      }
+
+    &.form-holder {
+
+        & form {
+          float: right;
+          color: white;
+          font-size: 1.5rem;
+          margin-left: 3rem;
+          margin-top: -2rem;
+          text-decoration: none;
+          border-bottom: 0.19rem solid transparent;
+          transition: border,color,outline  0.2s ease-in-out;
+
+
+          @media screen and (max-width: 900px) {
+            float: none;
+            margin-top: 2rem;
+            width: 20rem;
+          }
+
+          & label {
+            display: block;
+          }
+
+
+          & input {
+            background: none;
+            border: none;
+            border-bottom: 0.08rem solid white;
+            color: white;
+            font-family: $roboto-slab;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+            width: 20rem;
+
+            &:focus {
+              outline: 0.15rem solid white;
+              box-shadow: 0 0 0.5rem white;
+            }
+
+            &::placeholder {
+              color: rgba(255, 250, 250, 0.9);
+            }
+          }
+
+          ul {
+            max-height: 20rem;
+            overflow-y: scroll;
+
+            &.hidden {
+              max-height: 0rem;
+              padding: 0;
+              overflow-y: hidden;
+            }
+
+            position: relative;
+            display: block;
+            background: white;
+            color: black;
+            border: 0.016rem solid black;
+            width: 20rem;
+            padding: 0.5rem;
+
+            & li {
+              cursor: pointer;
+              &:nth-child(even) {
+                background: lightgray;
+              }
+              &.focused {
+                background: black;
+                color: white;
+              }
+            }
+          }
+
+      }
+
+
+  }
+
+  }
+
+}
+
+  & a {
+    color: white;
+    font-size: 1.5rem;
+    margin-left: 3rem;
+    text-decoration: none;
+    transition: border,color,outline  0.2s ease-in-out;
+    border-bottom: 0.19rem solid transparent;
+
+    &.active {
+      border-bottom: 0.19rem solid white;
+    }
+
+    &:visited {
+      color: white;
+    }
+
+    &:focus, &:hover {
+      text-shadow: 2px 2px 7px white;
+      border-bottom: 0.19rem solid white;
+
+    }
+
+    &:focus {
+      outline: 0.15rem solid white;
+      box-shadow: 0 0 0.5rem white;
+    }
+
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $roboto-slab;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #333;
+}
+
+small {
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+#articles {
+  display: flex;
+
+  @media screen and (max-width: 375px) {
+    flex-wrap: wrap;
+  }
+}
+
+div  {
+  &.responsive-table {
+    overflow-x: auto;
+
+    h2 {
+      text-align: center;
+    }
+  }
+
+}
+
+form {
+  &#people-form {
+    border: 0.0625rem solid black;
+    border-radius: 0.25rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
+
+    & > label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    & > input {
+      border: none;
+      font-size: 1.5rem;
+      width: 50vw;
+      border: 0.016rem dashed black;
+      background: white;
+      margin-left: 0.2rem;
+      margin-bottom: 2rem;
+
+      &:focus {
+        outline: 0.15rem solid black;
+        box-shadow: 0 0 0.25rem darkgray;
+      }
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      margin-bottom: 2rem;
+
+      & legend {
+        padding: 0;
+        margin-bottom: 0.5rem;
+      }
+
+      & label {
+        border: 0.0625rem solid black;
+        border-radius: 0.5rem;
+        font-size: 1.25rem;
+        padding: 0.25rem;
+        background-color: lightgray;
+      }
+
+      & input {
+        visibility: hidden;
+
+        &:checked + label {
+          background-color: black;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  & > caption {
+    font-size: 2rem;
+  }
+
+  & th {
+    border: 0.016rem solid black;
+    padding: 1rem;
+    background: lightgray;
+  }
+
+  & tr {
+    border: 0.016rem solid black;
+    &:nth-child(odd) {
+      background-color: white;
+    }
+    &:nth-child(even) {
+      background-color: lightgray;;
+    }
+  }
+  & td {
+    border: 0.016rem solid black;
+    padding: 1rem;
+  }
+}
+
+ul {
+  &.pagination {
+    text-align: center;
+  & li {
+    margin: 0.75rem;
+    display: inline-flex;
+    border: 0.016rem solid black;
+    padding: 1px;
+    & a {
+      padding: 1rem;
+      text-decoration: none;
+      background: white;
+
+      &.disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        color: black;
+        text-decoration: none;
+        z-index: -1;
+      }
+    }
+  }
+  }
+}
+
+.person-details {
+  margin-top: 1rem;
+  width: 80vw;
+  section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    border: 0.0625rem solid darkgray;
+    border-radius: 0.25rem;
+
+    p {
+      width: 100%;
+      padding-left: 1rem;
+    }
+
+    code {
+      padding-left: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    & > div {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      color: white;
+      padding-left: 1rem;
+    }
+
+    ul {
+      display: inline-flex;
+      flex-wrap: wrap;
+      padding-left: 1rem;
+
+      &.vertical {
+        display: block;
+      }
+
+      & li {
+        list-style: none;
+        margin-right: 1rem;
+      }
+    }
+  }
+}
