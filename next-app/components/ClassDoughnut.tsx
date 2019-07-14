@@ -6,7 +6,7 @@ import { RefObject } from 'react';
 interface DoughnutState {
   book?: number,
   chart?: Chart,
-  data?: ChartData
+  chartData?: ChartData
 };
 
 
@@ -32,15 +32,15 @@ export default class ClassDoughnut extends React.Component<any, DoughnutState>  
       data = undefined;
     }
     if (data) {
-      this.setState({data: data.data}, () => {
+      this.setState({chartData: data.data}, () => {
         let ctx: HTMLCanvasElement | null = null;
         if (this.canvas && this.canvas.current) {
            ctx = this.canvas.current;
         }
-        if (this.state.data && ctx) {
+        if (this.state.chartData && ctx) {
           const chart = new Chart(ctx, {
             type: 'doughnut',
-            data: this.state.data,
+            data: Object.assign({}, this.state.chartData),
             options: {
               legend: {
                 onClick: (e) => e.stopPropagation
@@ -62,9 +62,9 @@ export default class ClassDoughnut extends React.Component<any, DoughnutState>  
       data = undefined
     }
     if (data) {
-      this.setState({data: data.data}, () => {
+      this.setState({chartData: data.data}, () => {
         if (this.state.chart) {
-          this.state.chart.data = this.state.data ? this.state.data : {};
+          this.state.chart.data = this.state.chartData ? Object.assign({}, this.state.chartData) : {};
           this.state.chart.update();
         }
       })
