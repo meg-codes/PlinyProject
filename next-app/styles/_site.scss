@@ -22,9 +22,14 @@ code {
   z-index: -1;
   position: fixed;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 900px) and (orientation: portrait) {
     transform: scale(2.0);
-    height: 18rem;
+    height: 20rem;
+  }
+
+  @media screen and (max-width: 900px) and (orientation: landscape) {
+    transform: scale(2.0);
+    height: 10rem;
   }
 
 }
@@ -32,9 +37,14 @@ code {
 main {
   margin-top: 10rem;
 
-  @media screen and (max-width: 900px) {
-    margin-top: 28rem;
+  @media screen and (max-width: 900px) and (orientation: portrait) {
+    margin-top: 30rem;
   }
+
+  @media screen and (max-width: 900px) and (orientation: landscape) {
+    margin-top: 15rem;
+  }
+
 
 }
 
@@ -66,15 +76,24 @@ nav.main-nav {
     margin-left: 0px;
     padding-left: 0px;
 
-    @media screen and (max-width: 900px) {
+    
+
+    @media screen and (max-width: 900px) and (orientation: portrait) {
       display: flex;
+      flex-wrap: wrap;
+    }
+
+    @media screen and (max-width: 900px) and (orientation: landscape) {
       flex-wrap: wrap;
     }
 
     & li {
 
-      @media screen and (max-width: 900px) {
+      @media screen and (max-width: 900px) and (orientation: portrait){
         width: 100%;
+      }
+
+      @media screen and (max-width: 900px) and (orientation: landscape) {
       }
 
     &.form-holder {
@@ -89,16 +108,29 @@ nav.main-nav {
           border-bottom: 0.19rem solid transparent;
           transition: border,color,outline  0.2s ease-in-out;
 
-
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 900px) and (orientation: portrait) {
             float: none;
             margin-top: 2rem;
             width: 20rem;
           }
 
+          @media screen and (max-width: 900px) and (orientation: landscape) {
+            flex-wrap: wrap;
+            margin-top: 1rem;
+
+          }
+
           & label {
             display: block;
+
+            @media screen and (max-width: 900px) and (orientation: portrait) {
+              width: 100%;
+              margin-left: auto;
+              margin-top: auto;
+              float: auto;
+            }
           }
+
 
 
           & input {
