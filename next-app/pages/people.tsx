@@ -23,14 +23,11 @@ interface CorrespondentListProps {
 interface PaginationProps {
   query: QueryStringMapObject,
   count: number
-  page: number
+  page: number,
+  pages: Array<number>
 }
 
 interface PeopleListProps extends CorrespondentListProps, PaginationProps {}
-
-interface PaginationState {
-  pages: Array<number>
-}
 
 function queryMapToString(query: QueryStringMapObject) {
 
@@ -55,23 +52,18 @@ function queryMapToString(query: QueryStringMapObject) {
     return ''
 }
 
-class Pagination extends React.Component<PaginationProps, PaginationState> {
+class Pagination extends React.Component<PaginationProps> {
   constructor(props: PaginationProps) {
     super(props)
-    const pages = [...Array(Math.ceil(this.props.count / 20)).keys()].map(x => x+1)
-    if (pages.length == 1) {
-      pages.shift()
-    }
-    this.state = {
-      pages: pages
-    }
+   
+  
   }
 
   render() {
     return (
       <nav aria-label='pagination navigation'>
         <ul className='pagination'>
-          {this.state.pages.map((el) => {
+          {this.props.pages.map((el) => {
             if (el == this.props.page) {
               return (<li key={el}>
                         <a href="#" className='disabled'
@@ -126,7 +118,7 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
   }
  }
 
-const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, count, page, query}) => (
+const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, count, page, pages, query}) => (
   <React.Fragment>
   <Head>
     <title>Pliny's Correspondents</title>
@@ -143,7 +135,7 @@ const PeopleList: NextFunctionComponent<PeopleListProps> = ({correspondents, cou
       To search for a particular nomina, simply hit the <code>Enter</code> key after typing a name.
     </p>
     <PeopleFilter key={queryMapToString(query)} query={query} />
-    <Pagination count={count} page={page} query={query} />
+    <Pagination count={count} pages={pages} page={page} query={query} />
     <CorrespondentList correspondents={correspondents} count={count}/>
   </main>
   </React.Fragment>
@@ -155,10 +147,15 @@ PeopleList.getInitialProps = async ({ query, req }: any) => {
     const queryString = queryMapToString(query)
     const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
     const res = await axios.get(baseUrl + `/api/people${queryString}`);
+    const pages = [...Array(Math.ceil(res.data.count / 20)).keys()].map(x => x+1)
+    if (pages.length === 1) {
+      pages.shift();
+    }
     return {
         correspondents: res.data.results,
         count: res.data.count,
         page: query.page ? query.page : 1,
+        pages: pages,
         query: query
     }
   } catch(err) {
