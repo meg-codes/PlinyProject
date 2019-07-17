@@ -20,53 +20,40 @@ code {
   width: 100%;
   height: 10rem;
   z-index: -1;
-  position: fixed;
+  position: absolute;
 
   @media screen and (max-width: 900px) and (orientation: portrait) {
-    transform: scale(2.0);
-    height: 20rem;
+    height: 28rem;
   }
 
   @media screen and (max-width: 900px) and (orientation: landscape) {
-    transform: scale(2.0);
-    height: 10rem;
-  }
+    height: 12rem;
+  } 
 
 }
-
-main {
-  margin-top: 10rem;
-
-  @media screen and (max-width: 900px) and (orientation: portrait) {
-    margin-top: 30rem;
-  }
-
-  @media screen and (max-width: 900px) and (orientation: landscape) {
-    margin-top: 15rem;
-  }
-
-
-}
-
-.header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
 .site-header {
   font-family: $goudy;
   font-size: 4rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.98);
+  color: hsla(0, 0%, 100%, 0.98);
   text-shadow: 0 0 0.25rem rgba(148, 78, 78, 0.25);
-  display: inline;
   margin-right: 2rem;
+  @media screen and (max-width: 900px) and (orientation: portrait) {
+    font-size: 3rem;
+  }
+
+  @media screen and (max-width: 900px) and (orientation: landscape) {
+    font-size: 2rem;
+  } 
 }
 
 nav.main-nav {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-family: $roboto-slab;
+
+  @media screen and (max-width: 900px) and (orientation: portrait) {
+    margin-bottom: 5rem;
+  }
 
   & ul {
     display: inline-flex;
@@ -76,14 +63,14 @@ nav.main-nav {
     margin-left: 0px;
     padding-left: 0px;
 
-    
-
     @media screen and (max-width: 900px) and (orientation: portrait) {
+      font-size: 0.5rem;
       display: flex;
       flex-wrap: wrap;
     }
 
     @media screen and (max-width: 900px) and (orientation: landscape) {
+      font-size: 0.5rem; 
       flex-wrap: wrap;
     }
 
@@ -92,8 +79,8 @@ nav.main-nav {
       @media screen and (max-width: 900px) and (orientation: portrait){
         width: 100%;
       }
-
       @media screen and (max-width: 900px) and (orientation: landscape) {
+        margin-top: 1rem;
       }
 
     &.form-holder {
@@ -101,7 +88,7 @@ nav.main-nav {
         & form {
           float: right;
           color: white;
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           margin-left: 3rem;
           margin-top: -2rem;
           text-decoration: none;
@@ -116,8 +103,7 @@ nav.main-nav {
 
           @media screen and (max-width: 900px) and (orientation: landscape) {
             flex-wrap: wrap;
-            margin-top: 1rem;
-
+            margin-top: 0.001rem;
           }
 
           & label {
@@ -139,9 +125,17 @@ nav.main-nav {
             border-bottom: 0.08rem solid white;
             color: white;
             font-family: $roboto-slab;
-            font-size: 1.5rem;
+            font-size: 1rem;
             margin-right: 0.5rem;
-            width: 20rem;
+            width: 20vw;
+
+            @media screen and (max-width: 900px) and (orientation: portrait) {
+              width: 60vw;
+            }
+
+            @media screen and (max-width: 900px) and (orientation: landscape) {
+              width: 40vw;
+            }
 
             &:focus {
               outline: 0.15rem solid white;
@@ -156,19 +150,30 @@ nav.main-nav {
           ul {
             max-height: 20rem;
             overflow-y: scroll;
+            width: 20vw;
+            font-size: 1rem;
+
+            @media screen and (max-width: 900px) and (orientation: portrait) {
+              width: 60vw;
+            }
+
+            @media screen and (max-width: 900px) and (orientation: landscape) {
+              width: 40vw;
+            }
 
             &.hidden {
               max-height: 0rem;
               padding: 0;
               overflow-y: hidden;
+              border: 0;
             }
 
-            position: relative;
+            position: absolute;
             display: block;
+            
             background: white;
             color: black;
             border: 0.016rem solid black;
-            width: 20rem;
             padding: 0.5rem;
 
             & li {
