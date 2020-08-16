@@ -1,0 +1,8 @@
+Django~=2.2
+gunicorn
+psycopg2
+djangorestframework
+django-autocomplete-light<3.3
+django-bootstrap3
+requests
+six

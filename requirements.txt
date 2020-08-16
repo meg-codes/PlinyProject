@@ -1,7 +1,0 @@
-Django~=2.2
-mysqlclient
-djangorestframework
-django-autocomplete-light<3.3
-django-bootstrap3
-requests
-six
