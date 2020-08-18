@@ -1,3 +1,5 @@
+.vscode/
+env
 .envrc
 # Sphinx related ignores
 _build/
