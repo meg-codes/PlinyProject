@@ -171,7 +171,6 @@ PeopleList.getInitialProps = async ({
   req,
 }: any): Promise<PeopleListProps> => {
   try {
-    console.log(query);
     const queryString = queryMapToString(query);
     const baseUrl = getBaseUrl(req);
     const res = await axios.get(baseUrl + `/api/people${queryString}`);

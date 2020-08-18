@@ -1,24 +1,32 @@
 version: "3.8"
 services:
   db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: foo
-    ports:
-      - 3306:3306
-    volumes:
-      - ./:/dumps
-      - mysql-vol:/var/lib/mysql
-  psql-db:
     image: postgres
     ports:
       - 5432:5432
+    env_file:
+      - env
     volumes:
       - psql-vol:/var/lib/postgresql/data
-      - ./:/dumps
-    security_opt:
-      - seccomp=unconfined
+  django-app:
+    build:
+      context: ./backend
+      target: dev
+    env_file:
+      - env
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/opt/app
+  next-app:
+    build:
+      context: ./frontend
+      target: dev
+    env_file:
+      - env
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/opt/app
 volumes:
-  mysql-vol:
   psql-vol:

@@ -39,7 +39,9 @@ export default class QuickSearch extends React.Component<
 
   async componentDidMount() {
     try {
-      const res = await axios.get("/api/people/autocomplete");
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/people/autocomplete`
+      );
       const nomina: Array<string> = res.data.map((x: any) => x.nomina).sort();
       this.setState({ options: nomina, filteredOptions: nomina });
     } catch (err) {

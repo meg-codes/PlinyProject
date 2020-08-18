@@ -17,7 +17,9 @@ export default class ClassDoughnut extends React.Component {
     let data;
 
     try {
-      data = await axios.get("/people/social_class.json");
+      data = await axios.get(
+        process.env.NEXT_PUBLIC_BASE_URL + "/people/social_class.json"
+      );
     } catch (err) {
       data = undefined;
     }
@@ -47,7 +49,9 @@ export default class ClassDoughnut extends React.Component {
     let data;
     try {
       const query = this.state.book ? `?q=${this.state.book}` : "";
-      data = await axios.get(`/people/social_class.json${query}`);
+      data = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/people/social_class.json${query}`
+      );
     } catch (err) {
       data = undefined;
     }

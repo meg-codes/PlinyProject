@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 body {
   font-family: $roboto;
@@ -10,9 +10,8 @@ code {
   color: #981b1e;
 }
 
-
 .img-banner {
-  background-image: url('/static/pliny-banner.png');
+  background-image: url("/pliny-banner.png");
   background-color: black;
   filter: brightness(80%);
   top: 0;
@@ -28,8 +27,7 @@ code {
 
   @media screen and (max-width: 900px) and (orientation: landscape) {
     height: 12rem;
-  } 
-
+  }
 }
 .site-header {
   font-family: $goudy;
@@ -44,7 +42,7 @@ code {
 
   @media screen and (max-width: 900px) and (orientation: landscape) {
     font-size: 2rem;
-  } 
+  }
 }
 
 nav.main-nav {
@@ -70,21 +68,19 @@ nav.main-nav {
     }
 
     @media screen and (max-width: 900px) and (orientation: landscape) {
-      font-size: 0.5rem; 
+      font-size: 0.5rem;
       flex-wrap: wrap;
     }
 
     & li {
-
-      @media screen and (max-width: 900px) and (orientation: portrait){
+      @media screen and (max-width: 900px) and (orientation: portrait) {
         width: 100%;
       }
       @media screen and (max-width: 900px) and (orientation: landscape) {
         margin-top: 1rem;
       }
 
-    &.form-holder {
-
+      &.form-holder {
         & form {
           float: right;
           color: white;
@@ -93,7 +89,7 @@ nav.main-nav {
           margin-top: -2rem;
           text-decoration: none;
           border-bottom: 0.19rem solid transparent;
-          transition: border,color,outline  0.2s ease-in-out;
+          transition: border, color, outline 0.2s ease-in-out;
 
           @media screen and (max-width: 900px) and (orientation: portrait) {
             float: none;
@@ -116,8 +112,6 @@ nav.main-nav {
               float: auto;
             }
           }
-
-
 
           & input {
             background: none;
@@ -170,7 +164,7 @@ nav.main-nav {
 
             position: absolute;
             display: block;
-            
+
             background: white;
             color: black;
             border: 0.016rem solid black;
@@ -187,22 +181,17 @@ nav.main-nav {
               }
             }
           }
-
+        }
       }
-
-
+    }
   }
-
-  }
-
-}
 
   & a {
     color: white;
     font-size: 1.5rem;
     margin-left: 3rem;
     text-decoration: none;
-    transition: border,color,outline  0.2s ease-in-out;
+    transition: border, color, outline 0.2s ease-in-out;
     border-bottom: 0.19rem solid transparent;
 
     &.active {
@@ -213,21 +202,25 @@ nav.main-nav {
       color: white;
     }
 
-    &:focus, &:hover {
+    &:focus,
+    &:hover {
       text-shadow: 2px 2px 7px white;
       border-bottom: 0.19rem solid white;
-
     }
 
     &:focus {
       outline: 0.15rem solid white;
       box-shadow: 0 0 0.5rem white;
     }
-
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $roboto-slab;
 }
 
@@ -249,7 +242,7 @@ small {
   }
 }
 
-div  {
+div {
   &.responsive-table {
     overflow-x: auto;
 
@@ -257,7 +250,6 @@ div  {
       text-align: center;
     }
   }
-
 }
 
 form {
@@ -336,7 +328,7 @@ table {
       background-color: white;
     }
     &:nth-child(even) {
-      background-color: lightgray;;
+      background-color: lightgray;
     }
   }
   & td {
@@ -348,25 +340,25 @@ table {
 ul {
   &.pagination {
     text-align: center;
-  & li {
-    margin: 0.75rem;
-    display: inline-flex;
-    border: 0.016rem solid black;
-    padding: 1px;
-    & a {
-      padding: 1rem;
-      text-decoration: none;
-      background: white;
-
-      &.disabled {
-        cursor: not-allowed;
-        pointer-events: none;
-        color: black;
+    & li {
+      margin: 0.75rem;
+      display: inline-flex;
+      border: 0.016rem solid black;
+      padding: 1px;
+      & a {
+        padding: 1rem;
         text-decoration: none;
-        z-index: -1;
+        background: white;
+
+        &.disabled {
+          cursor: not-allowed;
+          pointer-events: none;
+          color: black;
+          text-decoration: none;
+          z-index: -1;
+        }
       }
     }
-  }
   }
 }
 

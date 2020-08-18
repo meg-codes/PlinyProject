@@ -5,7 +5,9 @@ export default class ForceGraph extends React.Component {
   async componentDidMount() {
     // prevent erroring out if d3 can't connect
     try {
-      var data = await d3.json("/people/nodes.json");
+      var data = await d3.json(
+        process.env.NEXT_PUBLIC_BASE_URL + "/people/nodes.json"
+      );
     } catch (err) {
       data = {
         links: [],

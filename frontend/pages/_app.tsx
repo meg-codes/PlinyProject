@@ -1,8 +1,6 @@
-import React from 'react';
-import App, { Container, AppProps } from 'next/app';
-import '../styles/_site.scss'
-
-
+import React from "react";
+import App, { AppProps } from "next/app";
+import "../styles/_site.scss";
 
 export default class extends App<AppProps> {
   static async getInitialProps({ Component, ctx }: any) {
@@ -18,10 +16,6 @@ export default class extends App<AppProps> {
   render() {
     const { Component, pageProps } = this.props;
 
-    return (
-      <Container>
-        <Component {...pageProps} />
-      </Container>
-    );
+    return <Component {...pageProps} />;
   }
 }

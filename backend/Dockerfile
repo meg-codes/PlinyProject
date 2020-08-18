@@ -25,13 +25,21 @@ RUN python -m venv $VENV_PATH
 RUN pip install pip --upgrade && pip install wheel
 RUN pip install -r requirements.txt
 
-FROM requirements as production
+FROM requirements as dev
+WORKDIR $PYSETUP_PATH
+COPY dev-requirements.txt .
+COPY --from=requirements $PYSETUP_PATH $PYSETUP_PATH
+RUN pip install -r dev-requirements.txt
+WORKDIR $APP_DIR
+EXPOSE 8000
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "plinyproj.wsgi"]
 
+
+FROM requirements as production
 WORKDIR $PYSETUP_PATH
 COPY --from=requirements $PYSETUP_PATH $PYSETUP_PATH
 WORKDIR $APP_DIR
 COPY . $APP_DIR
-
 EXPOSE 8000
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "plinyproj.wsgi"]
 
