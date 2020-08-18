@@ -6,12 +6,11 @@ ENV NEXT_PUBLIC_BASE_URL=$next_public_base_url
 
 WORKDIR ${APP_DIR}
 COPY package.json yarn.lock ./
-RUN yarn install --production=true
+RUN yarn install 
 
 FROM base as dev
 WORKDIR ${APP_DIR}
 COPY --from=base ${APP_DIR} .
-RUN yarn install --production=false
 CMD ["yarn", "run", "next", "dev"]
 
 FROM base as production
