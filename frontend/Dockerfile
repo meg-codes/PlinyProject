@@ -1,7 +1,8 @@
 FROM node:14.8-buster-slim as base
 ENV APP_DIR=/opt/app
 
-ENV NEXT_PUBLIC_BASE_URL=http://localhost:8000
+ARG next_public_base_url=''
+ENV NEXT_PUBLIC_BASE_URL=$next_public_base_url
 
 WORKDIR ${APP_DIR}
 COPY package.json yarn.lock ./
