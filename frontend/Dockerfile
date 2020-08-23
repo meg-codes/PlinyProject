@@ -17,5 +17,3 @@ FROM base as production
 COPY . ${APP_DIR}
 COPY --from=base ${APP_DIR} .
 WORKDIR ${APP_DIR}
-RUN yarn run next build
-CMD ["yarn", "run", "next", "start"]
